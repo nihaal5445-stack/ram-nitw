@@ -1,0 +1,71 @@
+{
+  "Nav": {
+    "appName": "RAM",
+    "toggleTheme": "థీమ్ మార్చండి",
+    "toggleLanguage": "భాష",
+    "signOut": "సైన్ అవుట్"
+  },
+  "Login": {
+    "title": "RAM లో సైన్ ఇన్ చేయండి",
+    "subtitle": "NIT వరంగల్ మెస్ నిర్వహణ వేదిక",
+    "emailLabel": "ఇమెయిల్ చిరునామా",
+    "emailPlaceholder": "మీరు@student.nitw.ac.in",
+    "sendOtp": "మ్యాజిక్ లింక్ పంపండి",
+    "checkEmail": "మీ ఇమెయిల్ తనిఖీ చేయండి",
+    "checkEmailDesc": "మేము {email} కి మ్యాజిక్ లింక్ పంపాము. సైన్ ఇన్ చేయడానికి లింక్ నొక్కండి.",
+    "studentNote": "విద్యార్థులు తమ @student.nitw.ac.in చిరునామాను ఉపయోగించాలి.",
+    "loading": "పంపుతోంది…",
+    "error": "ఏదో తప్పు జరిగింది. దయచేసి మళ్ళీ ప్రయత్నించండి."
+  },
+  "Dashboard": {
+    "welcome": "స్వాగతం, {name}",
+    "role": {
+      "student": "విద్యార్థి",
+      "parent": "తల్లిదండ్రులు / సంరక్షకులు",
+      "counter_staff": "కౌంటర్ సిబ్బంది",
+      "mess_rep": "మెస్ ప్రతినిధి",
+      "mess_admin": "మెస్ నిర్వాహకుడు",
+      "warden": "వార్డెన్"
+    }
+  },
+  "Student": {
+    "title": "నా మెస్ ఖాతా",
+    "balance": "ప్రస్తుత బ్యాలెన్స్",
+    "mess": "నియమించబడిన మెస్",
+    "todayMeals": "నేటి భోజనాలు",
+    "recentHistory": "ఇటీవలి భోజన చరిత్ర"
+  },
+  "Parent": {
+    "title": "పిల్లల మెస్ ఖాతా",
+    "linkedTo": "అనుసంధానించబడిన విద్యార్థి",
+    "balance": "బ్యాలెన్స్",
+    "recentHistory": "ఇటీవలి భోజన చరిత్ర"
+  },
+  "CounterStaff": {
+    "title": "కౌంటర్ డాష్‌బోర్డ్",
+    "scanToken": "టోకెన్ స్కాన్ చేయండి",
+    "todayCount": "నేడు అందించిన భోజనాలు",
+    "currentSlot": "ప్రస్తుత భోజన స్లాట్"
+  },
+  "MessRep": {
+    "title": "మెస్ ప్రతినిధి డాష్‌బోర్డ్",
+    "mess": "నా మెస్",
+    "submitComplaint": "ఫిర్యాదు సమర్పించండి",
+    "weeklyMenu": "వారపు మెనూ",
+    "openComplaints": "తెరిచిన ఫిర్యాదులు"
+  },
+  "MessAdmin": {
+    "title": "మెస్ నిర్వహణ",
+    "staffCount": "విధిలో సిబ్బంది",
+    "todayHeadcount": "నేటి హెడ్‌కౌంట్",
+    "menuManagement": "మెనూ నిర్వహణ",
+    "reports": "నివేదికలు"
+  },
+  "Warden": {
+    "title": "వార్డెన్ అవలోకనం",
+    "allMesses": "అన్ని మెస్‌లు",
+    "totalStudents": "మొత్తం విద్యార్థులు",
+    "userManagement": "వినియోగదారు నిర్వహణ",
+    "systemHealth": "సిస్టమ్ ఆరోగ్యం"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "Nav": {
+    "appName": "RAM",
+    "toggleTheme": "Toggle theme",
+    "toggleLanguage": "Language",
+    "signOut": "Sign out"
+  },
+  "Login": {
+    "title": "Sign in to RAM",
+    "subtitle": "NIT Warangal Mess Management Platform",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "you@student.nitw.ac.in",
+    "sendOtp": "Send magic link",
+    "checkEmail": "Check your email",
+    "checkEmailDesc": "We sent a magic link to {email}. Click the link to sign in.",
+    "studentNote": "Students must use their @student.nitw.ac.in address.",
+    "loading": "Sending…",
+    "error": "Something went wrong. Please try again."
+  },
+  "Dashboard": {
+    "welcome": "Welcome, {name}",
+    "role": {
+      "student": "Student",
+      "parent": "Parent / Guardian",
+      "counter_staff": "Counter Staff",
+      "mess_rep": "Mess Representative",
+      "mess_admin": "Mess Administrator",
+      "warden": "Warden"
+    }
+  },
+  "Student": {
+    "title": "My Mess Account",
+    "balance": "Current Balance",
+    "mess": "Assigned Mess",
+    "todayMeals": "Today's Meals",
+    "recentHistory": "Recent Meal History"
+  },
+  "Parent": {
+    "title": "Child's Mess Account",
+    "linkedTo": "Linked student",
+    "balance": "Balance",
+    "recentHistory": "Recent Meal History"
+  },
+  "CounterStaff": {
+    "title": "Counter Dashboard",
+    "scanToken": "Scan Token",
+    "todayCount": "Meals served today",
+    "currentSlot": "Current meal slot"
+  },
+  "MessRep": {
+    "title": "Mess Representative Dashboard",
+    "mess": "My Mess",
+    "submitComplaint": "Submit Complaint",
+    "weeklyMenu": "Weekly Menu",
+    "openComplaints": "Open Complaints"
+  },
+  "MessAdmin": {
+    "title": "Mess Administration",
+    "staffCount": "Staff on duty",
+    "todayHeadcount": "Today's headcount",
+    "menuManagement": "Menu Management",
+    "reports": "Reports"
+  },
+  "Warden": {
+    "title": "Warden Overview",
+    "allMesses": "All Messes",
+    "totalStudents": "Total Students",
+    "userManagement": "User Management",
+    "systemHealth": "System Health"
+  }
+}

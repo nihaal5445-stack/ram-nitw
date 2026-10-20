@@ -1,0 +1,71 @@
+{
+  "Nav": {
+    "appName": "RAM",
+    "toggleTheme": "थीम बदलें",
+    "toggleLanguage": "भाषा",
+    "signOut": "साइन आउट"
+  },
+  "Login": {
+    "title": "RAM में साइन इन करें",
+    "subtitle": "NIT वारंगल मेस प्रबंधन प्लेटफ़ॉर्म",
+    "emailLabel": "ईमेल पता",
+    "emailPlaceholder": "आप@student.nitw.ac.in",
+    "sendOtp": "मैजिक लिंक भेजें",
+    "checkEmail": "अपना ईमेल देखें",
+    "checkEmailDesc": "हमने {email} पर एक मैजिक लिंक भेजा है। साइन इन करने के लिए लिंक पर क्लिक करें।",
+    "studentNote": "छात्रों को अपने @student.nitw.ac.in पते का उपयोग करना होगा।",
+    "loading": "भेज रहे हैं…",
+    "error": "कुछ गलत हो गया। कृपया फिर से कोशिश करें।"
+  },
+  "Dashboard": {
+    "welcome": "स्वागत है, {name}",
+    "role": {
+      "student": "छात्र",
+      "parent": "अभिभावक",
+      "counter_staff": "काउंटर स्टाफ",
+      "mess_rep": "मेस प्रतिनिधि",
+      "mess_admin": "मेस प्रशासक",
+      "warden": "वार्डन"
+    }
+  },
+  "Student": {
+    "title": "मेरा मेस खाता",
+    "balance": "वर्तमान बैलेंस",
+    "mess": "नियुक्त मेस",
+    "todayMeals": "आज के भोजन",
+    "recentHistory": "हाल की भोजन इतिहास"
+  },
+  "Parent": {
+    "title": "बच्चे का मेस खाता",
+    "linkedTo": "जुड़ा छात्र",
+    "balance": "बैलेंस",
+    "recentHistory": "हाल की भोजन इतिहास"
+  },
+  "CounterStaff": {
+    "title": "काउंटर डैशबोर्ड",
+    "scanToken": "टोकन स्कैन करें",
+    "todayCount": "आज परोसे गए भोजन",
+    "currentSlot": "वर्तमान भोजन स्लॉट"
+  },
+  "MessRep": {
+    "title": "मेस प्रतिनिधि डैशबोर्ड",
+    "mess": "मेरा मेस",
+    "submitComplaint": "शिकायत दर्ज करें",
+    "weeklyMenu": "साप्ताहिक मेनू",
+    "openComplaints": "खुली शिकायतें"
+  },
+  "MessAdmin": {
+    "title": "मेस प्रशासन",
+    "staffCount": "ड्यूटी पर कर्मचारी",
+    "todayHeadcount": "आज की हेडकाउंट",
+    "menuManagement": "मेनू प्रबंधन",
+    "reports": "रिपोर्ट"
+  },
+  "Warden": {
+    "title": "वार्डन अवलोकन",
+    "allMesses": "सभी मेस",
+    "totalStudents": "कुल छात्र",
+    "userManagement": "उपयोगकर्ता प्रबंधन",
+    "systemHealth": "सिस्टम स्वास्थ्य"
+  }
+}
