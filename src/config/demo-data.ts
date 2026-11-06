@@ -66,3 +66,12 @@ export const progress: ProgressEntry[] = [
   { id: "p5", date: "2026-11-01", messId: "all", status: "done" },
   { id: "p6", date: "2026-10-30", messId: "all", status: "inProgress" },
 ];
+
+export interface CalendarEvent { id: string; date: string; type: "special" | "closure"; messId: string | "all" }
+/** DEMO DATA. TODO: verify every date with the Chief Warden's office (festival dates especially). Text under Public.calendar.items.<id>. */
+export const calendarEvents: CalendarEvent[] = [
+  { id: "c1", date: "2026-11-08", type: "special", messId: "all" },
+  { id: "c2", date: "2026-11-14", type: "closure", messId: "ifc-a" },
+  { id: "c3", date: "2026-11-20", type: "special", messId: "all" },
+  { id: "c4", date: "2026-12-20", type: "closure", messId: "all" },
+];

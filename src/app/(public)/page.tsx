@@ -6,6 +6,7 @@ import { MessSections } from "@/components/site/mess-sections";
 import { MealTimings } from "@/components/site/meal-timings";
 import { StatCounters } from "@/components/site/stat-counters";
 import { ProgressBoard } from "@/components/site/progress-board";
+import { CalendarSection } from "@/components/site/calendar-section";
 import { AudienceTiles } from "@/components/site/audience-tiles";
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
       <MealTimings />
       <StatCounters />
       <ProgressBoard />
+      <CalendarSection />
     </>
   );
 }

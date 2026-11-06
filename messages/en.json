@@ -426,6 +426,25 @@
         "p5": "Meal timings and today's menus were published on this website.",
         "p6": "Counting meals served in each slot, so kitchens can plan quantities."
       }
+    },
+    "calendar": {
+      "eyebrow": "Calendar",
+      "title": "Special meals and closures",
+      "lead": "Festival menus, event dinners and planned closures, so there are no surprises at the door.",
+      "demo": "Demo data. Dates unverified.",
+      "allMesses": "All confirmed messes",
+      "upcoming": "Coming up",
+      "none": "Nothing scheduled right now.",
+      "type": {
+        "special": "Special meal",
+        "closure": "Closure"
+      },
+      "items": {
+        "c1": "Festival lunch with a special menu.",
+        "c2": "Closed in the afternoon for deep cleaning.",
+        "c3": "Hostel day dinner with an extended menu.",
+        "c4": "Semester break: closing dates to be announced."
+      }
     }
   }
 }
