@@ -62,7 +62,11 @@ export default async function StudentDashboard() {
         </span>
       </Link>
 
-      <Link href="/dashboard/student/addons" className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:bg-muted/50">
+      {/* Today's full menu: right under the QR entry point, expanded by default */}
+      {profile.assigned_mess_id && <StudentMenu messId={profile.assigned_mess_id} vegOnly={profile.assigned_mess_id === "ifc-a"} />}
+
+      <div className="grid gap-4 sm:grid-cols-3">
+      <Link href="/dashboard/student/addons" className="flex items-center gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-muted/50">
         <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><Soup className="size-6" aria-hidden /></span>
         <span>
           <span className="block font-semibold">{t("addonsLink")}</span>
@@ -70,7 +74,7 @@ export default async function StudentDashboard() {
         </span>
       </Link>
 
-      <Link href="/dashboard/student/complaints" className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:bg-muted/50">
+      <Link href="/dashboard/student/complaints" className="flex items-center gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-muted/50">
         <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><MessageSquareWarning className="size-6" aria-hidden /></span>
         <span>
           <span className="block font-semibold">{t("complaintsLink")}</span>
@@ -78,19 +82,18 @@ export default async function StudentDashboard() {
         </span>
       </Link>
 
-      <Link href="/dashboard/student/fees" className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:bg-muted/50">
+      <Link href="/dashboard/student/fees" className="flex items-center gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-muted/50">
         <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><PieChart className="size-6" aria-hidden /></span>
         <span>
           <span className="block font-semibold">{t("feesLink")}</span>
           <span className="block text-sm text-muted-foreground">{t("feesDesc")}</span>
         </span>
       </Link>
+      </div>
 
       <CrowdPanel ownMessId={profile.assigned_mess_id} />
 
       {profile.assigned_mess_id && <SwitchMess ownMess={profile.assigned_mess_id} allowed={switchAllowed} activePass={activePass} />}
-
-      {profile.assigned_mess_id && <StudentMenu messId={profile.assigned_mess_id} vegOnly={profile.assigned_mess_id === "ifc-a"} />}
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
