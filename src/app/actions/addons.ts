@@ -11,16 +11,19 @@ const FRIENDLY: Record<string, string> = {
   no_slot_left_today: "No meal slot left today.",
   already_bought_for_this_slot: "You already bought this for the current slot.",
   "add-on not available": "This add-on is not available in your mess.",
+  payment_required: "Online payment is required.",
 };
 const friendly = (m: string) => Object.entries(FRIENDLY).find(([k]) => m.includes(k))?.[1] ?? "Could not complete the purchase.";
 
 /** MOCK payment: no money moves. The SQL function reserves stock and records a TEST transaction. */
-export async function buyAddon(addonId: string) {
+export interface Purchase { id: string; slot: string; meal_date: string; payment_ref: string; order_id: string; method: string; amount_paise: number; created_at: string; name: string }
+
+export async function buyAddon(addonId: string, method: "upi" | "card" | "wallet" | "test" = "test") {
   const { user } = await getCurrentProfile();
   if (!user) return { ok: false as const, error: "Please sign in again." };
-  const { data, error } = await (await createClient()).rpc("buy_addon", { p_addon: addonId });
-  if (error) return { ok: false as const, error: friendly(error.message) };
-  return { ok: true as const, purchase: data as { id: string; slot: string; meal_date: string; payment_ref: string } };
+  const { data, error } = await (await createClient()).rpc("buy_addon", { p_addon: addonId, p_method: method });
+  if (error) return { ok: false as const, error: error.message.includes("payment_required") ? "Online payment is required: use Razorpay checkout." : friendly(error.message) };
+  return { ok: true as const, purchase: data as Purchase };
 }
 
 /** The signed one-slot QR for a purchase the caller owns (RLS), only while it is unused and for today. */

@@ -10,7 +10,7 @@
     "db:reset": "npx supabase db reset",
     "test:db": "for f in supabase/tests/*.sql; do echo \"== $f\"; docker exec -i supabase_db_ram-nitw psql -U postgres -v ON_ERROR_STOP=1 < \"$f\" || exit 1; done",
     "test:signup": "node scripts/test-signup-flows.mjs",
-    "test:unit": "node --test src/lib/access/*.test.ts",
+    "test:unit": "node --test src/lib/access/*.test.ts src/lib/payments/*.test.ts",
     "test:access": "node scripts/test-access-flow.mjs",
     "test:student-token": "node scripts/test-student-token.mjs",
     "test:scanner": "node scripts/test-scanner-flow.mjs",
