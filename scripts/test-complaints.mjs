@@ -11,7 +11,8 @@ const NIL = "00000000-0000-0000-0000-000000000000";
 let failed = 0;
 const check = (name, ok, detail = "") => { console.log(`${ok ? "PASS" : "FAIL"}  ${name}${ok ? "" : "  -> " + String(detail).slice(0, 200)}`); if (!ok) failed++; };
 const as = async (email) => { const c = createClient(env.API_URL, env.ANON_KEY, { auth: { persistSession: false } }); await c.auth.signInWithPassword({ email, password: "password123" }); return c; };
-const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+// yesterday, so the dinner window is always closed and the SLA timer is running (or overdue) whatever time the test runs
+const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date(Date.now() - 86_400_000));
 const file = (c, body, o = {}) => c.rpc("file_complaint", { p_mess: "ifc-a", p_category: "food_quality", p_date: today, p_slot: "dinner", p_body: body, p_anonymous: false, ...o });
 const clean = () => admin.from("complaints").delete().neq("id", NIL);
 await clean();

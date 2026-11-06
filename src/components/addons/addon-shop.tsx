@@ -15,7 +15,7 @@ export interface ShopPurchase { id: string; name: string; date: string; slot: st
 
 const rupees = (p: number) => `Rs ${(p / 100).toFixed(p % 100 ? 2 : 0)}`;
 
-export function AddonShop({ addons, purchases, messAssigned }: { addons: ShopAddon[]; purchases: ShopPurchase[]; messAssigned: boolean }) {
+export function AddonShop({ addons, purchases, messAssigned, debug }: { addons: ShopAddon[]; purchases: ShopPurchase[]; messAssigned: boolean; debug?: boolean }) {
   const t = useTranslations("Addons");
   const tm = useTranslations("Public.meals");
   const router = useRouter();
@@ -63,6 +63,7 @@ export function AddonShop({ addons, purchases, messAssigned }: { addons: ShopAdd
           <CardContent className="flex flex-col items-center gap-3">
             <QrCode text={ticket.text} label={t("ticketQr")} className="w-64 max-w-full rounded-md border border-border" />
             <p className="text-center text-sm text-muted-foreground">{t("ticketHelp")}</p>
+            {debug && <code className="block max-w-full break-all rounded bg-muted p-2 text-[10px]" data-testid="ticket-text">{ticket.text}</code>}
           </CardContent>
         </Card>
       )}

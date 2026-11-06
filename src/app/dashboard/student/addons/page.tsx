@@ -6,7 +6,7 @@ import { AddonShop } from "@/components/addons/addon-shop";
 
 export const dynamic = "force-dynamic";
 
-export default async function StudentAddonsPage() {
+export default async function StudentAddonsPage({ searchParams }: { searchParams: Promise<{ debug?: string }> }) {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
@@ -26,6 +26,7 @@ export default async function StudentAddonsPage() {
         amountPaise: p.amount_paise, ref: p.payment_ref, status: p.status as "paid" | "redeemed", at: p.created_at,
       }))}
       messAssigned={!!profile.assigned_mess_id}
+      debug={(await searchParams).debug === "1"}
     />
   );
 }
