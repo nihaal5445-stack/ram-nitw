@@ -15,6 +15,8 @@ const as = async (email) => { const c = createClient(env.API_URL, env.ANON_KEY, 
 const setting = (k, v) => admin.from("app_settings").upsert({ key: k, value: v });
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const priorSwitch = (await admin.from("app_settings").select("value").eq("key", "allow_mess_switch").single()).data?.value ?? "off";
+const priorDemo = (await admin.from("app_settings").select("value").eq("key", "demo_mode").single()).data?.value ?? "off";
+await setting("demo_mode", "off"); // this suite asserts the REAL rules; restored in finally
 const { data: slotsB } = await admin.from("mess_slots").select("*").eq("mess_id", "ifc-b");
 const demoRows = [];
 const addCrowd = async (mess, n) => { const rows = Array.from({ length: n }, () => ({ mess_id: mess, scanned_at: new Date(Date.now() - 60e3).toISOString() })); const { data } = await admin.from("demo_crowd_scans").insert(rows).select("id"); demoRows.push(...data.map((d) => d.id)); return data.map((d) => d.id); };
@@ -86,6 +88,7 @@ try {
   for (const s of slotsB) await admin.from("mess_slots").update({ starts: s.starts, ends: s.ends }).eq("mess_id", "ifc-b").eq("slot", s.slot);
   if (demoRows.length) await admin.from("demo_crowd_scans").delete().in("id", demoRows);
   await setting("allow_mess_switch", priorSwitch);
+  await setting("demo_mode", priorDemo);
   await resetPasses();
 }
 console.log(failed ? `\n${failed} FAILED` : "\nALL SWITCH TESTS PASSED");
