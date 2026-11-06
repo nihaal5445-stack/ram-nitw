@@ -58,8 +58,32 @@ Say: "demo data" is labelled; real accepted scans also count.
 ## 4:40 Fees (20 s)
 17. Open `/fees` (public, also under Transparency -> Where your fee goes; students also have it on their dashboard): donut of where the fee goes and the six-month trend. A banner says it is demo data.
 
+## Extras (about 3 more minutes, pick what you need)
+
+**Crowd on every dashboard + "Eat here this meal"**
+- Every dashboard (student, parent, rep, counter, admin, warden) has the live crowd card with colour bars and "Try after HH:MM".
+- Warden (`warden@nitw.ac.in`): the **Allow students to eat at another mess** switch shows "On (demo mode)"; outside demo mode flip it. It also lists passes issued/redeemed today.
+- Student (`student@student.nitw.ac.in`, IFC-A): the **Eat here this meal** card offers messes less crowded than IFC-A (IFC-B is the hot spot in the seeded data, so run `demo:crowd` after changing it, or swap the numbers in `scripts/demo-crowd.mjs`: IFC-A needs a higher % than the target). Tap **Eat here this meal** -> a signed single-meal pass QR appears.
+- Counter at the other mess (`admin-ifcb@nitw.ac.in` -> `/dashboard/counter/scan?debug=1`, or a counter there): paste the pass text (`data-ticket`, or scan the QR): green **Meal pass OK ... Visiting from IFC-A**; again: **Add-on already used**. After sync the meal is recorded at the other mess (the billing log). Priyadarshini (ladies' mess) is never offered.
+
+**Like the food**
+- Student dashboard: **Like today's <meal>** with a heart per dish and one for the whole meal; one like per dish per day (tap again to undo). The public mess sections show the live counts (read-only). Admin and warden dashboards show **Most-liked dishes (last 7 days)**.
+
+**Assistant (admin / warden dashboard)**
+- Click a chip such as *What should we fix first?* or type a question. Without `GEMINI_API_KEY` / `ANTHROPIC_API_KEY` in `.env.local` the answer is labelled **Offline summary** (rule-based, same data); with a key it says **AI answer**. It only ever receives counts: no complaint text, no names, so anonymous complainants cannot leak. File a few complaints first (the complaint step above) so there is something to summarise.
+
+**Admin explains, AI replies** (replaces the per-complaint typing in the complaint step)
+- `/dashboard/admin/complaints`: in a group, write a short **note** (why it can or cannot be fixed), pick **Resolved / In progress / Cannot be resolved**, press **Write a reply for each student**. Each complainant gets their own reply (quoting their own complaint; anonymous ones are greeted without a name) labelled *Written by AI* or *Written from a template*. Edit any reply, then **Send all**. "Cannot be resolved" needs the note (min 10 characters) because it is shared as the reason. Students see **In progress** with the reply on their complaints page.
+
+**Contact admin**
+- Students: a floating **Contact admin** button on mobile (bottom right) and a **Contact admin** button in the nav on desktop open a chat with the admin of their mess. The admin sees it in **Messages inbox** (`/dashboard/admin/messages`, with an unread count on the admin dashboard) and replies there.
+
+**Backgrounds**
+- Light: warm off-white, faint paper grain, a soft maroon-gold glow. Dark (moon icon): navy-to-maroon wash with a slow aurora. It pauses with "reduce motion" and when the tab is hidden.
+
 ## If something goes wrong
 - Scan or add-on says "No meal is being served right now" / "no meal slot left today": DEMO_MODE is off. Run `npm run demo:mode -- on`, then start a new shift on the scanner.
 - Heatmap shows "Not serving right now": run `npm run demo:crowd` again (the last-10-minutes window decays; `demo:prep` and `-- --keep` prevent that).
 - Camera scanning has only been tried against a fake camera, not a real phone. The paste box (`?debug=1`) uses the same code path.
+- The AI parts (assistant, drafted replies) have deterministic fallbacks, so they work with no key; they were not run against a live Gemini/Anthropic API.
 - To show real slot rules to an audience: `npm run demo:mode -- off` (the badge disappears).
