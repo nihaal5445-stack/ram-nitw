@@ -273,6 +273,17 @@
         "desc": "Counter scanning, menus, headcount and reports for mess teams and wardens.",
         "cta": "Staff sign in"
       }
+    },
+    "welcome": {
+      "eyebrow": "Welcome",
+      "title": "A note from the Chief Warden",
+      "portraitAlt": "Illustrated placeholder portrait of the Chief Warden",
+      "placeholder": "Illustrative placeholder. Fictional name and portrait.",
+      "p1": "A mess is the one place on campus where everyone meets every day. It should feel dependable: food on time, a clear menu, and a fair wait.",
+      "p2": "RAM is how we are working towards that. Digital tokens replace paper, menus and timings are public, and the improvements we make are posted where you can see them.",
+      "p3": "If something can be done better, tell us. We would rather hear it early.",
+      "name": "Dr. Raghavendra Iyer",
+      "role": "Chief Warden, fictional placeholder"
     }
   }
 }
