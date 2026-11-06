@@ -32,8 +32,8 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  // Public routes that don't need a session
-  const publicRoutes = ["/login", "/auth/callback", "/credits", "/robots.txt"];
+  // Public routes that don't need a session. /api/scanner/sync authenticates itself (cookie or Bearer) and returns 401/403.
+  const publicRoutes = ["/login", "/auth/callback", "/credits", "/robots.txt", "/api/scanner/sync"];
   if (pathname === "/" || publicRoutes.some((r) => pathname.startsWith(r))) {
     return supabaseResponse;
   }

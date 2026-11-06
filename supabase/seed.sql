@@ -157,3 +157,6 @@ update public.profiles
 update public.profiles
   set role = 'warden'
   where id = '66666666-6666-6666-6666-666666666666';
+
+-- Phase 3: demo roll number for the manual-entry fallback (placeholder format, TODO: verify real roll-number format)
+update public.profiles set roll_number = 'DEMO0001' where id = '11111111-1111-1111-1111-111111111111';
