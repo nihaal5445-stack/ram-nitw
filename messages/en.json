@@ -7,7 +7,7 @@
   },
   "Login": {
     "title": "Sign in to RAM",
-    "subtitle": "NIT Warangal Mess Management Platform",
+    "subtitle": "We email you a one-time sign-in link. There are no passwords.",
     "emailLabel": "Email address",
     "emailPlaceholder": "you@student.nitw.ac.in",
     "sendOtp": "Send magic link",
@@ -15,7 +15,38 @@
     "checkEmailDesc": "We sent a magic link to {email}. Click the link to sign in.",
     "studentNote": "Students must use their @student.nitw.ac.in address.",
     "loading": "Sending…",
-    "error": "Something went wrong. Please try again."
+    "error": "Something went wrong. Please try again.",
+    "eyebrow": "Sign in",
+    "panelTitle": "Your mess, in one place.",
+    "panelLead": "Menus, meal tokens and balances for students, parents and mess teams at NIT Warangal.",
+    "back": "Back to home",
+    "tablist": "Choose who you are",
+    "tabs": {
+      "students": "Students",
+      "parents": "Parents",
+      "staff": "Mess Staff & Administration"
+    },
+    "students": {
+      "title": "Student sign in",
+      "desc": "Use your institute email to see your meals and tokens.",
+      "placeholder": "you@student.nitw.ac.in",
+      "hint": "Students must use their @student.nitw.ac.in address."
+    },
+    "parents": {
+      "title": "Parent or guardian sign in",
+      "desc": "Use the email your ward's account is linked to.",
+      "placeholder": "you@example.com",
+      "hint": "Your account is linked to a student by the warden's office."
+    },
+    "staff": {
+      "title": "Staff and administration sign in",
+      "desc": "For counter staff, mess representatives, mess administrators and wardens.",
+      "placeholder": "you@nitw.ac.in",
+      "hint": "Staff accounts are created by the warden's office."
+    },
+    "domainError": "Students must sign in with an {domain} address.",
+    "differentEmail": "Use a different email",
+    "footer": "RAM · NIT Warangal · {year}"
   },
   "Dashboard": {
     "welcome": "Welcome, {name}",
