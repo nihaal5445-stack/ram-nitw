@@ -6,7 +6,7 @@ import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { Utensils, Wallet, CalendarDays, History, QrCode, Soup } from "lucide-react";
+import { Utensils, Wallet, CalendarDays, History, QrCode, Soup, MessageSquareWarning } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
 
@@ -60,6 +60,14 @@ export default async function StudentDashboard() {
         <span>
           <span className="block font-semibold">{t("addonsLink")}</span>
           <span className="block text-sm text-muted-foreground">{t("addonsDesc")}</span>
+        </span>
+      </Link>
+
+      <Link href="/dashboard/student/complaints" className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:bg-muted/50">
+        <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><MessageSquareWarning className="size-6" aria-hidden /></span>
+        <span>
+          <span className="block font-semibold">{t("complaintsLink")}</span>
+          <span className="block text-sm text-muted-foreground">{t("complaintsDesc")}</span>
         </span>
       </Link>
 

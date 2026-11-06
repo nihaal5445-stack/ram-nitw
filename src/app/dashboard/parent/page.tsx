@@ -6,7 +6,8 @@ import { getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wallet, User, History, CalendarDays } from "lucide-react";
+import { Wallet, User, History, CalendarDays, MessageSquareWarning } from "lucide-react";
+import Link from "next/link";
 
 export default async function ParentDashboard() {
   const { user, profile, error } = await getCurrentProfile();
@@ -63,6 +64,14 @@ export default async function ParentDashboard() {
           </CardContent>
         </Card>
       )}
+      <Link href="/dashboard/parent/complaints" className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:bg-muted/50">
+        <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><MessageSquareWarning className="size-6" aria-hidden /></span>
+        <span>
+          <span className="block font-semibold">File or follow a complaint</span>
+          <span className="block text-sm text-muted-foreground">Tell the mess administration about a problem and see their reply.</span>
+        </span>
+      </Link>
+
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title={t("balance")} value="₹ 2,450" icon={Wallet} accent="primary" />

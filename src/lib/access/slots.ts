@@ -23,3 +23,9 @@ export const ledgerKey = (studentId: string, date: string, slot: string) => `${s
 
 /** The slot being served right now (no grace), or null. Server components call this instead of touching Date.now(). */
 export const currentSlot = (slots: SlotWindow[]) => slotAt(slots, Date.now(), 0);
+
+/** The last `n` IST dates (today first) as YYYY-MM-DD. Lives here so server components avoid calling Date.now() directly. */
+export function recentDates(n = 3): string[] {
+  const now = Date.now();
+  return Array.from({ length: n }, (_, i) => istParts(now - i * 86_400_000).date);
+}

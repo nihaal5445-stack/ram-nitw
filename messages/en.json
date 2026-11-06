@@ -83,7 +83,9 @@
     "manualTag": "Manual entry",
     "servedTag": "Served",
     "addonsLink": "Buy an add-on",
-    "addonsDesc": "Pay (test mode) and get a one-meal ticket QR"
+    "addonsDesc": "Pay (test mode) and get a one-meal ticket QR",
+    "complaintsLink": "File or follow a complaint",
+    "complaintsDesc": "Tell the mess administration about a problem and see their reply"
   },
   "Parent": {
     "title": "Child's Mess Account",
@@ -782,6 +784,71 @@
       "none": "No add-ons yet.",
       "saved": "Saved",
       "pureVeg": "IFC-A is pure vegetarian: non-veg items are refused."
+    }
+  },
+  "Complaints": {
+    "title": "Complaints",
+    "subtitle": "Tell the mess administration what went wrong. You only ever see your own complaints.",
+    "formLabel": "File a complaint",
+    "mess": "Mess",
+    "category": "Category",
+    "date": "Which day",
+    "today": "Today",
+    "meal": "Which meal",
+    "what": "What happened?",
+    "placeholder": "For example: the dal was cold and the rice was undercooked at lunch.",
+    "anonymous": "File anonymously",
+    "anonymousNote": "Anonymous: the mess admin cannot see your name. The system still records your account so it can limit spam and show you the reply.",
+    "submit": "Submit complaint",
+    "filed": "Complaint filed. You can follow it below.",
+    "mine": "My complaints",
+    "none": "You have not filed any complaints.",
+    "anonTag": "anonymous",
+    "timeline": "Status timeline",
+    "awaiting": "Waiting for the mess administration",
+    "replyFromAdmin": "Reply from the mess administration",
+    "reason": "Reason",
+    "cat": {
+      "food_quality": "Food quality",
+      "hygiene": "Hygiene",
+      "quantity": "Quantity",
+      "service": "Service",
+      "other": "Other"
+    },
+    "status": {
+      "open": "Open",
+      "resolved": "Resolved",
+      "cannot_resolve": "Cannot be resolved"
+    },
+    "event": {
+      "filed": "Complaint filed",
+      "resolved": "Resolved",
+      "cannot_resolve": "Cannot be resolved"
+    },
+    "admin": {
+      "title": "Complaints console",
+      "lead": "Similar complaints are grouped into issues. Edit each draft reply, then send. Declining needs a reason.",
+      "source_rules": "Auto summary (keyword rules)",
+      "source_ai": "AI summary",
+      "reports": "{n} reports",
+      "openIssues": "Open issues",
+      "answered": "Answered",
+      "noOpen": "No open complaints.",
+      "slaOpen": "Meal window still open. SLA starts when it closes.",
+      "slaLeft": "SLA: {time} left",
+      "slaOver": "SLA overdue by {time}",
+      "anonymous": "Anonymous",
+      "reply": "Reply to this student",
+      "send": "Send reply and mark resolved",
+      "cannot": "Cannot be resolved",
+      "cannotReason": "Reason (required, shared with the student)",
+      "sendDecline": "Send reply and decline",
+      "cancel": "Cancel",
+      "post": "Post to Daily Progress",
+      "postText": "Public text (no names, no complaint details)",
+      "posted": "On the public board",
+      "postBtn": "Post",
+      "sent": "Reply sent."
     }
   }
 }

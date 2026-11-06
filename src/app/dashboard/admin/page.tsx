@@ -54,6 +54,9 @@ export default async function MessAdminDashboard() {
             <Link href="/dashboard/admin/addons" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10">
               Add-ons: stock and prices
             </Link>
+            <Link href="/dashboard/admin/complaints" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10">
+              Complaints console
+            </Link>
           </CardContent>
         </Card>
 

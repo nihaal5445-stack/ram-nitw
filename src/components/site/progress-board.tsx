@@ -3,12 +3,18 @@ import { CheckCircle2, Loader } from "lucide-react";
 import { messes } from "@/config/messes";
 import { progress } from "@/config/demo-data";
 import { Reveal } from "./reveal";
+import { createClient } from "@supabase/supabase-js";
 import { cn } from "@/lib/utils";
 
 export async function ProgressBoard() {
   const t = await getTranslations("Public.progress");
   const locale = await getLocale();
   const fmt = new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" });
+  let posted: { mess_id: string; on_date: string; text: string }[] = [];
+  try {
+    const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { auth: { persistSession: false } });
+    posted = (await db.rpc("public_progress")).data ?? [];
+  } catch { /* the board still shows the demo entries */ }
   const nameOf = (id: string) => (id === "all" ? t("allMesses") : (messes.find((m) => m.id === id)?.name ?? id));
 
   return (
@@ -26,6 +32,18 @@ export async function ProgressBoard() {
         </Reveal>
         <Reveal className="lg:col-span-8">
           <ol className="border-t border-border">
+            {posted.map((p, i) => (
+              <li key={`db-${i}`} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-border py-5 sm:grid-cols-[6rem_1fr_auto] sm:gap-8" data-testid="posted-progress">
+                <time dateTime={p.on_date} className="font-display text-lg font-semibold tabular-nums text-brand">{fmt.format(new Date(p.on_date))}</time>
+                <div>
+                  <p className="max-w-[60ch] leading-relaxed">{p.text}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{nameOf(p.mess_id)}</p>
+                </div>
+                <p className="col-start-2 inline-flex items-center gap-1.5 self-start text-sm font-medium text-success sm:col-start-auto">
+                  <CheckCircle2 className="size-4" strokeWidth={1.75} aria-hidden />{t("done")}
+                </p>
+              </li>
+            ))}
             {progress.map((p) => (
               <li key={p.id} className="grid grid-cols-[4.5rem_1fr] gap-4 border-b border-border py-5 sm:grid-cols-[6rem_1fr_auto] sm:gap-8">
                 <time dateTime={p.date} className="font-display text-lg font-semibold tabular-nums text-brand">
