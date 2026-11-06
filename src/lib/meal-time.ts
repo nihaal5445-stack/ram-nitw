@@ -35,12 +35,12 @@ export function slotState(now: Date): SlotState {
 }
 
 /** Demo-only crowd estimate: busy at the start of a slot, easing off towards the end. */
-export function crowdFor(now: Date): CrowdLevel | null {
+export function crowdFor(now: Date, bias: -1 | 0 | 1 = 0): CrowdLevel | null {
   const st = slotState(now);
   if (st.status !== "serving") return null;
   const len = toMin(st.slot.end) - toMin(st.slot.start);
   const elapsed = len - st.minutes;
-  if (elapsed < len * 0.3) return "busy";
-  if (elapsed < len * 0.65) return "moderate";
-  return "low";
+  const order: CrowdLevel[] = ["low", "moderate", "busy"];
+  const base = elapsed < len * 0.3 ? 2 : elapsed < len * 0.65 ? 1 : 0;
+  return order[Math.min(2, Math.max(0, base + bias))];
 }

@@ -2,6 +2,8 @@ export type MessType = "veg" | "mixed" | "north_indian";
 /** confirmed = verified operational mess; unconfirmed = exists but name/details not yet confirmed. */
 export type MessStatus = "confirmed" | "unconfirmed" | "under_construction";
 
+export type EligibilityKey = "pureVeg" | "allStudents" | "ladiesHalls" | "tbc";
+
 export interface MessConfig {
   id: string;
   /** Display name. Placeholders are labelled plainly, never invented. */
@@ -9,6 +11,8 @@ export interface MessConfig {
   type: MessType;
   menuStyle: string;
   eligibleGroups: string[];
+  /** Translation keys under Public.messSections.eligibility */
+  eligibility: EligibilityKey[];
   capacity: number;
   status: MessStatus;
   location: { lat: number; lng: number };
@@ -25,6 +29,7 @@ export const messes: MessConfig[] = [
     type: "veg",
     menuStyle: "Pure vegetarian",
     eligibleGroups: ["Pure-vegetarian students"], // TODO: verify
+    eligibility: ["pureVeg"],
     capacity: 800, // TODO: verify
     status: "confirmed",
     location: { lat: 17.9848, lng: 79.5292 }, // TODO: verify
@@ -35,6 +40,7 @@ export const messes: MessConfig[] = [
     type: "mixed",
     menuStyle: "South and North Indian mixed menu", // TODO: verify
     eligibleGroups: ["All students"], // TODO: verify
+    eligibility: ["allStudents"],
     capacity: 800, // TODO: verify
     status: "confirmed",
     location: { lat: 17.9852, lng: 79.5318 }, // TODO: verify
@@ -45,6 +51,7 @@ export const messes: MessConfig[] = [
     type: "north_indian",
     menuStyle: "North Indian menu", // TODO: verify
     eligibleGroups: ["All students"], // TODO: verify
+    eligibility: ["allStudents"],
     capacity: 1000, // TODO: verify
     status: "confirmed",
     location: { lat: 17.9826, lng: 79.5287 }, // TODO: verify
@@ -55,6 +62,7 @@ export const messes: MessConfig[] = [
     type: "mixed",
     menuStyle: "Mixed menu", // TODO: verify
     eligibleGroups: ["Ladies' Halls of Residence"], // TODO: verify
+    eligibility: ["ladiesHalls"],
     capacity: 600, // TODO: verify
     status: "confirmed",
     location: { lat: 17.9818, lng: 79.5312 }, // TODO: verify
@@ -67,6 +75,7 @@ export const messes: MessConfig[] = [
       type: "mixed",
       menuStyle: "To be confirmed",
       eligibleGroups: ["To be confirmed"],
+      eligibility: ["tbc"],
       capacity: 500, // TODO: verify
       status: "unconfirmed",
       location: {
@@ -82,6 +91,7 @@ export const messes: MessConfig[] = [
       type: "mixed",
       menuStyle: "To be confirmed",
       eligibleGroups: ["To be confirmed"],
+      eligibility: ["tbc"],
       capacity: 1000, // TODO: verify
       status: "under_construction",
       location: {

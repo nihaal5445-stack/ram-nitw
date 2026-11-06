@@ -59,3 +59,11 @@ export const images = {
     source: U("photo-1606491956689-2ea866880c84"), credit: TODO,
   },
 } satisfies Record<string, SiteImage>;
+
+/** Photo per confirmed mess (generic food photography, not the actual mess). */
+export const messPhotos: Record<string, SiteImage> = {
+  "ifc-a": images.wellnessBowl,
+  "ifc-b": images.biryani,
+  krishna: images.grabGo,
+  priyadarshini: images.pavBhaji,
+};

@@ -329,6 +329,54 @@
       "veg": "Pure vegetarian",
       "mixed": "Mixed menu",
       "north_indian": "North Indian"
+    },
+    "messSections": {
+      "eyebrow": "Mess by mess",
+      "title": "What each mess offers",
+      "lead": "Menu style, who can eat where, meal times, today's menu and the latest improvement for every confirmed mess. Details marked demo data are placeholders until verified.",
+      "photoNote": "Illustrative food photo, not this mess.",
+      "menuStyle": "Menu style",
+      "eligibilityLabel": "Who can eat here",
+      "timings": "Meal timings",
+      "rating": "Student rating",
+      "ratingValue": "{value} out of 5",
+      "demo": "demo data",
+      "today": "Today's menu",
+      "serving": "Now serving",
+      "next": "Next up",
+      "tomorrow": "Tomorrow morning",
+      "veg": "Vegetarian",
+      "crowd": "Crowd now",
+      "crowdClosed": "Not serving right now",
+      "level": {
+        "low": "Light",
+        "moderate": "Moderate",
+        "busy": "Busy"
+      },
+      "addOns": "Add-ons",
+      "latest": "Latest progress update",
+      "othersTitle": "Other messes",
+      "othersLead": "These messes exist but their names and details are not yet confirmed, so they are listed plainly and without guesses.",
+      "detailsTbc": "details to be confirmed",
+      "eligibility": {
+        "pureVeg": "Pure-vegetarian students",
+        "allStudents": "All students",
+        "ladiesHalls": "Ladies' Halls of Residence",
+        "tbc": "To be confirmed"
+      },
+      "addOnItems": {
+        "egg": "Egg",
+        "sweet": "Sweet",
+        "fruit": "Fruit",
+        "juice": "Fresh juice",
+        "paneer": "Paneer"
+      },
+      "updates": {
+        "ifc_a": "A second serving counter was added at lunch to shorten the wait.",
+        "ifc_b": "The menu board now lists dishes in English and Telugu.",
+        "krishna": "Water coolers were cleaned and serviced.",
+        "priyadarshini": "Dinner timing was reviewed with hostel representatives."
+      }
     }
   }
 }

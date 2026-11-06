@@ -11,7 +11,12 @@ for (const [w, h] of [[1440, 900], [390, 844]]) {
     const ctx = await browser.newContext({ viewport: { width: w, height: h }, colorScheme: scheme, reducedMotion: "reduce" });
     const page = await ctx.newPage();
     await page.goto(base + path, { waitUntil: "networkidle" });
-    await page.waitForTimeout(500);
+    // scroll through so lazy images and scroll-driven reveals settle
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); }
+      window.scrollTo(0, 0);
+    });
+    await page.waitForTimeout(600);
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     if (overflow) console.warn(`HORIZONTAL SCROLL at ${w} ${scheme}`);
     const file = `screenshots/${name}-${w}-${scheme}.png`;

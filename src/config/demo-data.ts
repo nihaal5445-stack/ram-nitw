@@ -32,3 +32,19 @@ export const baseMenu: Record<MealId, Dish[]> = {
 };
 
 export type CrowdLevel = "low" | "moderate" | "busy";
+
+export interface MessDemo {
+  rating: number; // out of 5. TODO: verify (demo)
+  /** shifts the crowd estimate: +1 busier, -1 quieter */
+  crowdBias: -1 | 0 | 1;
+  addOns: string[]; // keys under Public.messSections.addOnItems
+  updateDate: string; // ISO date; text under Public.messSections.updates.<id with _>
+}
+
+// All demo values. TODO: verify with the Chief Warden's office.
+export const messDemo: Record<string, MessDemo> = {
+  "ifc-a": { rating: 4.2, crowdBias: 1, addOns: ["sweet", "fruit", "juice"], updateDate: "2026-11-04" },
+  "ifc-b": { rating: 3.9, crowdBias: 0, addOns: ["egg", "sweet", "juice"], updateDate: "2026-11-03" },
+  krishna: { rating: 4.0, crowdBias: 1, addOns: ["paneer", "sweet", "egg"], updateDate: "2026-11-05" },
+  priyadarshini: { rating: 4.3, crowdBias: -1, addOns: ["fruit", "sweet", "egg"], updateDate: "2026-11-02" },
+};
