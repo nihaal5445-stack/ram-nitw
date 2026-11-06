@@ -1226,5 +1226,30 @@
     "cardTitle": "Students",
     "cardDesc": "Add a student to the mess or remove one",
     "cardWarden": "Add students, move them between messes"
+  },
+  "MessMenu": {
+    "title": "Full menu today",
+    "tomorrowTitle": "Full menu tomorrow",
+    "tabs": "Meals",
+    "veg": "Veg",
+    "nonVeg": "Non-veg",
+    "nowServing": "Now serving",
+    "nextUp": "Next up",
+    "likes": "{n} likes",
+    "demo": "Demo menu: placeholder dishes until the mess publishes the real menu. Like counts are live.",
+    "mostLiked": "Most liked this week",
+    "mostLikedDemo": "Demo counts until students start liking dishes.",
+    "noLikes": "No likes yet.",
+    "glance": "Mess at a glance",
+    "capacity": "Capacity",
+    "seats": "{n} seats",
+    "addOnsFrom": "Add-ons from",
+    "rating": "Rating",
+    "demoTag": "demo",
+    "addOnsTitle": "Extras on sale",
+    "inStock": "In stock",
+    "soldOut": "Sold out",
+    "fromPrice": "from Rs {n}",
+    "tomorrowLabel": "Tomorrow"
   }
 }

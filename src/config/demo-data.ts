@@ -39,14 +39,18 @@ export interface MessDemo {
   crowdBias: -1 | 0 | 1;
   addOns: string[]; // keys under Public.messSections.addOnItems
   updateDate: string; // ISO date; text under Public.messSections.updates.<id with _>
+  /** placeholder "most liked this week" until real likes exist (dish keys under Public.dishes). TODO: verify / remove */
+  topLiked: { dish: string; n: number }[];
+  /** placeholder lowest add-on price in Rs, for messes that have no add-ons in the database yet */
+  addOnFrom: number;
 }
 
 // All demo values. TODO: verify with the Chief Warden's office.
 export const messDemo: Record<string, MessDemo> = {
-  "ifc-a": { rating: 4.2, crowdBias: 1, addOns: ["sweet", "fruit", "juice"], updateDate: "2026-11-04" },
-  "ifc-b": { rating: 3.9, crowdBias: 0, addOns: ["egg", "sweet", "juice"], updateDate: "2026-11-03" },
-  krishna: { rating: 4.0, crowdBias: 1, addOns: ["paneer", "sweet", "egg"], updateDate: "2026-11-05" },
-  priyadarshini: { rating: 4.3, crowdBias: -1, addOns: ["fruit", "sweet", "egg"], updateDate: "2026-11-02" },
+  "ifc-a": { rating: 4.2, crowdBias: 1, addOns: ["sweet", "fruit", "juice"], updateDate: "2026-11-04", topLiked: [{ dish: "paneerCurry", n: 42 }, { dish: "mixedVeg", n: 31 }, { dish: "idli", n: 27 }], addOnFrom: 20 },
+  "ifc-b": { rating: 3.9, crowdBias: 0, addOns: ["egg", "sweet", "juice"], updateDate: "2026-11-03", topLiked: [{ dish: "chickenBiryani", n: 58 }, { dish: "dosa", n: 36 }, { dish: "eggCurry", n: 24 }], addOnFrom: 25 },
+  krishna: { rating: 4.0, crowdBias: 1, addOns: ["paneer", "sweet", "egg"], updateDate: "2026-11-05", topLiked: [{ dish: "chole", n: 47 }, { dish: "roti", n: 33 }, { dish: "palakPaneer", n: 29 }], addOnFrom: 30 },
+  priyadarshini: { rating: 4.3, crowdBias: -1, addOns: ["fruit", "sweet", "egg"], updateDate: "2026-11-02", topLiked: [{ dish: "vegBiryani", n: 39 }, { dish: "poha", n: 28 }, { dish: "kheer", n: 22 }], addOnFrom: 20 },
 };
 
 /** Headline figures. `demo: true` ones are placeholders. TODO: verify / replace with real data. */

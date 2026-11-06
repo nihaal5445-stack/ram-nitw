@@ -29,6 +29,7 @@
     "test:complaints-live": "node scripts/test-complaints-live.mjs",
     "test:extras": "node scripts/test-extras.mjs",
     "test:students": "node scripts/test-students.mjs",
+    "test:layout": "node scripts/test-mess-layout.mjs",
     "test:dashboards": "node scripts/test-dashboards.mjs",
     "test:login-code": "node scripts/test-login-code.mjs",
     "demo:prep": "node scripts/demo-prep.mjs",
