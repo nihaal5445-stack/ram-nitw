@@ -24,6 +24,7 @@ export function ComplaintsView({ messes, defaultMess, dates, complaints }: {
 }) {
   const t = useTranslations("Complaints");
   const tm = useTranslations("Public.meals");
+  const tl = useTranslations("Complaints.live");
   const router = useRouter();
   const [pending, start] = useTransition();
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -48,7 +49,8 @@ export function ComplaintsView({ messes, defaultMess, dates, complaints }: {
 
       <form onSubmit={submit} className="grid gap-4 rounded-lg border border-border bg-card p-4 sm:grid-cols-2" aria-label={t("formLabel")}>
         <div><Label htmlFor="c-mess">{t("mess")}</Label>
-          <select id="c-mess" className={selectCls} value={f.mess} onChange={(e) => setF({ ...f, mess: e.target.value })}>{messes.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}</select></div>
+          <select id="c-mess" className={selectCls} value={f.mess} onChange={(e) => setF({ ...f, mess: e.target.value })}>{messes.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}</select>
+          <p className="mt-1 text-xs text-muted-foreground" data-testid="goes-to">{tl("goesTo", { mess: nameOf(f.mess) })}</p></div>
         <div><Label htmlFor="c-cat">{t("category")}</Label>
           <select id="c-cat" className={selectCls} value={f.category} onChange={(e) => setF({ ...f, category: e.target.value })}>{CATEGORIES.map((c) => <option key={c} value={c}>{t(`cat.${c}`)}</option>)}</select></div>
         <div><Label htmlFor="c-date">{t("date")}</Label>

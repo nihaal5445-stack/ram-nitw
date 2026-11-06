@@ -26,6 +26,7 @@
     "test:menu": "node scripts/test-menu.mjs",
     "test:phone": "node scripts/test-phone.mjs",
     "test:live": "node scripts/test-live.mjs",
+    "test:complaints-live": "node scripts/test-complaints-live.mjs",
     "test:dashboards": "node scripts/test-dashboards.mjs",
     "test:login-code": "node scripts/test-login-code.mjs",
     "demo:prep": "node scripts/demo-prep.mjs",

@@ -955,6 +955,15 @@
       "draftSourceTemplate": "Written from a template (no AI key): edit freely",
       "noteRequired": "Write a note of at least 10 characters first. If it cannot be resolved, the note is the reason shared with the students.",
       "sendFailed": "Some replies could not be sent."
+    },
+    "live": {
+      "toast": "New complaint",
+      "open": "Open the console",
+      "dismiss": "Dismiss",
+      "navLabel": "Complaints",
+      "nav": "Complaints: {n} unread",
+      "scope": "Showing complaints for {mess} only.",
+      "goesTo": "This goes to the admin of {mess}."
     }
   },
   "Feedback": {

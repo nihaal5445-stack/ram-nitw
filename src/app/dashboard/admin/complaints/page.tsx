@@ -27,7 +27,7 @@ export default async function AdminComplaintsPage() {
     key: g.key, title: `${g.topicLabel} · ${nameOf(g.messId)} · ${g.slot} · ${g.date}`, summary: g.summary, source: g.source,
     complaints: g.complaints.map((c) => ({ id: c.id, body: c.body, who: c.anonymous ? null : c.filer_name, slaDue: c.sla_due, draft: g.drafts[c.id] })),
   });
-  return <AdminConsole issues={open.map(toConsole)} answered={answered.map((c) => ({
+  return <AdminConsole messName={nameOf(profile.assigned_mess_id ?? "")} issues={open.map(toConsole)} answered={answered.map((c) => ({
     id: c.id, body: c.body, status: c.status as "resolved" | "cannot_resolve", reply: c.reply ?? "", reason: c.cannot_reason, posted: !!c.posted_at,
     title: `${nameOf(c.mess_id)} · ${c.slot} · ${c.meal_date}`,
   }))} />;

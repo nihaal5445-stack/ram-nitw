@@ -7,6 +7,7 @@ import { Sparkles, Timer, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { COMPLAINTS_EVENT } from "@/components/complaints/admin-notifier";
 import { draftReplies, postProgress, respondComplaint, type Outcome } from "@/app/actions/complaints";
 import { cn } from "@/lib/utils";
 
@@ -175,13 +176,22 @@ function IssueCard({ g }: { g: ConsoleIssue }) {
   );
 }
 
-export function AdminConsole({ issues, answered }: { issues: ConsoleIssue[]; answered: AnsweredRow[] }) {
+export function AdminConsole({ issues, answered, messName }: { issues: ConsoleIssue[]; answered: AnsweredRow[]; messName?: string }) {
   const t = useTranslations("Complaints.admin");
+  const tl = useTranslations("Complaints.live");
+  const router = useRouter();
+  // a new complaint arrives (Realtime): re-render the server data in place, no manual refresh
+  useEffect(() => {
+    const on = () => router.refresh();
+    window.addEventListener(COMPLAINTS_EVENT, on);
+    return () => window.removeEventListener(COMPLAINTS_EVENT, on);
+  }, [router]);
   return (
     <div className="space-y-8">
       <div>
         <h1 className="font-display text-3xl font-semibold text-brand">{t("title")}</h1>
         <p className="mt-1 text-muted-foreground">{t("lead")}</p>
+        {messName && <p className="mt-1 text-sm font-medium" data-testid="console-scope">{tl("scope", { mess: messName })}</p>}
       </div>
       <section aria-labelledby="open-issues" className="space-y-4">
         <h2 id="open-issues" className="text-lg font-semibold">{t("openIssues")}</h2>

@@ -3,6 +3,7 @@ import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { Navbar } from "@/components/navbar";
 import { ProfileError } from "@/components/profile-error";
 import { ContactAdmin } from "@/components/messages/contact-admin";
+import { AdminNotifier } from "@/components/complaints/admin-notifier";
 import { DemoBadge } from "@/components/demo-badge";
 import { FeedbackBanner } from "@/components/feedback/feedback-bell";
 
@@ -28,7 +29,7 @@ export default async function DashboardLayout({
       <Navbar
         userName={profile.full_name ?? user.email ?? "User"}
         role={profile.role}
-        badge={<DemoBadge />}
+        badge={<><DemoBadge />{profile.role === "mess_admin" && profile.assigned_mess_id && <AdminNotifier messId={profile.assigned_mess_id} />}</>}
       />
       {profile.role === "student" && <FeedbackBanner />}
       {profile.role === "student" && <ContactAdmin />}
