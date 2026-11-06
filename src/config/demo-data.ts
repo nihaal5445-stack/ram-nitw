@@ -48,3 +48,10 @@ export const messDemo: Record<string, MessDemo> = {
   krishna: { rating: 4.0, crowdBias: 1, addOns: ["paneer", "sweet", "egg"], updateDate: "2026-11-05" },
   priyadarshini: { rating: 4.3, crowdBias: -1, addOns: ["fruit", "sweet", "egg"], updateDate: "2026-11-02" },
 };
+
+/** Headline figures. `demo: true` ones are placeholders. TODO: verify / replace with real data. */
+export const stats = [
+  { id: "meals", value: 6200, decimals: 0, demo: true },
+  { id: "tokens", value: 18500, decimals: 0, demo: true },
+  { id: "rating", value: 4.1, decimals: 1, demo: true },
+] as const;

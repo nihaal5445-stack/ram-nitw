@@ -391,6 +391,24 @@
       "nextUp": "Next up",
       "done": "Finished for today",
       "note": "Timings are placeholders and may vary by mess until confirmed by the Chief Warden's office."
+    },
+    "stats": {
+      "title": "RAM at a glance",
+      "demoBadge": "Demo data",
+      "demo": "demo data",
+      "messes": {
+        "label": "Confirmed messes"
+      },
+      "meals": {
+        "label": "Meals served per day"
+      },
+      "tokens": {
+        "label": "Paper tokens avoided each month"
+      },
+      "rating": {
+        "label": "Average student rating (out of 5)"
+      },
+      "note": "Only the mess count comes from configuration. Every other figure is a placeholder until live attendance and feedback data are connected."
     }
   }
 }
