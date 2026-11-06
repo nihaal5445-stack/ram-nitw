@@ -18,7 +18,7 @@ export default async function WardenDashboard() {
   const t = await getTranslations("Warden");
   const tDash = await getTranslations("Dashboard");
 
-  const operationalMesses = messes.filter((m) => m.status === "operational");
+  const operationalMesses = messes.filter((m) => m.status === "confirmed");
   const underConstructionMesses = messes.filter((m) => m.status === "under_construction");
 
   return (
@@ -35,7 +35,7 @@ export default async function WardenDashboard() {
           title={t("allMesses")}
           value={operationalMesses.length}
           icon={Building2}
-          description={`${underConstructionMesses.length} under construction`}
+          description={`confirmed; ${messes.length - operationalMesses.length - underConstructionMesses.length} unconfirmed, ${underConstructionMesses.length} under construction`}
           accent="primary"
         />
         <StatCard
@@ -81,14 +81,14 @@ export default async function WardenDashboard() {
                     </span>
                   </div>
                   <Badge
-                    variant={mess.status === "operational" ? "default" : "secondary"}
+                    variant={mess.status === "confirmed" ? "default" : "secondary"}
                     className={
-                      mess.status === "operational"
+                      mess.status === "confirmed"
                         ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
                         : "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
                     }
                   >
-                    {mess.status === "operational" ? "Operational" : "Under Construction"}
+                    {mess.status === "confirmed" ? "Confirmed" : mess.status === "unconfirmed" ? "Unconfirmed" : "Under Construction"}
                   </Badge>
                 </div>
               ))}

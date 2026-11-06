@@ -33,8 +33,8 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public routes that don't need a session
-  const publicRoutes = ["/login", "/auth/callback"];
-  if (publicRoutes.some((r) => pathname.startsWith(r))) {
+  const publicRoutes = ["/login", "/auth/callback", "/credits"];
+  if (pathname === "/" || publicRoutes.some((r) => pathname.startsWith(r))) {
     return supabaseResponse;
   }
 

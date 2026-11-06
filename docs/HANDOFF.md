@@ -29,7 +29,7 @@ For the complete technical specification, architectural blueprint, and future ph
   - Server-side role verification and redirection on every `/dashboard/<role>` page
   - Mess configuration (`messes.ts`) with confirmed and placeholder messes
   - Seed database setup with permanent `auth.identities` and non-null token defaults via `npm run db:reset`
-- [ ] **Phase 2: Public Website (SPEC Section 6 — Full Plan)**
+- [ ] **Phase 2: Public Website (IN PROGRESS, see 'Phase 2 progress' below)**
   - Public landing page with NITW branding and features
   - Interactive Leaflet campus map showing all 9 mess locations (4 operational, 3 placeholder operational, 2 under construction)
   - Click-to-scroll navigation between map markers and mess detail cards (timings, menus, eligibility)
@@ -173,3 +173,16 @@ For the complete technical specification, architectural blueprint, and future ph
    - Phase 2 is the **Public Website** (full SPEC Section 6 plan: hero section, interactive Leaflet campus map, 9 messes with operational status badges, click-to-scroll navigation, and menu previews), NOT meal tokens.
    - Phase 3 is the **Meal Token System** (device-bound offline TOTP + cross-platform scanner library like `@zxing/browser` or `qr-scanner`, not BarcodeDetector).
 5. **Update `docs/HANDOFF.md` at the end of every work session**.
+
+---
+
+## 7. Phase 2 progress (public website)
+
+Plan: `/Users/nihal/.claude/plans/mutable-watching-wren.md` (12 sections in order, then /login restyle). One commit per section.
+
+- [x] Setup: CLAUDE.md, deps (leaflet, motion, playwright), `messes.ts` corrected (4 confirmed + Mess 5-7 TODO + Mess 8-9 under construction TODO; status `confirmed|unconfirmed|under_construction`), tokens in globals.css (`--surface`, `--brand`, `--gold`, `--navy-deep`), `lang` follows locale, `(public)` route group, `/` and `/credits` made public in `src/proxy.ts`.
+- [x] 1. Utility bar + sticky mega-menu + mobile drawer (`src/components/site/`, nav data in `src/config/site.ts`, strings in `messages/*.json` under `Public.*`).
+- [ ] 2. Hero + Today's Menu + Crowd pill (+ `src/config/images.ts`, `/credits`)
+- [ ] 3-12, then login restyle.
+
+Tooling: `BASE=http://localhost:3100 node scripts/shoot.mjs <name> [path] [selector]` writes `screenshots/` (git-ignored) at 1440/390, light/dark. Dev server was NOT running on :3000 in this session; screenshots used `npm run build && npx next start -p 3100`. The first `npm run build` after a change may print a Next security notice and fail; rerun it. Next 16.4.0 has a published advisory; upgrade is the user's call.

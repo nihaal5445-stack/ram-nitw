@@ -67,5 +67,139 @@
     "totalStudents": "Total Students",
     "userManagement": "User Management",
     "systemHealth": "System Health"
+  },
+  "Public": {
+    "brand": {
+      "home": "RAM, Random Access Meals, home",
+      "tagline": "NIT Warangal"
+    },
+    "utility": {
+      "institute": "National Institute of Technology Warangal",
+      "opensNew": "(opens in a new tab)",
+      "confirmed": "4 confirmed messes",
+      "helpline": "Helpline: to be announced"
+    },
+    "nav": {
+      "primary": "Primary",
+      "skip": "Skip to main content",
+      "signIn": "Sign in",
+      "menu": "Menu",
+      "openMenu": "Open menu",
+      "closeMenu": "Close menu",
+      "about": {
+        "label": "About",
+        "blurb": "Why RAM exists and what the Chief Warden's office is working towards.",
+        "links": {
+          "welcome": {
+            "title": "Message from the Chief Warden",
+            "desc": "Our approach to dining on campus."
+          },
+          "initiatives": {
+            "title": "Initiatives",
+            "desc": "Paper-free tokens, less waste, quicker service."
+          },
+          "audiences": {
+            "title": "For students, parents and staff",
+            "desc": "Find what matters to you."
+          }
+        }
+      },
+      "messes": {
+        "label": "Messes",
+        "blurb": "Every mess on campus, where it is and what it serves.",
+        "links": {
+          "map": {
+            "title": "Campus map",
+            "desc": "See each mess on the map."
+          },
+          "directory": {
+            "title": "Mess directory",
+            "desc": "Menu style, eligibility and timings."
+          },
+          "crowd": {
+            "title": "Crowd now",
+            "desc": "A quick read on how busy it is."
+          }
+        }
+      },
+      "menus": {
+        "label": "Menus & Timings",
+        "blurb": "What is being served today and when each meal starts.",
+        "links": {
+          "today": {
+            "title": "Today's menu",
+            "desc": "Breakfast, lunch, snacks and dinner."
+          },
+          "timings": {
+            "title": "Meal timings",
+            "desc": "Now serving and next up."
+          }
+        }
+      },
+      "transparency": {
+        "label": "Transparency",
+        "blurb": "Numbers and progress shared in the open.",
+        "links": {
+          "progress": {
+            "title": "Daily progress",
+            "desc": "Improvements made recently."
+          },
+          "stats": {
+            "title": "Key figures",
+            "desc": "Meals, savings and feedback."
+          },
+          "open": {
+            "title": "Open by default",
+            "desc": "How we report and why."
+          }
+        }
+      },
+      "sustainability": {
+        "label": "Sustainability",
+        "blurb": "Cutting waste in the kitchen and on the plate.",
+        "links": {
+          "waste": {
+            "title": "Food waste reduction",
+            "desc": "Planning meals around real demand."
+          },
+          "paper": {
+            "title": "Zero paper tokens",
+            "desc": "Digital tokens instead of printed slips."
+          }
+        }
+      },
+      "calendar": {
+        "label": "Calendar",
+        "blurb": "Special meals, festivals and closures.",
+        "links": {
+          "special": {
+            "title": "Special meals",
+            "desc": "Festival and event menus."
+          },
+          "closures": {
+            "title": "Closures",
+            "desc": "Planned holidays and maintenance."
+          }
+        }
+      },
+      "help": {
+        "label": "Help",
+        "blurb": "Questions about access, tokens or timings.",
+        "links": {
+          "contact": {
+            "title": "Contact",
+            "desc": "Reach the Chief Warden's office."
+          },
+          "support": {
+            "title": "Support",
+            "desc": "Common questions and who to ask."
+          },
+          "signin": {
+            "title": "Sign in",
+            "desc": "Students, parents and mess staff."
+          }
+        }
+      }
+    }
   }
 }

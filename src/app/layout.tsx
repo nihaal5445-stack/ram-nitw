@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/inter";
 import "@fontsource-variable/playfair-display";
-import { getMessages } from "next-intl/server";
+import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
@@ -20,10 +20,11 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const messages = await getMessages();
+  const locale = await getLocale();
 
   return (
     <html
-      lang="en"
+      lang={locale}
       className="h-full antialiased"
       suppressHydrationWarning
     >
@@ -34,7 +35,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <NextIntlClientProvider messages={messages}>
+          <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
           </NextIntlClientProvider>
         </ThemeProvider>
