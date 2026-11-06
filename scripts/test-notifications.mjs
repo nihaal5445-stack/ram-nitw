@@ -36,7 +36,7 @@ try {
   check("a student cannot post", !!(await s1.rpc("post_announcement", { p_title: `${TAG} bad`, p_body: "x y z", p_category: "general" })).error);
   const w1 = await warden.rpc("post_announcement", { p_title: `${TAG} warden two`, p_body: "IFC-B and Krishna.", p_category: "closure", p_mess_ids: ["ifc-b", "krishna"], p_public: true });
   check("warden posts to several messes: S2 yes, S1 no", !w1.error && (await inbox(s2)).some((n) => n.title === `${TAG} warden two`) && !(await inbox(s1)).some((n) => n.title === `${TAG} warden two`));
-  const w2 = await warden.rpc("post_announcement", { p_title: `${TAG} warden all`, p_body: "Everybody.", p_category: "special_meal", p_pinned: true });
+  await warden.rpc("post_announcement", { p_title: `${TAG} warden all`, p_body: "Everybody.", p_category: "special_meal", p_pinned: true });
   check("warden posts to all messes: S1, S2 and the parent get it", (await inbox(s1)).some((n) => n.title === `${TAG} warden all` && n.pinned) && (await inbox(s2)).some((n) => n.title === `${TAG} warden all`) && (await inbox(parent)).some((n) => n.title === `${TAG} warden all`));
   check("pinned item is first in the inbox", (await inbox(s1))[0].title === `${TAG} warden all`);
 

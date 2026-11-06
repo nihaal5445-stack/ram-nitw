@@ -103,6 +103,17 @@ Fallback if the camera will not focus: on the phone add `?debug=1` to the scanne
 | **Admin adds / removes students** | admin dashboard (form at the top) and `/dashboard/admin/students` (search, Remove from mess) | `admin-ifcb@nitw.ac.in` (own mess only); **warden** `/dashboard/warden/students`: any mess, move between messes |
 | **Public mess sections** (balanced columns, full menu, most liked, at a glance) | `/` then scroll to "Messes" | none (public) |
 
+## Likes after eating, and notifications (about 3 minutes)
+Logins as in the table (or the password `password123` locally).
+1. **Locked hearts.** Student -> dashboard -> *Today's menu*: every heart shows its count but is greyed; hover (or tap) shows "You can rate this after your meal".
+2. **Scan, then still locked.** Scan the student at the counter (QR page + scanner as above). Hearts of that meal stay locked: a scan is not enough until the slot has ended or 40 minutes passed. (In DEMO MODE the "slot ended" clause is ignored on purpose, only the 40 minutes count, so scans at odd hours do not unlock instantly.)
+3. **Unlock.** Student -> bell -> or `/dashboard/student/feedback` -> **Simulate 40 min passed**. Back on the dashboard the hearts of that meal are live (other meals stay locked); like a dish and watch the count change. A feedback-request notification appears in the bell at the same moment.
+4. **Live announcement.** Two windows: Student on `/dashboard/student`, Mess admin IFC-A on `/dashboard/notifications`. Admin: title "Dinner closed on Sunday", category *Closure*, tick *pin* and *Also show on the public Updates page*, **Send**. The student window shows a toast and the bell count goes up with no reload. The admin sees "Sent to N people" and a read counter.
+5. **Warden** (`/dashboard/notifications`): tick one, several or no messes (none = all) and send; a student of IFC-B only gets it if IFC-B was ticked. Parent (`parent@example.com`) receives everything addressed to the linked student.
+6. **Inbox:** filter chips by category, *Mark read*, *Mark all read*, and the settings box to mute categories (Complaint update and Message from admin are always on).
+7. **Automatic ones:** admin replies to a complaint -> the filer gets "Your complaint was resolved/being worked on"; admin replies in a message thread -> "Message from your mess admin"; admin adds an extra on the Extras page -> every student of the mess gets "New add-on on sale".
+8. **Public:** open `http://localhost:3000/` (signed out): the **Updates** section, and `/updates` for all of them. Only closures, special meals and timings marked public appear; menu changes, complaints and personal items never do.
+
 ## If something goes wrong
 - Scan or add-on says "No meal is being served right now" / "no meal slot left today": DEMO_MODE is off. Run `npm run demo:mode -- on`, then start a new shift on the scanner.
 - Heatmap shows "Not serving right now": run `npm run demo:crowd` again (the last-10-minutes window decays; `demo:prep` and `-- --keep` prevent that).
