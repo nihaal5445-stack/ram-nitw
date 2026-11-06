@@ -11,6 +11,7 @@ import Link from "next/link";
 import { AlertOctagon } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
+import { AssistantPanel } from "@/components/assistant/assistant-panel";
 import { TopLiked } from "@/components/likes/top-liked";
 import { CrowdPanel } from "@/components/crowd-panel";
 import { SwitchToggle } from "@/components/switch/switch-toggle";
@@ -56,6 +57,8 @@ export default async function WardenDashboard() {
       <CrowdPanel />
 
       <TopLiked showMess />
+
+      <AssistantPanel chips={["What are the top issues at IFC-B this week?", "What should we fix first?", "How are complaints trending?", "Which messes are busiest right now?"]} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard

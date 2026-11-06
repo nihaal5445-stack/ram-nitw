@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Users, TrendingUp, UtensilsCrossed, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { messes } from "@/config/messes";
+import { AssistantPanel } from "@/components/assistant/assistant-panel";
 import { TopLiked } from "@/components/likes/top-liked";
 import { CrowdPanel } from "@/components/crowd-panel";
 
@@ -43,6 +44,8 @@ export default async function MessAdminDashboard() {
       <CrowdPanel ownMessId={profile.assigned_mess_id} />
 
       <TopLiked />
+
+      <AssistantPanel chips={[`What are the top issues at ${assignedMess?.name ?? "my mess"} this week?`, "What should we fix first?", "Which dishes do students like most?", "How crowded is it right now?"]} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="border border-border shadow-sm">

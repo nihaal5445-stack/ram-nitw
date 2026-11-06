@@ -970,5 +970,22 @@
     "topTitle": "Most-liked dishes (last 7 days)",
     "topNone": "No likes yet.",
     "likes": "{n} likes"
+  },
+  "Assistant": {
+    "title": "Ask the assistant",
+    "lead": "Questions about complaints, feedback, likes and crowd. It only sees counts, never names or complaint text.",
+    "chips": "Suggested questions",
+    "you": "You",
+    "assistant": "Assistant",
+    "offline": "Offline summary",
+    "ai": "AI answer",
+    "thinking": "Thinking…",
+    "placeholder": "Ask a question, e.g. top issues this week",
+    "send": "Send",
+    "privacy": "Offline summary = rule-based answers from your data, used when no AI key is configured.",
+    "errors": {
+      "default": "The assistant is not available right now.",
+      "rate": "Too many questions. Wait a minute."
+    }
   }
 }
