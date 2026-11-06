@@ -119,31 +119,7 @@ try {
   check("admin page: stock left 29 / 30, sold 1, served 1", /29 \/ 30\s+1\s+1/.test((await row.innerText()).replace(/\s+/g, " ")), await row.innerText());
   await ap.screenshot({ path: "screenshots/addon-admin-1440-light.png" });
 
-  // ── student page: mock payment screen ──
-  const s = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  await s.addCookies((await sessionCookies("student@student.nitw.ac.in")).cookies);
-  const sp = await s.newPage();
-  await sp.goto(`${BASE}/dashboard/student/addons`, { waitUntil: "networkidle" });
-  check("student page: history shows the used ticket", await visible(sp.getByText("Used", { exact: true })));
-  await sp.getByTestId("pay-Gulab Jamun (2 pc)").click();
-  check("payment sheet is labelled 'Test payment, no money is charged'", await visible(sp.getByRole("heading", { name: "Test payment" })) && await visible(sp.getByText("Test payment, no money is charged", { exact: true }).first()));
-  check("UPI tab: demo QR and an 'I've paid' button", await visible(sp.getByTestId("upi-paid")) && (await sp.getByRole("img", { name: "Demo UPI QR code" }).count()) === 1);
-  await sp.getByTestId("tab-card").click();
-  check("Card tab: test card prefilled", (await sp.getByLabel("Card number").inputValue()).startsWith("4242"));
-  await sp.getByTestId("tab-wallet").click();
-  check("Wallet tab: wallet choices", await visible(sp.getByTestId("wallet-pay")));
-  await sp.screenshot({ path: "screenshots/addon-pay-390-light.png" });
-  await sp.getByTestId("tab-upi").click();
-  await sp.getByTestId("upi-paid").click();
-  check("a processing state is shown first", await visible(sp.getByTestId("processing"), 3000));
-  const t0 = Date.now();
-  check("success after about 2 seconds, with a receipt (order id, amount, time)", await visible(sp.getByTestId("pay-success"), 8000) && /^order_TEST_/.test(await sp.getByTestId("receipt-order").innerText()) && /Rs 20/.test(await sp.getByTestId("receipt").innerText()) && Date.now() - t0 >= 800);
-  await sp.screenshot({ path: "screenshots/addon-receipt-390-light.png" });
-  await sp.getByTestId("pay-done").click();
-  check("then the signed QR ticket is shown", await visible(sp.getByTestId("addon-ticket"), 15000) && /^ramA\./.test(await sp.getByTestId("addon-ticket").getAttribute("data-ticket")));
-  await sp.reload({ waitUntil: "networkidle" });
-  await sp.getByTestId("receipt-toggle").first().click();
-  check("receipt is in the transaction history", await visible(sp.getByTestId("receipt").first()) && /UPI \(test\)/.test(await sp.getByTestId("receipt").first().innerText()));
+  // (the student shop UI, cart, payment sheet and receipts are covered by test:extras)
   // payment_mode: with a real gateway configured, free direct purchases are refused
   await admin.from("app_settings").upsert({ key: "payment_mode", value: "razorpay" });
   await admin.from("addon_purchases").delete().neq("id", NIL); await admin.from("addons").update({ sold: 0 }).neq("id", NIL);

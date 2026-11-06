@@ -7,11 +7,17 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { QrCode } from "@/components/access/qr-code";
-import { buyAddon, type Purchase } from "@/app/actions/addons";
-import { confirmRazorpay, startRazorpay } from "@/app/actions/payments";
 import { cn } from "@/lib/utils";
 
-export interface PayItem { id: string; name: string; pricePaise: number }
+export interface PayReceipt { order_id: string; payment_ref: string; amount_paise: number; method: string; created_at: string; name: string }
+type Res<R> = { ok: true; result: R } | { ok: false; error: string };
+/** What the sheet pays for. The sheet knows nothing about carts or add-ons: callers plug in the server actions. */
+export interface PayApi<R extends PayReceipt> {
+  title: string; amountPaise: number; razorpay: boolean;
+  mock: (method: "upi" | "card" | "wallet") => Promise<Res<R>>;
+  razorpayStart: () => Promise<{ ok: true; orderId: string; keyId: string; amountPaise: number; name: string } | { ok: false; error: string }>;
+  razorpayConfirm: (resp: { orderId: string; paymentId: string; signature: string }) => Promise<Res<R>>;
+}
 export const rupees = (p: number) => `Rs ${(p / 100).toFixed(p % 100 ? 2 : 0)}`;
 const stamp = (iso: string) => new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "Asia/Kolkata" }).format(new Date(iso));
 
@@ -43,35 +49,37 @@ type Tab = "upi" | "card" | "wallet";
 const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Payment sheet. Razorpay Checkout (test mode) when the server has keys, otherwise a realistic TEST payment sheet. Nothing is ever charged. */
-export function PaymentSheet({ item, razorpay, onClose, onPaid }: { item: PayItem; razorpay: boolean; onClose: () => void; onPaid: (p: Purchase) => void }) {
+export function PaymentSheet<R extends PayReceipt>({ api, onClose, onPaid }: { api: PayApi<R>; onClose: () => void; onPaid: (r: R) => void }) {
+  const razorpay = api.razorpay;
+  const item = { name: api.title, pricePaise: api.amountPaise };
   const t = useTranslations("Addons.pay");
   const [tab, setTab] = useState<Tab>("upi");
   const [phase, setPhase] = useState<"choose" | "processing" | "success">("choose");
-  const [receipt, setReceipt] = useState<Purchase | null>(null);
+  const [receipt, setReceipt] = useState<R | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [card, setCard] = useState({ number: "4242 4242 4242 4242", expiry: "12/30", cvv: "123", name: "Demo Student" });
   const [wallet, setWallet] = useState("phonepe");
 
-  const finish = (p: Purchase) => { setReceipt(p); setPhase("success"); onPaid(p); };
+  const finish = (p: R) => { setReceipt(p); setPhase("success"); onPaid(p); };
 
   const payMock = async (method: Tab) => {
     setError(null); setPhase("processing");
-    const [r] = await Promise.all([buyAddon(item.id, method), wait(2000)]); // the 2-second "processing" state
+    const [r] = await Promise.all([api.mock(method), wait(2000)]); // the 2-second "processing" state
     if (!r.ok) { setError(r.error); setPhase("choose"); return; }
-    finish(r.purchase);
+    finish(r.result);
   };
 
   const payRazorpay = async () => {
     setError(null); setPhase("processing");
-    const o = await startRazorpay(item.id);
+    const o = await api.razorpayStart();
     if (!o.ok) { setError(o.error); setPhase("choose"); return; }
     if (!(await loadCheckout()) || !window.Razorpay) { setError(t("scriptFail")); setPhase("choose"); return; }
     new window.Razorpay({
       key: o.keyId, order_id: o.orderId, amount: o.amountPaise, currency: "INR", name: "RAM, NIT Warangal", description: o.name, theme: { color: "#7B1E1E" },
       handler: async (resp: { razorpay_payment_id: string; razorpay_order_id: string; razorpay_signature: string }) => {
-        const c = await confirmRazorpay({ orderId: resp.razorpay_order_id, paymentId: resp.razorpay_payment_id, signature: resp.razorpay_signature });
+        const c = await api.razorpayConfirm({ orderId: resp.razorpay_order_id, paymentId: resp.razorpay_payment_id, signature: resp.razorpay_signature });
         if (!c.ok) { setError(c.error); setPhase("choose"); return; }
-        finish(c.purchase);
+        finish(c.result);
       },
       modal: { ondismiss: () => setPhase((p) => (p === "processing" ? "choose" : p)) },
     }).open();

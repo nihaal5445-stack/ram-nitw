@@ -66,7 +66,7 @@ export default async function StudentDashboard() {
       {profile.assigned_mess_id && <StudentMenu messId={profile.assigned_mess_id} vegOnly={profile.assigned_mess_id === "ifc-a"} />}
 
       <div className="grid gap-4 sm:grid-cols-3">
-      <Link href="/dashboard/student/addons" className="flex items-center gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-muted/50">
+      <Link href="/dashboard/student/extras" className="flex items-center gap-4 rounded-lg border border-border bg-card p-4 transition-colors hover:bg-muted/50">
         <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><Soup className="size-6" aria-hidden /></span>
         <span>
           <span className="block font-semibold">{t("addonsLink")}</span>

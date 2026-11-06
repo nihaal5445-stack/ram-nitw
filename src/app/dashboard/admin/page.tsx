@@ -66,7 +66,7 @@ export default async function MessAdminDashboard() {
               Manage Menu (Phase 3)
             </Button>
             <Link href="/dashboard/admin/addons" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10">
-              Add-ons: stock and prices
+              Extras: items, stock and orders
             </Link>
             <Link href="/dashboard/admin/messages" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10" data-testid="inbox-link">
               Messages inbox{unreadMsgs > 0 ? ` (${unreadMsgs} new)` : ""}
