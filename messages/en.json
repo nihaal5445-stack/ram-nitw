@@ -88,7 +88,23 @@
     "title": "Counter Dashboard",
     "scanToken": "Scan Token",
     "todayCount": "Meals served today",
-    "currentSlot": "Current meal slot"
+    "currentSlot": "Current meal slot",
+    "noMealNow": "No meal now",
+    "manualToday": "Manual entries today",
+    "manualTodayDesc": "Logged with a reason",
+    "lastSync": "Last sync",
+    "never": "Never",
+    "openScanner": "Open scanner",
+    "openScannerDesc": "Scan student QR codes, even without internet",
+    "recentScans": "Recent scans",
+    "noScansYet": "No scans recorded yet.",
+    "manualTag": "Manual",
+    "privacyNote": "Student names are shown only on the scanner while a shift is open.",
+    "status": {
+      "accepted": "Admitted",
+      "duplicate": "Duplicate",
+      "rejected": "Rejected"
+    }
   },
   "MessRep": {
     "title": "Mess Representative Dashboard",
@@ -109,7 +125,46 @@
     "allMesses": "All Messes",
     "totalStudents": "Total Students",
     "userManagement": "User Management",
-    "systemHealth": "System Health"
+    "systemHealth": "System Health",
+    "fraud": {
+      "title": "Fraud flags",
+      "subtitle": "Raised automatically when scans are synced. Review them, then resolve each with a short note. Flags are evidence for a conversation, not proof of wrongdoing.",
+      "showAll": "Show resolved flags too",
+      "showOpen": "Show only open flags",
+      "none": "No flags to review.",
+      "high": "High",
+      "medium": "Medium",
+      "student": "Student",
+      "mess": "Mess",
+      "evidence": "Evidence",
+      "resolve": "Resolve",
+      "notePlaceholder": "What did you find? (required)",
+      "resolvedWith": "Resolved: {note}",
+      "cardTitle": "Fraud flags ({n} open)",
+      "cardDesc": "Review duplicate, forged and suspicious scans from the counters",
+      "kinds": {
+        "duplicate_cross_scanner": "Admitted at two counters",
+        "duplicate_same_scanner": "Scanned twice at one counter",
+        "wrong_mess": "Scan at the wrong mess",
+        "stale_code": "Old code or screenshot",
+        "bad_signature": "Forged or corrupted code",
+        "revoked_device": "Revoked phone used",
+        "unknown_device": "Unknown code",
+        "clock_skew": "Counter clock wrong",
+        "manual_overuse": "Too many manual entries"
+      },
+      "explain": {
+        "duplicate_cross_scanner": "Two counters admitted the same student for the same meal while offline. Only the earliest counts.",
+        "duplicate_same_scanner": "The same student was scanned again for a meal they were already admitted to.",
+        "wrong_mess": "A student was scanned at a mess they are not assigned to.",
+        "stale_code": "The QR was more than 60 seconds old when scanned: likely a screenshot or a forwarded code.",
+        "bad_signature": "The code's signature did not match the student's registered phone. Someone tried to fake a code.",
+        "revoked_device": "A phone that was replaced or revoked was used to scan.",
+        "unknown_device": "A code for a phone that RAM has never seen.",
+        "clock_skew": "A counter reported a time far from the server's clock.",
+        "manual_overuse": "A staff member or student exceeded the manual-entry limits."
+      }
+    }
   },
   "Public": {
     "brand": {

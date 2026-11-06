@@ -13,7 +13,8 @@
     "test:unit": "node --test src/lib/access/*.test.ts",
     "test:access": "node scripts/test-access-flow.mjs",
     "test:student-token": "node scripts/test-student-token.mjs",
-    "test:scanner": "node scripts/test-scanner-flow.mjs"
+    "test:scanner": "node scripts/test-scanner-flow.mjs",
+    "test:dashboards": "node scripts/test-dashboards.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

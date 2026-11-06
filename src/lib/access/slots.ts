@@ -20,3 +20,6 @@ export function slotAt(slots: SlotWindow[], ms: number, graceMin = 15): { slot: 
 }
 
 export const ledgerKey = (studentId: string, date: string, slot: string) => `${studentId}|${date}|${slot}`;
+
+/** The slot being served right now (no grace), or null. Server components call this instead of touching Date.now(). */
+export const currentSlot = (slots: SlotWindow[]) => slotAt(slots, Date.now(), 0);

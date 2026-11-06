@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Building2, Users, ShieldCheck, Activity } from "lucide-react";
+import Link from "next/link";
+import { AlertOctagon } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
 
 export default async function WardenDashboard() {
@@ -18,6 +21,7 @@ export default async function WardenDashboard() {
   const t = await getTranslations("Warden");
   const tDash = await getTranslations("Dashboard");
 
+  const { count: openFlags } = await (await createClient()).from("fraud_flags").select("id", { count: "exact", head: true }).is("resolved_at", null);
   const operationalMesses = messes.filter((m) => m.status === "confirmed");
   const underConstructionMesses = messes.filter((m) => m.status === "under_construction");
 
@@ -29,6 +33,14 @@ export default async function WardenDashboard() {
         </h1>
         <p className="text-muted-foreground mt-1">{t("title")}</p>
       </div>
+
+      <Link href="/dashboard/warden/fraud" className="flex items-center gap-4 rounded-lg border-2 border-primary/40 bg-primary/5 p-5 transition-colors hover:bg-primary/10">
+        <span className="flex size-12 items-center justify-center rounded-xl bg-primary text-primary-foreground"><AlertOctagon className="size-6" aria-hidden /></span>
+        <span>
+          <span className="block font-semibold">{t("fraud.cardTitle", { n: openFlags ?? 0 })}</span>
+          <span className="block text-sm text-muted-foreground">{t("fraud.cardDesc")}</span>
+        </span>
+      </Link>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
