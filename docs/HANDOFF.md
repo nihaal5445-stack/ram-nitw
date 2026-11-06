@@ -88,6 +88,11 @@ For the complete technical specification, architectural blueprint, and future ph
 - **Self-Hosted Fonts**: Google Fonts network requests (`next/font/google`) were removed and replaced with self-hosted `@fontsource-variable/inter` and `@fontsource-variable/playfair-display` in [`src/app/layout.tsx`](file:///Users/nihal/.gemini/antigravity-ide/scratch/ram-nitw/src/app/layout.tsx) and [`src/app/globals.css`](file:///Users/nihal/.gemini/antigravity-ide/scratch/ram-nitw/src/app/globals.css).
 - **Proxy Convention**: Next.js 16 deprecated `middleware.ts` in favor of `proxy.ts`. Created [`src/proxy.ts`](file:///Users/nihal/.gemini/antigravity-ide/scratch/ram-nitw/src/proxy.ts) exporting `proxy` function and config. Builds run with zero warnings.
 
+### D. Next.js 16.4.5 Security Upgrade (2026-11-06)
+- Upgraded `next` and `eslint-config-next` from 16.4.0 to **16.4.5** to patch published advisories (RCE in Image Optimization with SVGs, RCE in `use cache` typed-array returns, Server Actions DoS). Set `experimental.agentUpgrade: "security"` in `next.config.ts`.
+- **Build gotcha**: if your shell exports `NODE_ENV=development`, `next build` fails prerendering `/_global-error` (`Cannot read properties of null (reading 'useContext')`). Run `NODE_ENV=production npm run build` or unset it. This also happens on 16.4.0 and was not caused by the upgrade.
+- Known pre-existing lint issues: unescaped `'` in `src/app/page.tsx`, unused `authConfig` in `src/app/login/page.tsx`.
+
 ---
 
 ## 4. How to Run Locally
