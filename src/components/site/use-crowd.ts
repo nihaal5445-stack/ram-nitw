@@ -1,10 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import type { CrowdRow } from "@/lib/crowd";
+import { useScanEvents } from "@/components/live/use-scan-events";
 
 /** Polls the public /api/crowd every 15 s (paused while the tab is hidden). */
-export function useCrowd(): Record<string, CrowdRow> | null {
+export function useCrowd(live = false): Record<string, CrowdRow> | null {
   const [data, setData] = useState<Record<string, CrowdRow> | null>(null);
+  const [tick, setTick] = useState(0);
+  useScanEvents(() => setTick((n) => n + 1), live);
   useEffect(() => {
     let stop = false;
     const load = async () => {
@@ -21,6 +24,6 @@ export function useCrowd(): Record<string, CrowdRow> | null {
     const vis = () => void load();
     document.addEventListener("visibilitychange", vis);
     return () => { stop = true; window.clearInterval(id); document.removeEventListener("visibilitychange", vis); };
-  }, []);
+  }, [tick]);
   return data;
 }

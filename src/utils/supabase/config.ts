@@ -11,6 +11,8 @@ export const AUTH_COOKIE_NAME = "sb-ram-auth-token";
  * 127.0.0.1, so its requests go to <this origin>/sb, which next.config.ts rewrites to the local Supabase.
  */
 export function browserSupabaseUrl(): string {
-  if (process.env.NEXT_PUBLIC_SUPABASE_PROXY === "1" && typeof window !== "undefined") return `${window.location.origin}/sb`;
+  // Only for hosts that cannot reach 127.0.0.1 (a phone behind the tunnel). The laptop itself talks to Supabase directly,
+  // which also keeps Realtime (WebSockets) off the Next.js rewrite.
+  if (process.env.NEXT_PUBLIC_SUPABASE_PROXY === "1" && typeof window !== "undefined" && !["localhost", "127.0.0.1"].includes(window.location.hostname)) return `${window.location.origin}/sb`;
   return process.env.NEXT_PUBLIC_SUPABASE_URL!;
 }

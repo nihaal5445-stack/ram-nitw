@@ -81,9 +81,22 @@ Say: "demo data" is labelled; real accepted scans also count.
 **Backgrounds**
 - Light: warm off-white, faint paper grain, a soft maroon-gold glow. Dark (moon icon): navy-to-maroon wash with a slow aurora. It pauses with "reduce motion" and when the tab is hidden.
 
+## Phone as the scanner, live head count (about 2 minutes, needs the tunnel)
+
+Set up (once, about 2 minutes): `npm run demo:phone`. It locks the seed passwords (the tunnel URL is public), builds the app with the Supabase proxy, serves it on :3100, opens a `cloudflared` quick tunnel and prints the **phone URL** (and a QR of it). Stop everything with `npm run demo:phone:stop` (it restores the seed passwords). After stopping, rebuild normally (`NODE_ENV=production npm run build && NODE_ENV=production npx next start -p 3100`) before running tests: the build is baked with the proxy flag. `npm run test:phone` runs this whole scenario automatically while the tunnel is up.
+
+1. **Phone** (browser, not an app): open the printed URL, tab **Mess Staff & Administration**, email `admin-ifcb@nitw.ac.in` -> **Send magic link**. With passwords locked you sign in with the **6-digit code**: read it on the **laptop** at <http://127.0.0.1:54324> (Mailpit) and type it on the phone.
+2. **Phone**: open `/dashboard/counter/scan` (Dashboard -> Open scanner), choose a PIN (e.g. `482913`), **Start shift**. Allow the camera when asked. Big camera view, and the result appears ABOVE it as a big solid green (admitted) or red (refused) block.
+3. **Laptop A** (normal window, `http://localhost:3100`): sign in as `student2@student.nitw.ac.in` (email code from Mailpit), **Show my meal QR**, **Enroll this phone**; keep the QR on screen (raise the brightness).
+4. **Laptop B** (a different browser profile or private window): sign in as `admin-ifcb@nitw.ac.in` and open `/dashboard/admin`. Note **Today's headcount** and the **Live crowd** bars.
+5. **Phone**: point the camera at the QR on laptop A. Phone: big **green "Demo Student Two: welcome"**. The scan is sent to the server immediately; on laptop B the **head count goes up by one and the IFC-B crowd bar moves by itself** (no refresh).
+6. Scan the same QR again: big **red "already served"**. (DEMO_MODE must be on, or it has to be a real meal time.)
+Fallback if the camera will not focus: on the phone add `?debug=1` to the scanner URL and paste the text shown under the student's QR (`?debug=1` on the token page).
+
 ## If something goes wrong
 - Scan or add-on says "No meal is being served right now" / "no meal slot left today": DEMO_MODE is off. Run `npm run demo:mode -- on`, then start a new shift on the scanner.
 - Heatmap shows "Not serving right now": run `npm run demo:crowd` again (the last-10-minutes window decays; `demo:prep` and `-- --keep` prevent that).
 - Camera scanning has only been tried against a fake camera, not a real phone. The paste box (`?debug=1`) uses the same code path.
+- Phone: the tunnel URL changes every time you run `demo:phone`. If the phone shows an old URL, re-scan the new QR. If the phone cannot sign in, check you used the 6-digit code (passwords are locked) and that Mailpit shows the newest email.
 - The AI parts (assistant, drafted replies) have deterministic fallbacks, so they work with no key; they were not run against a live Gemini/Anthropic API.
 - To show real slot rules to an audience: `npm run demo:mode -- off` (the badge disappears).

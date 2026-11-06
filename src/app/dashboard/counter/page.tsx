@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CheckCircle, Clock, Keyboard, RefreshCw, ScanLine } from "lucide-react";
+import { Clock, Keyboard, RefreshCw, ScanLine } from "lucide-react";
 import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
 import { CrowdPanel } from "@/components/crowd-panel";
@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { messes } from "@/config/messes";
 import { currentSlot } from "@/lib/access/slots";
+import { LiveCount } from "@/components/live/live-count";
 import { getDemoMode } from "@/lib/demo-mode";
 
 export default async function CounterDashboard() {
@@ -52,7 +53,7 @@ export default async function CounterDashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title={t("currentSlot")} value={current ? tm(current.slot as "lunch") : t("noMealNow")} icon={Clock} accent="secondary" />
-        <StatCard title={t("todayCount")} value={String(served)} icon={CheckCircle} accent="green" />
+        <LiveCount title={t("todayCount")} initial={served} icon="check" accent="green" />
         <StatCard title={t("manualToday")} value={String(manual)} icon={Keyboard} accent="amber" description={t("manualTodayDesc")} />
         <StatCard title={t("lastSync")} value={scanner?.last_sync_at ? time.format(new Date(scanner.last_sync_at)) : t("never")} icon={RefreshCw} accent="primary" />
       </div>

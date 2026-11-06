@@ -66,6 +66,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
   const lastActivity = useRef(0);
   const skewRef = useRef(0);
   const syncingRef = useRef(false);
+  const resyncRef = useRef(false); // a scan arrived while a sync was running: sync again right after
 
   const nowMs = () => Date.now() + skewRef.current;
   const touch = () => { lastActivity.current = Date.now(); };
@@ -112,7 +113,8 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
 
   // ── sync ──
   const runSync = useCallback(async () => {
-    if (syncingRef.current || !scannerIdRef.current) return;
+    if (!scannerIdRef.current) return;
+    if (syncingRef.current) { resyncRef.current = true; return; }
     syncingRef.current = true; setSyncing(true); setSyncNote(null);
     try {
       const out = await syncOutbox(scannerIdRef.current, nowMs());
@@ -121,8 +123,13 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
         setLastSync(Date.now());
       } else if (out.kind === "auth") setSyncNote(t("ready.syncAuth"));
       else if (out.kind === "error") setSyncNote(t("ready.syncError", { status: out.status }));
-    } finally { syncingRef.current = false; setSyncing(false); refreshPending(); }
+    } finally {
+      syncingRef.current = false; setSyncing(false); refreshPending();
+      if (resyncRef.current && navigator.onLine) { resyncRef.current = false; setTimeout(() => void runSyncRef.current(), 0); }
+    }
   }, [refreshPending, t]);
+  const runSyncRef = useRef<() => Promise<void>>(async () => {});
+  useEffect(() => { runSyncRef.current = runSync; }, [runSync]);
 
   useEffect(() => {
     if (phase !== "ready" && phase !== "locked") return;
@@ -295,7 +302,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
   if (phase === "locked") return <LockedForm t={t} busy={busy} error={error} pending={pending} online={online} onUnlock={unlock} onNewShift={async () => { await wipeBundle(); setError(null); setPhase("setup"); }} />;
 
   const clockOff = skewKnown && Math.abs(skewMs) > 10_000;
-  const toneClass = { ok: "border-success bg-success/10", bad: "border-destructive bg-destructive/10", warn: "border-warning bg-warning/10" } as const;
+  const toneClass = { ok: "border-success bg-success text-white", bad: "border-destructive bg-destructive text-destructive-foreground", warn: "border-warning bg-warning text-white dark:text-black" } as const;
   const ToneIcon = { ok: CheckCircle2, bad: XCircle, warn: AlertTriangle } as const;
   const crossDup = report.filter((r) => r.status === "duplicate" && r.local === "admitted");
 
@@ -324,8 +331,8 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
       )}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <div>
-          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-muted">
+        <div className="order-2 lg:order-none">
+          <div className="relative aspect-square max-h-[62vh] w-full overflow-hidden rounded-lg border border-border bg-muted sm:aspect-[4/3]" data-testid="camera-box">
             <video ref={videoRef} muted playsInline className="h-full w-full object-cover" aria-label={t("ready.camera.label")} />
             {cameraState !== "on" && (
               <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-muted-foreground">
@@ -339,15 +346,15 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
           {debug && <DebugInput t={t} onSubmit={handleText} />}
         </div>
 
-        <div className="space-y-3">
-          <div role="status" aria-live="assertive" className={cn("min-h-40 rounded-lg border-2 p-5", shown ? toneClass[shown.tone] : "border-dashed border-border")} data-testid="scan-result" data-tone={shown?.tone ?? "idle"}>
+        <div className="contents lg:block lg:space-y-3">
+          <div role="status" aria-live="assertive" className={cn("order-1 min-h-44 rounded-lg border-4 p-5 sm:min-h-40 lg:order-none lg:border-2", shown ? toneClass[shown.tone] : "border-dashed border-border")} data-testid="scan-result" data-tone={shown?.tone ?? "idle"}>
             {shown ? (() => { const I = ToneIcon[shown.tone]; return (
               <div className="flex items-start gap-3">
-                <I className="mt-1 size-8 shrink-0" strokeWidth={1.75} aria-hidden />
-                <div><p className="font-display text-2xl font-semibold leading-tight">{shown.title}</p>{shown.detail && <p className="mt-1 text-muted-foreground">{shown.detail}</p>}</div>
+                <I className="mt-1 size-12 shrink-0 sm:size-8" strokeWidth={2} aria-hidden />
+                <div><p className="font-display text-3xl font-semibold leading-tight sm:text-2xl" data-testid="scan-title">{shown.title}</p>{shown.detail && <p className="mt-1 text-lg font-semibold opacity-95">{shown.detail}</p>}</div>
               </div>); })() : <p className="text-muted-foreground">{t("ready.camera.hint")}</p>}
           </div>
-          <div>
+          <div className="order-3 lg:order-none">
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{t("ready.recent")}</h3>
             {recent.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("ready.noScans")}</p> : (
               <ul className="mt-2 divide-y divide-border text-sm">
@@ -358,7 +365,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
                   </li>))}
               </ul>)}
           </div>
-          <div>
+          <div className="order-4 lg:order-none">
             <h3 className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{t("ready.report.title")}{lastSync && <span className="ml-2 normal-case tracking-normal">{t("ready.lastSync", { time: hhmm(lastSync) })}</span>}</h3>
             {report.length === 0 ? <p className="mt-2 text-sm text-muted-foreground">{t("ready.report.none")}</p> : (
               <ul className="mt-2 divide-y divide-border text-sm" data-testid="sync-report">

@@ -9,7 +9,7 @@ import { useCrowd } from "@/components/site/use-crowd";
 /** Live crowd for every confirmed mess (dashboards). The viewer's own mess is listed first. */
 export function CrowdPanel({ ownMessId }: { ownMessId?: string | null }) {
   const t = useTranslations("Crowd");
-  const crowd = useCrowd();
+  const crowd = useCrowd(true); // live: refetches when a scanner syncs an accepted scan
   const list = messes.filter((m) => m.status === "confirmed").sort((a, b) => (a.id === ownMessId ? -1 : b.id === ownMessId ? 1 : 0));
   return (
     <Card className="border border-border shadow-sm" data-testid="crowd-panel">

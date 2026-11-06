@@ -6,10 +6,11 @@ import { getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Users, TrendingUp, UtensilsCrossed, BarChart3 } from "lucide-react";
+import { TrendingUp, UtensilsCrossed, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
+import { LiveCount } from "@/components/live/live-count";
 import { AssistantPanel } from "@/components/assistant/assistant-panel";
 import { TopLiked } from "@/components/likes/top-liked";
 import { CrowdPanel } from "@/components/crowd-panel";
@@ -25,6 +26,9 @@ export default async function MessAdminDashboard() {
 
   const inbox = ((await (await createClient()).rpc("admin_inbox")).data ?? []) as { unread: number }[];
   const unreadMsgs = inbox.reduce((a, r) => a + r.unread, 0);
+  const todayStr = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+  const { count: headCountRaw } = await (await createClient()).from("meal_redemptions").select("id", { count: "exact", head: true }).eq("status", "accepted").eq("meal_date", todayStr);
+  const headcount = headCountRaw ?? 0;
   const assignedMess = messes.find((m) => m.id === profile?.assigned_mess_id);
 
   return (
@@ -39,7 +43,7 @@ export default async function MessAdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title={t("todayHeadcount")} value="784" icon={Users} accent="primary" />
+        <LiveCount title={t("todayHeadcount")} initial={headcount} icon="users" accent="primary" description="Live: updates when a scan syncs" />
         <StatCard title={t("staffCount")} value="12" icon={TrendingUp} accent="secondary" />
         <StatCard title="Open complaints" value="3" icon={UtensilsCrossed} accent="amber" />
         <StatCard title="Avg. daily headcount" value="720" icon={BarChart3} accent="green" />
