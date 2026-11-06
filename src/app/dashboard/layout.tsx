@@ -27,6 +27,7 @@ export default async function DashboardLayout({
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navbar
+        userId={user.id}
         userName={profile.full_name ?? user.email ?? "User"}
         role={profile.role}
         badge={<><DemoBadge />{profile.role === "mess_admin" && profile.assigned_mess_id && <AdminNotifier messId={profile.assigned_mess_id} />}</>}

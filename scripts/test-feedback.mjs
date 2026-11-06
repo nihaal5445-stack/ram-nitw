@@ -60,9 +60,9 @@ try {
   await page.goto(`${BASE}/dashboard/student`, { waitUntil: "networkidle" });
   const vis = (l) => l.waitFor({ state: "visible", timeout: 8000 }).then(() => true, () => false);
   check("banner is shown on the dashboard", await vis(page.getByTestId("feedback-banner")));
-  check("bell shows a count of 1", (await page.getByTestId("feedback-count").innerText()) === "1");
+  check("the header bell shows a feedback-request notification", await vis(page.getByTestId("notif-count")));
   await page.screenshot({ path: "screenshots/feedback-banner-390-light.png" });
-  await page.getByTestId("feedback-bell").click();
+  await page.getByTestId("feedback-banner").getByRole("link").click();
   await page.getByRole("radio", { name: "5 stars" }).click();
   await page.getByLabel("Your review (optional)").fill("Idli was soft");
   await page.getByTestId("submit-feedback").click();

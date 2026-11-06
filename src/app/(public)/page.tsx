@@ -7,7 +7,10 @@ import { MealTimings } from "@/components/site/meal-timings";
 import { StatCounters } from "@/components/site/stat-counters";
 import { ProgressBoard } from "@/components/site/progress-board";
 import { CalendarSection } from "@/components/site/calendar-section";
+import { UpdatesSection } from "@/components/site/updates-section";
 import { AudienceTiles } from "@/components/site/audience-tiles";
+
+export const dynamic = "force-dynamic";
 
 export default function Home() {
   return (
@@ -16,6 +19,7 @@ export default function Home() {
       <AudienceTiles />
       <WelcomeCard />
       <Initiatives />
+      <UpdatesSection />
       <MessMapSection />
       <MessSections />
       <MealTimings />

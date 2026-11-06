@@ -9,16 +9,17 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Role } from "@/config/auth";
 import { ContactAdminNavButton } from "@/components/messages/contact-admin";
-import { FeedbackBell } from "@/components/feedback/feedback-bell";
+import { NotificationBell } from "@/components/notifications/notification-bell";
 
 interface NavbarProps {
   userName: string;
+  userId: string;
   role: Role;
   /** server-rendered extras next to the role badge (e.g. the demo badge) */
   badge?: React.ReactNode;
 }
 
-export function Navbar({ userName, role, badge }: NavbarProps) {
+export function Navbar({ userName, userId, role, badge }: NavbarProps) {
   const t = useTranslations();
   const tNav = useTranslations("Nav");
   const router = useRouter();
@@ -57,7 +58,7 @@ export function Navbar({ userName, role, badge }: NavbarProps) {
               {userName}
             </span>
             {role === "student" && <ContactAdminNavButton />}
-            {role === "student" && <FeedbackBell />}
+            <NotificationBell userId={userId} />
             <LocaleToggle />
             <ThemeToggle />
             <Button

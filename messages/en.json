@@ -261,6 +261,10 @@
             "title": "Open by default",
             "desc": "How we report and why."
           },
+          "updates": {
+            "title": "Mess updates",
+            "desc": "Closures, special meals and timing changes."
+          },
           "fees": {
             "title": "Where your fee goes",
             "desc": "A clear breakdown of the mess fee."
@@ -1252,5 +1256,61 @@
     "soldOut": "Sold out",
     "fromPrice": "from Rs {n}",
     "tomorrowLabel": "Tomorrow"
+  },
+  "Notifications": {
+    "title": "Notifications",
+    "subtitle": "Updates from your mess and replies to your complaints and messages.",
+    "subtitleStaff": "Post an announcement to students and parents. Your own inbox is below.",
+    "bell": "Notifications: {n} unread",
+    "open": "Open",
+    "dismiss": "Dismiss",
+    "all": "All",
+    "unread": "Unread",
+    "filter": "Filter by category",
+    "markRead": "Mark read",
+    "markAll": "Mark all read",
+    "empty": "Nothing here yet.",
+    "pinned": "Pinned",
+    "categories": {
+      "menu_change": "Menu change",
+      "timings": "Timings",
+      "closure": "Closure",
+      "special_meal": "Special meal",
+      "addon": "Add-on available",
+      "complaint_update": "Complaint update",
+      "feedback_request": "Feedback request",
+      "admin_message": "Message from admin",
+      "general": "General"
+    },
+    "settingsTitle": "Notification settings",
+    "settingsLead": "Untick a category to stop receiving it. Complaint updates and messages from your admin are always delivered.",
+    "alwaysOn": "always on",
+    "receive": "Receive {category}",
+    "composeTitle": "Post an announcement",
+    "fieldTitle": "Title",
+    "fieldText": "Text",
+    "fieldCategory": "Category",
+    "fieldExpiry": "Expires (optional)",
+    "fieldTargets": "Send to",
+    "ownMess": "Students and parents of {mess}",
+    "allMesses": "All messes (tick to choose)",
+    "someMesses": "{n} selected",
+    "fieldPin": "Pin to the top",
+    "fieldPublic": "Also show on the public Updates page (closure, special meal, timings)",
+    "send": "Send announcement",
+    "sent": "Sent to {n} people.",
+    "postedTitle": "Posted by you",
+    "postedNone": "Nothing posted yet.",
+    "public": "public",
+    "readOf": "{read} of {n} read",
+    "endNow": "End now",
+    "ended": "ended",
+    "publicEyebrow": "Updates",
+    "publicTitle": "Mess updates",
+    "publicLead": "Closures, special meals and timing changes announced by the mess administration.",
+    "publicNote": "Only public announcements are shown here. Personal notifications and complaints are never published.",
+    "publicNone": "No public updates right now.",
+    "seeAll": "All updates",
+    "allMessesLabel": "All messes"
   }
 }

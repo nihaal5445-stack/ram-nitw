@@ -20,6 +20,7 @@
     "test:demo-mode": "node scripts/test-demo-mode.mjs",
     "test:switch": "node scripts/test-switch.mjs",
     "test:likes": "node scripts/test-likes.mjs",
+    "test:notifications": "node scripts/test-notifications.mjs",
     "test:assistant": "node scripts/test-assistant.mjs",
     "test:replies": "node scripts/test-replies.mjs",
     "test:backdrop": "node scripts/test-backdrop.mjs",
