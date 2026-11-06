@@ -29,6 +29,7 @@ try {
   const { data: curry } = await s2.from("addons").select("*").eq("name", "Chicken Curry").single();
   check("student2 sees the Rs 50 Chicken Curry (stock 40)", curry?.price_paise === 5000 && curry.stock_total === 40, JSON.stringify(curry));
   check("IFC-B admin can edit IFC-B add-ons", !(await a2.rpc("upsert_addon", { p_id: curry.id, p_name: "Chicken Curry", p_price_paise: 5000, p_stock: 40, p_active: true })).error);
+  check("...and editing without the veg flag keeps Chicken Curry non-veg (regression)", (await admin.from("addons").select("veg").eq("id", curry.id).single()).data.veg === false);
 
   // park every IFC-B slot far from now so ONLY demo mode can make "now" an open slot
   const { data: slots } = await admin.from("mess_slots").select("*").eq("mess_id", "ifc-b");

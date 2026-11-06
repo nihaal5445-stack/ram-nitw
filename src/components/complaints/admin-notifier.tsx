@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -17,16 +17,24 @@ export function AdminNotifier({ messId }: { messId: string }) {
   const [toast, setToast] = useState<string | null>(null);
   const onConsole = path.startsWith("/dashboard/admin/complaints");
 
+  const prev = useRef(0);
+  // ONE path for everything: ask the database how many complaints this admin has not seen. A Realtime event just triggers it sooner;
+  // the 8 s poll is the fallback if the socket is down. A higher count than before = a new complaint: toast + tell the console to re-render.
   const refresh = useCallback(async () => {
     const db = createClient();
-    if (onConsole) { await db.rpc("mark_complaints_seen"); setUnseen(0); return; }
     const { data } = await db.rpc("admin_unseen_complaints");
-    if (typeof data === "number") setUnseen(data);
-  }, [onConsole]);
+    if (typeof data !== "number") return;
+    if (data > prev.current) {
+      window.dispatchEvent(new Event(COMPLAINTS_EVENT));
+      setToast(t("toast")); setTimeout(() => setToast(null), 7000);
+    }
+    if (onConsole) { await db.rpc("mark_complaints_seen"); prev.current = 0; setUnseen(0); }
+    else { prev.current = data; setUnseen(data); }
+  }, [onConsole, t]);
 
   useEffect(() => { const id = setTimeout(() => void refresh(), 0); return () => clearTimeout(id); }, [refresh]);
   useEffect(() => {
-    const id = setInterval(() => { if (!document.hidden) void refresh(); }, 30_000); // fallback if the socket drops
+    const id = setInterval(() => { if (!document.hidden) void refresh(); }, 8_000);
     return () => clearInterval(id);
   }, [refresh]);
 
@@ -37,15 +45,12 @@ export function AdminNotifier({ messId }: { messId: string }) {
       if (stop) return;
       const ch = db.channel("complaints", { config: { broadcast: { self: false } } })
         .on("broadcast", { event: "complaint" }, ({ payload }) => {
-          if ((payload as { mess_id?: string }).mess_id !== messId) return; // only my mess
-          window.dispatchEvent(new Event(COMPLAINTS_EVENT));
-          setToast(t("toast")); setTimeout(() => setToast(null), 7000);
-          void refresh();
+          if ((payload as { mess_id?: string }).mess_id === messId) void refresh(); // only my mess
         }).subscribe();
       cleanup = () => { void db.removeChannel(ch); };
     })();
     return () => { stop = true; cleanup?.(); };
-  }, [messId, refresh, t]);
+  }, [messId, refresh]);
 
   return (
     <>

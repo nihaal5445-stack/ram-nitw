@@ -90,18 +90,18 @@ $$;
 
 -- admin: create/edit/restock (the new veg + photo fields)
 drop function public.upsert_addon(uuid, text, integer, integer, boolean);
-create or replace function public.upsert_addon(p_id uuid, p_name text, p_price_paise integer, p_stock integer, p_active boolean default true, p_veg boolean default true, p_photo text default null)
+create or replace function public.upsert_addon(p_id uuid, p_name text, p_price_paise integer, p_stock integer, p_active boolean default true, p_veg boolean default null, p_photo text default null)
 returns uuid language plpgsql security definer set search_path = public as $$
 declare v_mess text := public.get_my_assigned_mess_id(); v_id uuid;
 begin
   if public.get_my_role() <> 'mess_admin' or v_mess is null then raise exception 'only a mess admin can manage add-ons' using errcode = '42501'; end if;
-  if v_mess = 'ifc-a' and (not p_veg or lower(p_name) ~ '(chicken|mutton|egg|fish|prawn|meat|beef|pork|biryani)') then
+  if v_mess = 'ifc-a' and (coalesce(p_veg, true) = false or lower(p_name) ~ '(chicken|mutton|egg|fish|prawn|meat|beef|pork|biryani)') then
     raise exception 'IFC-A is pure vegetarian: non-veg add-ons are not allowed' using errcode = '23514';
   end if;
   if p_id is null then
-    insert into public.addons (mess_id, name, price_paise, stock_total, active, veg, photo) values (v_mess, trim(p_name), p_price_paise, p_stock, p_active, p_veg, p_photo) returning id into v_id;
+    insert into public.addons (mess_id, name, price_paise, stock_total, active, veg, photo) values (v_mess, trim(p_name), p_price_paise, p_stock, p_active, coalesce(p_veg, true), p_photo) returning id into v_id;
   else
-    update public.addons set name = trim(p_name), price_paise = p_price_paise, stock_total = p_stock, active = p_active, veg = p_veg, photo = coalesce(p_photo, photo)
+    update public.addons set name = trim(p_name), price_paise = p_price_paise, stock_total = p_stock, active = p_active, veg = coalesce(p_veg, veg), photo = coalesce(p_photo, photo)
      where id = p_id and mess_id = v_mess returning id into v_id;
     if v_id is null then raise exception 'add-on not found in your mess' using errcode = '42501'; end if;
   end if;

@@ -93,6 +93,16 @@ Set up (once, about 2 minutes): `npm run demo:phone`. It locks the seed password
 6. Scan the same QR again: big **red "already served"**. (DEMO_MODE must be on, or it has to be a real meal time.)
 Fallback if the camera will not focus: on the phone add `?debug=1` to the scanner URL and paste the text shown under the student's QR (`?debug=1` on the token page).
 
+## Latest additions (check each in 1 minute)
+
+| What | URL | Login |
+|---|---|---|
+| **Admin sees complaints live** (toast + unread badge, no refresh) | admin window: `/dashboard/admin/complaints` (or any admin page); student window: `/dashboard/student/complaints` | admin `admin-ifcb@nitw.ac.in` + student `student2@student.nitw.ac.in` (IFC-B); or `admin@nitw.ac.in` + `student@student.nitw.ac.in` (IFC-A). The student's form says which mess admin receives it; an admin only sees their own mess. |
+| **Full menu at the top** of the student dashboard (4 meals, all dishes, "This week" tab) | `/dashboard/student` | `student@student.nitw.ac.in` (veg only) and `student2@student.nitw.ac.in` |
+| **Extras shop**: cards, quantity, cart, test payment, one QR per item | student `/dashboard/student/extras` (`?debug=1` prints ticket text); admin `/dashboard/admin/addons` (add / edit / price / **Restock +10** / orders) | student2 + `admin-ifcb@nitw.ac.in` (Chicken Curry Rs 50); IFC-A: `student@student.nitw.ac.in` + `admin@nitw.ac.in` (veg items) |
+| **Admin adds / removes students** | admin dashboard (form at the top) and `/dashboard/admin/students` (search, Remove from mess) | `admin-ifcb@nitw.ac.in` (own mess only); **warden** `/dashboard/warden/students`: any mess, move between messes |
+| **Public mess sections** (balanced columns, full menu, most liked, at a glance) | `/` then scroll to "Messes" | none (public) |
+
 ## If something goes wrong
 - Scan or add-on says "No meal is being served right now" / "no meal slot left today": DEMO_MODE is off. Run `npm run demo:mode -- on`, then start a new shift on the scanner.
 - Heatmap shows "Not serving right now": run `npm run demo:crowd` again (the last-10-minutes window decays; `demo:prep` and `-- --keep` prevent that).

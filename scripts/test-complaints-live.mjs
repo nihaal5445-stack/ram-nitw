@@ -17,7 +17,7 @@ try {
   const open = async (email, w = 1280) => { const c = await browser.newContext({ viewport: { width: w, height: 1000 } }); await c.addCookies((await sessionCookies(email)).cookies); return c.newPage(); };
   const file = async (p, body) => { await p.goto(`${BASE}/dashboard/student/complaints`, { waitUntil: "networkidle" }); await p.locator("#c-body").fill(body); await p.getByRole("button", { name: "Submit complaint" }).click(); await p.getByText("Complaint filed.").waitFor({ timeout: 8000 }); };
   const issues = (p) => p.getByTestId("issue").count();
-  const waitFor = async (fn, ms = 6000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return Date.now() - t0; await wait(150); } return -1; };
+  const waitFor = async (fn, ms = 12000) => { const t0 = Date.now(); while (Date.now() - t0 < ms) { if (await fn()) return Date.now() - t0; await wait(150); } return -1; };
 
   const adminB = await open("admin-ifcb@nitw.ac.in"), adminA = await open("admin@nitw.ac.in");
   const stu2 = await open("student2@student.nitw.ac.in", 390), stu1 = await open("student@student.nitw.ac.in", 390);
@@ -31,7 +31,7 @@ try {
   check("student2's form defaults to IFC-B and says who receives it", (await stu2.locator("#c-mess").inputValue()) === "ifc-b" && /admin of IFC-B/.test(await stu2.getByTestId("goes-to").innerText()));
   await file(stu2, "The dal was cold and the rice stale at lunch (student2)");
   const ms = await waitFor(async () => (await issues(adminB)) === 1);
-  check("IFC-B admin console shows it LIVE without a reload", ms >= 0, `${ms} ms`);
+  check("IFC-B admin console shows it LIVE without a reload (Realtime; 8 s poll as fallback)", ms >= 0, `${ms} ms`);
   check("...with a 'New complaint' toast", await adminB.getByTestId("complaint-toast").isVisible());
   check("IFC-A admin (other mess) gets no toast and no badge", !(await adminA.getByTestId("complaint-toast").isVisible()) && (await adminA.getByTestId("complaints-unseen").count()) === 0);
 

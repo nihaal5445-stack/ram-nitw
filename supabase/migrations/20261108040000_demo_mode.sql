@@ -19,11 +19,11 @@ begin
   if public.demo_mode() then
     select slot into v_slot from public.mess_slots where mess_id = p_mess
      order by case when v_min >= extract(epoch from starts) / 60 and v_min < extract(epoch from ends) / 60 then 0
-                   else 1 + least(abs(v_min - extract(epoch from starts) / 60), abs(v_min - extract(epoch from ends) / 60)) end, starts
+                   else 1 + least(abs(v_min - extract(epoch from starts) / 60), abs(v_min - extract(epoch from ends) / 60)) end, starts, slot
      limit 1;
   else
     select slot into v_slot from public.mess_slots where mess_id = p_mess
-       and v_min >= extract(epoch from starts) / 60 - 15 and v_min < extract(epoch from ends) / 60 + 15 limit 1;
+       and v_min >= extract(epoch from starts) / 60 - 15 and v_min < extract(epoch from ends) / 60 + 15 order by starts, slot limit 1;
   end if;
   return v_slot;
 end $$;
