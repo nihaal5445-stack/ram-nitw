@@ -85,7 +85,9 @@
     "addonsLink": "Buy an add-on",
     "addonsDesc": "Pay (test mode) and get a one-meal ticket QR",
     "complaintsLink": "File or follow a complaint",
-    "complaintsDesc": "Tell the mess administration about a problem and see their reply"
+    "complaintsDesc": "Tell the mess administration about a problem and see their reply",
+    "feesLink": "Where does my fee go?",
+    "feesDesc": "A breakdown of the mess fee and the monthly trend"
   },
   "Parent": {
     "title": "Child's Mess Account",
@@ -258,6 +260,10 @@
           "open": {
             "title": "Open by default",
             "desc": "How we report and why."
+          },
+          "fees": {
+            "title": "Where your fee goes",
+            "desc": "A clear breakdown of the mess fee."
           }
         }
       },
@@ -881,5 +887,41 @@
     "simulate": "Simulate 40 min passed",
     "simulated": "Done: your latest meal is now due for feedback.",
     "simulateNone": "No accepted scan found in the last 24 hours. Scan the student QR at the counter first."
+  },
+  "Fees": {
+    "eyebrow": "Transparency",
+    "title": "Where your mess fee goes",
+    "lead": "Every rupee of the monthly mess fee, split by what it pays for, and how the cost per student has moved over the last six months.",
+    "demoBanner": "Demo data. These figures are illustrative placeholders, not audited accounts. They will be replaced with the real numbers from the accounts office.",
+    "perStudent": "Monthly fee per student",
+    "donutTitle": "Share of the fee by purpose",
+    "trendTitle": "Cost per student, month by month",
+    "trendLead": "Stacked: food, staff and other costs (Rs per student).",
+    "donutAria": "Donut chart of the mess fee by purpose",
+    "trendAria": "Stacked bar chart of cost per student by month",
+    "table": "Show as a table",
+    "share": "Share",
+    "amount": "Rs per student",
+    "month": "Month",
+    "total": "Total",
+    "cat": {
+      "groceries": "Groceries and provisions",
+      "fresh": "Vegetables, dairy and eggs",
+      "staff": "Kitchen and serving staff",
+      "fuel": "Fuel and utilities",
+      "hygiene": "Hygiene and maintenance",
+      "waste": "Waste handling",
+      "reserve": "Reserve fund"
+    },
+    "series": {
+      "food": "Food",
+      "staff": "Staff",
+      "other": "Other"
+    },
+    "yourFee": "Your monthly fee",
+    "note": "The fee is split the same way for every student in a mess.",
+    "back": "Back to dashboard",
+    "studentLink": "Where does my fee go?",
+    "studentLinkDesc": "A breakdown of the mess fee and the monthly trend"
   }
 }

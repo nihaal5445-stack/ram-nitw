@@ -1,6 +1,6 @@
 import {
   BookOpenText, Building2, CalendarDays, CalendarHeart, Clock, Compass, Eye, FileBarChart,
-  HandHelping, Leaf, LifeBuoy, Map, MessageSquareText, Recycle, Soup, Sprout, TrendingUp, UtensilsCrossed,
+  HandHelping, Leaf, LifeBuoy, Map, MessageSquareText, Recycle, Soup, Sprout, TrendingUp, UtensilsCrossed, Wallet,
   type LucideIcon,
 } from "lucide-react";
 
@@ -25,6 +25,7 @@ export const navGroups: NavGroup[] = [
   ]},
   { key: "transparency", links: [
     { key: "progress", href: "/#progress", icon: TrendingUp },
+    { key: "fees", href: "/fees", icon: Wallet },
     { key: "stats", href: "/#stats", icon: FileBarChart },
     { key: "open", href: "/#initiatives", icon: Eye },
   ]},
