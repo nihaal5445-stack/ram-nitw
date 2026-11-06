@@ -284,6 +284,31 @@
       "p3": "If something can be done better, tell us. We would rather hear it early.",
       "name": "Dr. Raghavendra Iyer",
       "role": "Chief Warden, fictional placeholder"
+    },
+    "initiatives": {
+      "eyebrow": "What we are working on",
+      "title": "Five initiatives, in plain terms",
+      "lead": "These are the directions the Chief Warden's office is pursuing. Progress is reported openly in the daily progress board below.",
+      "paper": {
+        "title": "Zero Paper Tokens",
+        "desc": "Meal tokens live on your phone. No printed slips to buy, lose or throw away, and no queue at the token window."
+      },
+      "waste": {
+        "title": "Food Waste Reduction",
+        "desc": "Counting who eats helps kitchens cook closer to real demand, so less good food ends up in the bin."
+      },
+      "grab": {
+        "title": "Grab & Go",
+        "desc": "A quicker lane for simple, ready items when you are between classes."
+      },
+      "transparency": {
+        "title": "Transparency",
+        "desc": "Menus, timings and improvements are public, and we show our figures with their limits."
+      },
+      "wellness": {
+        "title": "Wellness",
+        "desc": "Balanced plates, fresh vegetables and lighter options on every menu."
+      }
     }
   }
 }
