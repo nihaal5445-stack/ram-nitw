@@ -377,6 +377,20 @@
         "krishna": "Water coolers were cleaned and serviced.",
         "priyadarshini": "Dinner timing was reviewed with hostel representatives."
       }
+    },
+    "timings": {
+      "eyebrow": "Meal timings",
+      "title": "Four meals a day",
+      "hm": "{h} h {m} min",
+      "m": "{m} min",
+      "servingSummary": "Now serving {meal}. Service ends in {left}.",
+      "nextSummary": "Next up: {meal} at {time}, in {left}.",
+      "nextTomorrow": "Next up: {meal} tomorrow at {time}, in {left}.",
+      "campusTime": "Campus time (IST) {time}",
+      "nowServing": "Now serving",
+      "nextUp": "Next up",
+      "done": "Finished for today",
+      "note": "Timings are placeholders and may vary by mess until confirmed by the Chief Warden's office."
     }
   }
 }
