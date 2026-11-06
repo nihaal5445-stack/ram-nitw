@@ -46,7 +46,11 @@
     },
     "domainError": "Students must sign in with an {domain} address.",
     "differentEmail": "Use a different email",
-    "footer": "RAM · NIT Warangal · {year}"
+    "footer": "RAM · NIT Warangal · {year}",
+    "notRegistered": {
+      "parents": "This email is not registered. Ask your student or the warden's office to add you.",
+      "staff": "This email is not registered. Ask the warden's office to add you."
+    }
   },
   "Dashboard": {
     "welcome": "Welcome, {name}",

@@ -57,11 +57,17 @@ function LoginInner() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: `${window.location.origin}/auth/callback`, shouldCreateUser: true },
+      options: {
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        // Only students may self-register. Parents and staff must already have an account (added by a student's
+        // family link / the warden). The database enforces the same rule; this keeps the UI message friendly.
+        shouldCreateUser: audience === "students",
+      },
     });
     setLoading(false);
     if (error) {
-      setErrorMsg(t("error"));
+      const notRegistered = error.code === "otp_disabled" && audience !== "students";
+      setErrorMsg(notRegistered ? t(`notRegistered.${audience}`) : t("error"));
       setStep("error");
     } else {
       setStep("sent");

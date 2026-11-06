@@ -3,6 +3,14 @@
 -- Applied automatically by: npm run db:reset  (npx supabase db reset)
 -- ─────────────────────────────────────────────────────────────────────────────
 
+-- Allow-list the non-student seed accounts first. The handle_new_user trigger only lets a
+-- non-@student.nitw.ac.in email in if it is on public.provisioned_accounts (and consumes the row).
+insert into public.provisioned_accounts (email, role, full_name, assigned_mess_id) values
+  ('parent@example.com',  'parent',        'Demo Parent',        null),
+  ('counter@nitw.ac.in',  'counter_staff', 'Demo Counter Staff', 'ifc-a'),
+  ('admin@nitw.ac.in',    'mess_admin',    'Demo Mess Admin',    'ifc-a'),
+  ('warden@nitw.ac.in',   'warden',        'Demo Warden',        null);
+
 -- Seed auth.users directly (bypasses email OTP for dev convenience)
 insert into auth.users (
   id, instance_id, aud, role, email,
@@ -123,6 +131,7 @@ from auth.users
 on conflict (provider_id, provider) do nothing;
 
 -- The handle_new_user trigger fires on the inserts above and creates profiles.
+-- (Non-student seed emails got in via the allow-list inserted above; see migration 20261106000000_restrict_signups.)
 -- Now correct the roles that the trigger can't infer (non-student domains).
 update public.profiles
   set role = 'student', assigned_mess_id = 'ifc-a'
