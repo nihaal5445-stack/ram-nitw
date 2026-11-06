@@ -29,7 +29,7 @@ export function StudentMenu({ messId, vegOnly }: { messId: string; vegOnly: bool
   const td = useTranslations("Public.dishes");
   const tl = useTranslations("Likes");
   const now = useNow();
-  const { counts, liked, toggle } = useLikes(messId, true);
+  const { counts, liked, toggle, unlocked } = useLikes(messId, true);
   const [tab, setTab] = useState<"today" | "week">("today");
   if (!now) return <div className="h-64 animate-pulse rounded-lg bg-muted" aria-hidden />;
 
@@ -65,14 +65,14 @@ export function StudentMenu({ messId, vegOnly }: { messId: string; vegOnly: bool
                     <span className={cn("rounded-full px-2 py-0.5 text-[11px] font-semibold", s === "now" ? "bg-success text-white" : s === "next" ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground")}>
                       {t(s === "now" ? "nowServing" : s === "next" ? "nextUp" : s === "done" ? "finished" : "later")}
                     </span>
-                    <LikeHeart count={counts[likeKey(m.id, "_meal")] ?? 0} liked={liked.has(likeKey(m.id, "_meal"))} onToggle={() => toggle(m.id, "_meal")} label={tl("likeMeal")} />
+                    <LikeHeart count={counts[likeKey(m.id, "_meal")] ?? 0} liked={liked.has(likeKey(m.id, "_meal"))} onToggle={() => toggle(m.id, "_meal")} label={tl("likeMeal")} lockedHint={unlocked.has(m.id) ? undefined : tl("locked")} />
                   </span>
                 </div>
                 <ul className="mt-2 divide-y divide-border text-sm">
                   {dishes.map((x) => (
                     <li key={x.key} className="flex items-center justify-between gap-2 py-1.5">
                       <span className="flex flex-wrap items-center gap-x-2">{td(x.key)} <VegTag veg={x.veg} /></span>
-                      <LikeHeart count={counts[likeKey(m.id, x.key)] ?? 0} liked={liked.has(likeKey(m.id, x.key))} onToggle={() => toggle(m.id, x.key)} label={tl("likeDish", { dish: td(x.key) })} />
+                      <LikeHeart count={counts[likeKey(m.id, x.key)] ?? 0} liked={liked.has(likeKey(m.id, x.key))} onToggle={() => toggle(m.id, x.key)} label={tl("likeDish", { dish: td(x.key) })} lockedHint={unlocked.has(m.id) ? undefined : tl("locked")} />
                     </li>
                   ))}
                 </ul>

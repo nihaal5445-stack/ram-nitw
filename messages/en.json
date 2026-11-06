@@ -1071,6 +1071,7 @@
     "title": "Like today's {meal}",
     "wholeMeal": "Whole meal",
     "likeMeal": "Like the whole meal",
+    "locked": "You can rate this after your meal",
     "likeDish": "Like {dish}",
     "note": "One like per dish per day. Counts are shared with the mess admin.",
     "publicNote": "Students can like dishes after signing in.",
@@ -1132,7 +1133,7 @@
     "finished": "Finished",
     "veg": "Veg",
     "nonVeg": "Non-veg",
-    "likeNote": "Tap a heart to like a dish (one like per dish per day).",
+    "likeNote": "Hearts unlock after your meal: once you have scanned in and the meal has ended (or 40 minutes have passed). One like per dish per day.",
     "weekTitle": "Menu for the week",
     "today": "Today",
     "pureVegNote": "Pure-vegetarian mess: only vegetarian items are shown."
