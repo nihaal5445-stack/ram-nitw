@@ -255,7 +255,6 @@ end $$;
 create or replace function public.record_scans(p_staff_id uuid, p_scanner_id uuid, p_scans jsonb) returns jsonb
 language plpgsql security definer set search_path = public as $$
 declare
-  c_grace   constant interval := interval '15 minutes';
   v_scanner public.scanner_devices;
   v_staff   public.profiles;
   v_scan    jsonb;
@@ -300,8 +299,11 @@ begin
 
     v_date := (v_scanned at time zone 'Asia/Kolkata')::date;
     v_local := (v_scanned at time zone 'Asia/Kolkata')::time;
+    -- minutes arithmetic (not time - interval): `time` arithmetic wraps at midnight, which broke windows touching 00:00/24:00
     select slot into v_slot from public.mess_slots
-     where mess_id = v_scanner.mess_id and v_local >= starts - c_grace and v_local < ends + c_grace limit 1;
+     where mess_id = v_scanner.mess_id
+       and extract(epoch from v_local) / 60 >= extract(epoch from starts) / 60 - 15
+       and extract(epoch from v_local) / 60 <  extract(epoch from ends) / 60 + 15 limit 1;
 
     -- identify the student
     if v_method = 'qr' then

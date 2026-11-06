@@ -543,6 +543,108 @@
         "invalid_key": "This browser could not create a valid key. Try another browser.",
         "unknown": "Something went wrong. Please try again."
       }
+    },
+    "scanner": {
+      "title": "Counter scanner",
+      "subtitle": "Scans meal QR codes without internet. Admissions are saved on this device and synced when you are online.",
+      "noMess": "Your account has no mess assigned. Ask the warden's office to assign one.",
+      "setup": {
+        "title": "Start a shift",
+        "body": "Download the student list for {mess} (needs internet). It is encrypted on this device with your PIN and expires after 12 hours.",
+        "label": "Name for this device",
+        "pin": "Choose a shift PIN",
+        "pinRules": "6 to 12 digits. You will need it to unlock this scanner and for manual entries.",
+        "pinConfirm": "Repeat the PIN",
+        "tooShort": "The PIN must be 6 to 12 digits.",
+        "mismatch": "The two PINs do not match.",
+        "needOnline": "You need an internet connection to start a shift.",
+        "error": "Could not start the shift. Check your connection and try again.",
+        "start": "Start shift",
+        "starting": "Starting…",
+        "pendingKept": "{n} scans from an earlier shift are still waiting to sync. They are kept."
+      },
+      "locked": {
+        "title": "Scanner locked",
+        "body": "Enter your shift PIN to continue. Student data stays encrypted until you do.",
+        "pin": "Shift PIN",
+        "unlock": "Unlock",
+        "wrongPin": "Wrong PIN. {left} tries left before the student list is erased from this device.",
+        "wiped": "Too many wrong PINs. The student list was erased. Start a new shift.",
+        "newShift": "Start a new shift",
+        "pending": "{n} scans are waiting to sync."
+      },
+      "ready": {
+        "online": "Online",
+        "offline": "Offline: still scanning",
+        "pending": "{n} waiting to sync",
+        "shiftUntil": "Shift data valid until {time}",
+        "sync": "Sync now",
+        "syncing": "Syncing…",
+        "lock": "Lock",
+        "syncAuth": "Sign in again to sync. Your scans are safe on this device.",
+        "syncError": "Sync failed ({status}). Will retry.",
+        "clockOff": "This device's clock is {seconds} s off. It is being corrected while online; please enable automatic date and time.",
+        "lastSync": "last sync {time}",
+        "recent": "Recent scans",
+        "noScans": "Nothing scanned yet.",
+        "camera": {
+          "label": "Camera view for scanning meal QR codes",
+          "starting": "Starting camera…",
+          "unavailable": "Camera unavailable. Allow camera access, or use manual entry.",
+          "hint": "Hold a student's QR code in front of the camera."
+        },
+        "report": {
+          "title": "Sync report",
+          "none": "Nothing synced yet.",
+          "accepted": "Accepted",
+          "duplicate": "Duplicate",
+          "rejected": "Rejected",
+          "crossDuplicate": "Already admitted elsewhere: {names}. This was flagged for the warden."
+        },
+        "manual": {
+          "open": "Manual entry",
+          "title": "Manual entry",
+          "warning": "Use only if the QR cannot be scanned. Every manual entry is logged with your name and reason, and limited per hour and per student.",
+          "roll": "Roll number",
+          "reason": "Reason",
+          "choose": "Choose a reason",
+          "reasons": {
+            "phone_dead": "Phone is dead",
+            "app_problem": "App problem",
+            "lost_phone": "Lost phone",
+            "clock_wrong": "Phone clock is wrong",
+            "other": "Other (add a note)"
+          },
+          "note": "Note (required for Other)",
+          "pin": "Your shift PIN",
+          "cancel": "Cancel",
+          "submit": "Admit",
+          "wrongPin": "Wrong PIN."
+        },
+        "debug": {
+          "label": "Paste a code to test (no camera)",
+          "submit": "Check"
+        }
+      },
+      "result": {
+        "admitted": "{name}: welcome",
+        "admittedManual": "{name}: admitted (manual)",
+        "duplicate": "{name}: already served",
+        "duplicateAt": "First scanned at {time}",
+        "stale": "Code expired",
+        "future": "Code is from the future: check the phone's clock",
+        "bad_signature": "Invalid code",
+        "unknown_device": "Not registered for this mess",
+        "revoked_device": "This phone was replaced or revoked",
+        "locked": "Too many bad codes. Wait a minute.",
+        "malformed": "Not a RAM meal code",
+        "outside_meal_time": "No meal is being served right now",
+        "bundle_expired": "Shift data expired. Go online and start a new shift.",
+        "unknown_roll": "Roll number not found for this mess",
+        "manual_reason_required": "Choose a reason (add a note for Other)",
+        "manual_rate_limit_staff": "Too many manual entries this hour",
+        "manual_rate_limit_student": "This student has used the manual limit this week"
+      }
     }
   }
 }

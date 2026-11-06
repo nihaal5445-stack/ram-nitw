@@ -4,6 +4,12 @@
 -- receives sig_ok from its only permitted caller (service role) and must apply every other rule.
 -- ─────────────────────────────────────────────────────────────────────────────
 begin;
+-- isolation: start from empty Phase 3 tables regardless of what earlier e2e runs left behind (rolled back at the end)
+delete from public.fraud_flags;
+delete from public.meal_redemptions;
+delete from public.bundle_issues;
+delete from public.scanner_devices;
+delete from public.student_devices;
 create temp table _r (n serial, name text, ok boolean, detail text);
 grant all on _r to public;
 grant usage, select, update on sequence _r_n_seq to public;
@@ -216,6 +222,19 @@ begin
   r := public.record_scans(C1, sc1, jsonb_build_array(pg_temp.qr(gen_random_uuid(), k1, pg_temp.step_of(base - interval '1 hour'), base - interval '1 hour')));
   perform pg_temp.as_postgres();
   perform pg_temp.t('scan outside meal time rejected', pg_temp.status_of(r) = 'rejected:outside_meal_time', pg_temp.status_of(r));
+
+  -- slot windows that touch midnight must work (time arithmetic would wrap): widen dinner to 22:00-23:59, scan at 23:55 IST
+  update public.mess_slots set starts = '22:00', ends = '23:59' where mess_id = 'ifc-a' and slot = 'dinner';
+  declare late timestamptz := (((now() at time zone 'Asia/Kolkata')::date - 1) + time '23:55') at time zone 'Asia/Kolkata';
+  begin
+    delete from public.meal_redemptions where student_id = S1 and slot = 'dinner';
+    perform pg_temp.as_service();
+    r := public.record_scans(C1, sc1, jsonb_build_array(pg_temp.qr(gen_random_uuid(), k1, pg_temp.step_of(late), late)));
+    perform pg_temp.as_postgres();
+    perform pg_temp.t('slot window ending at 23:59 still admits a scan at 23:55 (no midnight wrap)', pg_temp.status_of(r) = 'accepted:', pg_temp.status_of(r));
+    update public.mess_slots set starts = '19:30', ends = '21:30' where mess_id = 'ifc-a' and slot = 'dinner';
+    delete from public.meal_redemptions where student_id = S1 and slot = 'dinner';
+  end;
 
   -- revoked device: revoke the key, then a scan stamped AFTER revocation fails; one stamped BEFORE is still honoured
   update public.student_devices set revoked_at = base + interval '10 minutes', revoked_reason = 'test' where id = d1;

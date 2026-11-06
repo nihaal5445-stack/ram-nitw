@@ -3,7 +3,7 @@ import { chromium } from "playwright";
 import { createClient } from "@supabase/supabase-js";
 import { mkdirSync } from "node:fs";
 import { sessionCookies, supabaseEnv } from "./lib/session.mjs";
-import { parseToken, importPublicKey, verifyToken, stepAt } from "../src/lib/access/token.ts";
+import { parseToken, importPublicKey, verifyToken } from "../src/lib/access/token.ts";
 import { hexToBytes } from "../src/lib/access/verify-scans.ts";
 
 const BASE = process.env.BASE ?? "http://localhost:3100";
