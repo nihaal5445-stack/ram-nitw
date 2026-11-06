@@ -12,9 +12,20 @@ export function istParts(ms: number): { date: string; minutes: number } {
 
 const toMin = (hhmm: string) => Number(hhmm.slice(0, 2)) * 60 + Number(hhmm.slice(3, 5));
 
-/** Slot whose window (plus `graceMin` either side) contains the time; null if none. */
-export function slotAt(slots: SlotWindow[], ms: number, graceMin = 15): { slot: string; date: string } | null {
+/**
+ * Slot whose window (plus `graceMin` either side) contains the time; null if none.
+ * `demo` (DEMO MODE): the time always counts as inside an open slot: the containing window, else the nearest one.
+ * Must match public.effective_slot() in the database.
+ */
+export function slotAt(slots: SlotWindow[], ms: number, graceMin = 15, demo = false): { slot: string; date: string } | null {
   const { date, minutes } = istParts(ms);
+  if (demo) {
+    if (slots.length === 0) return null;
+    const dist = (s: SlotWindow) => (minutes >= toMin(s.starts) && minutes < toMin(s.ends) ? 0 : 1 + Math.min(Math.abs(minutes - toMin(s.starts)), Math.abs(minutes - toMin(s.ends))));
+    let best = slots[0];
+    for (const s of slots) if (dist(s) < dist(best)) best = s; // strict <: ties keep the earlier slot, like ORDER BY starts
+    return { slot: best.slot, date };
+  }
   const hit = slots.find((s) => minutes >= toMin(s.starts) - graceMin && minutes < toMin(s.ends) + graceMin);
   return hit ? { slot: hit.slot, date } : null;
 }
@@ -22,7 +33,7 @@ export function slotAt(slots: SlotWindow[], ms: number, graceMin = 15): { slot: 
 export const ledgerKey = (studentId: string, date: string, slot: string) => `${studentId}|${date}|${slot}`;
 
 /** The slot being served right now (no grace), or null. Server components call this instead of touching Date.now(). */
-export const currentSlot = (slots: SlotWindow[]) => slotAt(slots, Date.now(), 0);
+export const currentSlot = (slots: SlotWindow[], demo = false) => slotAt(slots, Date.now(), 0, demo);
 
 /** The last `n` IST dates (today first) as YYYY-MM-DD. Lives here so server components avoid calling Date.now() directly. */
 export function recentDates(n = 3): string[] {

@@ -9,7 +9,8 @@ insert into public.provisioned_accounts (email, role, full_name, assigned_mess_i
   ('parent@example.com',  'parent',        'Demo Parent',        null),
   ('counter@nitw.ac.in',  'counter_staff', 'Demo Counter Staff', 'ifc-a'),
   ('admin@nitw.ac.in',    'mess_admin',    'Demo Mess Admin',    'ifc-a'),
-  ('warden@nitw.ac.in',   'warden',        'Demo Warden',        null);
+  ('warden@nitw.ac.in',   'warden',        'Demo Warden',        null),
+  ('admin-ifcb@nitw.ac.in', 'mess_admin',   'Demo IFC-B Admin',   'ifc-b');
 
 -- Seed auth.users directly (bypasses email OTP for dev convenience)
 insert into auth.users (
@@ -105,6 +106,34 @@ values
     '', '',
     '', '', '',
     '', '', ''
+  )  ,
+  (
+    '77777777-7777-7777-7777-777777777777',
+    '00000000-0000-0000-0000-000000000000',
+    'authenticated', 'authenticated',
+    'student2@student.nitw.ac.in',
+    crypt('password123', gen_salt('bf')),
+    now(),
+    '{"provider":"email","providers":["email"]}',
+    '{"full_name":"Demo Student Two"}',
+    now(), now(),
+    '', '',
+    '', '', '',
+    '', '', ''
+  )  ,
+  (
+    '88888888-8888-8888-8888-888888888888',
+    '00000000-0000-0000-0000-000000000000',
+    'authenticated', 'authenticated',
+    'admin-ifcb@nitw.ac.in',
+    crypt('password123', gen_salt('bf')),
+    now(),
+    '{"provider":"email","providers":["email"]}',
+    '{"full_name":"Demo IFC-B Admin"}',
+    now(), now(),
+    '', '',
+    '', '', '',
+    '', '', ''
   );
 
 -- Matching auth.identities rows for all seeded auth users
@@ -153,6 +182,14 @@ update public.profiles
 update public.profiles
   set role = 'mess_admin', assigned_mess_id = 'ifc-a'
   where id = '55555555-5555-5555-5555-555555555555';
+
+update public.profiles
+  set role = 'student', assigned_mess_id = 'ifc-b', roll_number = 'DEMO0002'
+  where id = '77777777-7777-7777-7777-777777777777';
+
+update public.profiles
+  set role = 'mess_admin', assigned_mess_id = 'ifc-b'
+  where id = '88888888-8888-8888-8888-888888888888';
 
 update public.profiles
   set role = 'warden'

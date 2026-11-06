@@ -33,7 +33,7 @@ export type AddonOutcome =
 
 /** Pure offline check. `used` = the local ledger already holds this purchase id. */
 export async function evaluateAddonTicket(
-  text: string, serverPublicKeyB64u: string | undefined, messId: string, slots: SlotWindow[], nowMs: number, used: (id: string) => Promise<boolean>,
+  text: string, serverPublicKeyB64u: string | undefined, messId: string, slots: SlotWindow[], nowMs: number, used: (id: string) => Promise<boolean>, demo = false,
 ): Promise<AddonOutcome> {
   const t = parseAddonTicket(text);
   if (!t) return { ok: false, reason: "addon_malformed" };
@@ -42,7 +42,7 @@ export async function evaluateAddonTicket(
   const good = await crypto.subtle.verify(ECDSA, key, t.sig as BufferSource, enc.encode(`${ADDON_PREFIX}|${t.body}`) as BufferSource);
   if (!good) return { ok: false, reason: "addon_bad_signature" };
   if (t.payload.m !== messId) return { ok: false, reason: "addon_wrong_mess", payload: t.payload };
-  const at = slotAt(slots, nowMs);
+  const at = slotAt(slots, nowMs, 15, demo);
   if (!at || at.date !== t.payload.d || at.slot !== t.payload.s) return { ok: false, reason: "addon_wrong_slot", payload: t.payload };
   if (await used(t.payload.i)) return { ok: false, reason: "addon_used", payload: t.payload };
   return { ok: true, payload: t.payload };

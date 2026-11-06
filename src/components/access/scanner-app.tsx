@@ -194,7 +194,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
     touch();
     const now = nowMs();
     if (text.startsWith("ramA.")) {
-      const ao = await evaluateAddonTicket(text, ctx.bundle.addon_key, ctx.bundle.mess_id, ctx.bundle.slots, now, async (id) => !!(await ledgerGet(`addon|${id}`)));
+      const ao = await evaluateAddonTicket(text, ctx.bundle.addon_key, ctx.bundle.mess_id, ctx.bundle.slots, now, async (id) => !!(await ledgerGet(`addon|${id}`)), ctx.bundle.demo_mode === true);
       if (ao.ok) {
         const p = ao.payload;
         await ledgerPut({ key: `addon|${p.i}`, studentId: "addon", slot: p.s, date: p.d, scannedAt: now, method: "qr", scanId: p.i });

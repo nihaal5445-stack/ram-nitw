@@ -231,7 +231,7 @@ begin
 
   return jsonb_build_object(
     'scanner_id', v_scanner.id, 'mess_id', v_scanner.mess_id,
-    'issued_at', now(), 'expires_at', v_expires, 'server_time', now(),
+    'issued_at', now(), 'expires_at', v_expires, 'server_time', now(), 'demo_mode', public.demo_mode(),
     'students', v_students,
     'revoked_keys', coalesce((select jsonb_agg(d.device_key) from public.student_devices d
                                join public.profiles p on p.id = d.student_id
@@ -299,11 +299,8 @@ begin
 
     v_date := (v_scanned at time zone 'Asia/Kolkata')::date;
     v_local := (v_scanned at time zone 'Asia/Kolkata')::time;
-    -- minutes arithmetic (not time - interval): `time` arithmetic wraps at midnight, which broke windows touching 00:00/24:00
-    select slot into v_slot from public.mess_slots
-     where mess_id = v_scanner.mess_id
-       and extract(epoch from v_local) / 60 >= extract(epoch from starts) / 60 - 15
-       and extract(epoch from v_local) / 60 <  extract(epoch from ends) / 60 + 15 limit 1;
+    -- slot rules live in effective_slot() (real windows +/- 15 min; DEMO MODE: always an open slot)
+    v_slot := public.effective_slot(v_scanner.mess_id, v_scanned);
 
     -- identify the student
     if v_method = 'qr' then

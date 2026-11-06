@@ -923,5 +923,9 @@
     "back": "Back to dashboard",
     "studentLink": "Where does my fee go?",
     "studentLinkDesc": "A breakdown of the mess fee and the monthly trend"
+  },
+  "Demo": {
+    "badge": "Demo mode",
+    "hint": "Demo mode: the current time counts as an open meal slot for every mess."
   }
 }

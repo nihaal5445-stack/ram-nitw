@@ -80,7 +80,8 @@ begin
   select * into v_addon from public.addons where id = p_addon for update;
   if v_addon.id is null or not v_addon.active or v_addon.mess_id is distinct from v_mess then raise exception 'add-on not available' using errcode = '42501'; end if;
   -- the slot being served now, else the next one today (a ticket is valid for that slot only)
-  select slot into v_slot from public.mess_slots where mess_id = v_mess and v_local < ends order by starts limit 1;
+  if public.demo_mode() then v_slot := public.effective_slot(v_mess, now());
+  else select slot into v_slot from public.mess_slots where mess_id = v_mess and v_local < ends order by starts limit 1; end if;
   if v_slot is null then raise exception 'no_slot_left_today'; end if;
   if v_addon.sold >= v_addon.stock_total then raise exception 'sold_out'; end if;
   if exists (select 1 from public.addon_purchases where student_id = v_uid and addon_id = p_addon and meal_date = v_date and slot = v_slot) then
@@ -105,9 +106,11 @@ begin
   if v_p.mess_id <> v_scanner.mess_id then return jsonb_build_object('status','rejected','reason','wrong_mess'); end if;
   select starts, ends into v_start, v_end from public.mess_slots where mess_id = v_p.mess_id and slot = v_p.slot;
   v_local := (p_scanned_at at time zone 'Asia/Kolkata')::time;
+  -- real rules: inside the ticket's slot window +/- 15 min. DEMO MODE: any time that day.
   if (p_scanned_at at time zone 'Asia/Kolkata')::date <> v_p.meal_date
-     or (extract(epoch from v_local)/60) < (extract(epoch from v_start)/60 - 15)
-     or (extract(epoch from v_local)/60) >= (extract(epoch from v_end)/60 + 15) then
+     or (not public.demo_mode() and (
+          (extract(epoch from v_local)/60) < (extract(epoch from v_start)/60 - 15)
+       or (extract(epoch from v_local)/60) >= (extract(epoch from v_end)/60 + 15))) then
     return jsonb_build_object('status','rejected','reason','outside_meal_time');
   end if;
   if v_p.status = 'redeemed' then return jsonb_build_object('status','duplicate','reason','already_redeemed'); end if;

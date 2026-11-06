@@ -13,9 +13,11 @@ import { FeedbackBell } from "@/components/feedback/feedback-bell";
 interface NavbarProps {
   userName: string;
   role: Role;
+  /** server-rendered extras next to the role badge (e.g. the demo badge) */
+  badge?: React.ReactNode;
 }
 
-export function Navbar({ userName, role }: NavbarProps) {
+export function Navbar({ userName, role, badge }: NavbarProps) {
   const t = useTranslations();
   const tNav = useTranslations("Nav");
   const router = useRouter();
@@ -45,6 +47,7 @@ export function Navbar({ userName, role }: NavbarProps) {
             >
               {t(`Dashboard.role.${role}`)}
             </Badge>
+            {badge}
           </div>
 
           {/* Right controls */}

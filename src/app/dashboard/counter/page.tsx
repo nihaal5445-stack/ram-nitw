@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { messes } from "@/config/messes";
 import { currentSlot } from "@/lib/access/slots";
+import { getDemoMode } from "@/lib/demo-mode";
 
 export default async function CounterDashboard() {
   const { user, profile, error } = await getCurrentProfile();
@@ -32,7 +33,7 @@ export default async function CounterDashboard() {
     supabase.from("meal_redemptions").select("id, slot, scanned_at, method, status").order("scanned_at", { ascending: false }).limit(8),
     supabase.from("scanner_devices").select("last_sync_at").order("last_sync_at", { ascending: false, nullsFirst: false }).limit(1).maybeSingle(),
   ]);
-  const current = currentSlot((slotRows ?? []).map((s) => ({ slot: s.slot, starts: s.starts.slice(0, 5), ends: s.ends.slice(0, 5) })));
+  const current = currentSlot((slotRows ?? []).map((s) => ({ slot: s.slot, starts: s.starts.slice(0, 5), ends: s.ends.slice(0, 5) })), await getDemoMode());
   const served = todayRows?.length ?? 0;
   const manual = (todayRows ?? []).filter((r) => r.method === "manual").length;
   const time = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" });

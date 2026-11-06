@@ -10,10 +10,12 @@ const seedUsers = [
   { email: "rep@student.nitw.ac.in", password: "password123", expectedRole: "mess_rep" },
   { email: "admin@nitw.ac.in", password: "password123", expectedRole: "mess_admin" },
   { email: "warden@nitw.ac.in", password: "password123", expectedRole: "warden" },
+  { email: "student2@student.nitw.ac.in", password: "password123", expectedRole: "student" },
+  { email: "admin-ifcb@nitw.ac.in", password: "password123", expectedRole: "mess_admin" },
 ];
 
 async function main() {
-  console.log("=== 6-USER AUTH & PROFILE VERIFICATION CHECK ===\n");
+  console.log("=== 8-USER AUTH & PROFILE VERIFICATION CHECK ===\n");
   let allPassed = true;
 
   for (const user of seedUsers) {
@@ -64,7 +66,7 @@ async function main() {
   }
 
   if (allPassed) {
-    console.log("🎉 ALL 6 SEED USERS SUCCESSFULLY SIGNED IN AND READ THEIR PROFILES WITH EXPECTED ROLES.");
+    console.log("🎉 ALL 8 SEED USERS SUCCESSFULLY SIGNED IN AND READ THEIR PROFILES WITH EXPECTED ROLES.");
   } else {
     console.error("❌ ONE OR MORE USER CHECKS FAILED.");
     process.exit(1);

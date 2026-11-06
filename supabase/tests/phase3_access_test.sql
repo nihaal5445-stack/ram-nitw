@@ -4,6 +4,8 @@
 -- receives sig_ok from its only permitted caller (service role) and must apply every other rule.
 -- ─────────────────────────────────────────────────────────────────────────────
 begin;
+-- these tests assert the REAL slot rules, so switch demo mode off inside this (rolled-back) transaction
+update public.app_settings set value = 'off' where key = 'demo_mode';
 -- isolation: start from empty Phase 3 tables regardless of what earlier e2e runs left behind (rolled back at the end)
 delete from public.fraud_flags;
 delete from public.meal_redemptions;
@@ -65,7 +67,7 @@ declare
 begin
   -- fixtures (as postgres): student S2 and counter C2 in krishna
   S2 := pg_temp.mk_user('s2@student.nitw.ac.in');
-  update public.profiles set assigned_mess_id = 'krishna', roll_number = 'DEMO0002' where id = S2;
+  update public.profiles set assigned_mess_id = 'krishna', roll_number = 'TSTK0002' where id = S2;
   insert into public.provisioned_accounts (email, role, assigned_mess_id) values ('c2@nitw.ac.in', 'counter_staff', 'krishna');
   C2 := pg_temp.mk_user('c2@nitw.ac.in');
   update auth.users set last_sign_in_at = now() where id in (S1, S2);
@@ -281,7 +283,7 @@ begin
     perform pg_temp.t('manual reason "other" needs a note of at least 5 characters', pg_temp.status_of(r) = 'rejected:manual_reason_required', pg_temp.status_of(r));
     r := public.record_scans(C1, sc1, jsonb_build_array(pg_temp.manual(gen_random_uuid(), 'NOPE', base + interval '32 minutes', 'phone_dead')));
     perform pg_temp.t('manual with unknown roll number rejected', pg_temp.status_of(r) = 'rejected:unknown_roll', pg_temp.status_of(r));
-    r := public.record_scans(C1, sc1, jsonb_build_array(pg_temp.manual(gen_random_uuid(), 'DEMO0002', base + interval '33 minutes', 'phone_dead')));
+    r := public.record_scans(C1, sc1, jsonb_build_array(pg_temp.manual(gen_random_uuid(), 'TSTK0002', base + interval '33 minutes', 'phone_dead')));
     perform pg_temp.t('manual for a student of another mess rejected (wrong_mess)', pg_temp.status_of(r) = 'rejected:wrong_mess', pg_temp.status_of(r));
     r := public.record_scans(C1, sc1, jsonb_build_array(pg_temp.manual(gen_random_uuid(), 'DEMO0003', base + interval '34 minutes', 'phone_dead')));
     perform pg_temp.t('manual with a valid reason accepted and logged as manual', pg_temp.status_of(r) = 'accepted:'

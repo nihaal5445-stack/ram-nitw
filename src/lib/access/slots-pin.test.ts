@@ -40,3 +40,15 @@ test("PIN wrap round trip; wrong PIN and tampering fail", async () => {
   assert.notEqual(w.salt, w2.salt);
   assert.notEqual(w.ct, w2.ct);
 });
+
+test("DEMO MODE: any time is inside an open slot (containing window, else the nearest)", () => {
+  // 23:00 IST: real rules say no slot, demo mode picks the nearest (dinner ends 21:30)
+  const NIGHT = Date.UTC(2026, 10, 6, 17, 30);
+  assert.equal(slotAt(SLOTS, NIGHT), null);
+  assert.equal(slotAt(SLOTS, NIGHT, 15, true)?.slot, "dinner");
+  // 05:00 IST: nearest is breakfast (starts 07:30)
+  assert.equal(slotAt(SLOTS, Date.UTC(2026, 10, 5, 23, 30), 15, true)?.slot, "breakfast");
+  // inside lunch: the containing window wins, demo or not
+  assert.equal(slotAt(SLOTS, LUNCH, 15, true)?.slot, "lunch");
+  assert.equal(slotAt(SLOTS, LUNCH)?.slot, "lunch");
+});

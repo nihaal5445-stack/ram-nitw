@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { ExternalLink, Phone } from "lucide-react";
+import { DemoBadge } from "@/components/demo-badge";
 
 export async function UtilityBar() {
   const t = await getTranslations("Public.utility");
@@ -16,6 +17,9 @@ export async function UtilityBar() {
           <ExternalLink className="size-3 shrink-0" aria-hidden />
           <span className="sr-only">{t("opensNew")}</span>
         </a>
+        <div className="flex items-center gap-5">
+          <DemoBadge />
+        </div>
         <div className="hidden items-center gap-5 sm:flex">
           <span>{t("confirmed")}</span>
           {/* TODO: verify helpline number */}

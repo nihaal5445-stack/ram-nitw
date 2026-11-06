@@ -10,6 +10,8 @@ export interface Bundle {
   students: BundleStudent[]; revoked_keys: string[]; slots: SlotWindow[];
   /** server public key for add-on tickets (added client-side from /api/addons/key) */
   addon_key?: string;
+  /** DEMO MODE: any time counts as an open meal slot (set by the server) */
+  demo_mode?: boolean;
 }
 export interface LedgerEntry { key: string; studentId: string; slot: string; date: string; scannedAt: number; method: "qr" | "manual"; scanId: string }
 
@@ -54,7 +56,7 @@ export type Outcome =
 const expired = (ctx: ScanContext, nowMs: number) => nowMs > Date.parse(ctx.bundle.expires_at);
 
 async function admissionCheck(ctx: ScanContext, student: BundleStudent, nowMs: number): Promise<Outcome | { slot: string; date: string }> {
-  const at = slotAt(ctx.bundle.slots, nowMs);
+  const at = slotAt(ctx.bundle.slots, nowMs, 15, ctx.bundle.demo_mode === true);
   if (!at) return { ok: false, reason: "outside_meal_time", student };
   const prior = await ctx.getLedger(ledgerKey(student.student_id, at.date, at.slot));
   if (prior) return { ok: false, reason: "duplicate", student, slot: at.slot, firstAt: prior.scannedAt };
