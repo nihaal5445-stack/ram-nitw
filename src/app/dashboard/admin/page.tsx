@@ -11,6 +11,7 @@ import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
 import { LiveCount } from "@/components/live/live-count";
+import { AddStudentForm } from "@/components/students/students-manager";
 import { AssistantPanel } from "@/components/assistant/assistant-panel";
 import { TopLiked } from "@/components/likes/top-liked";
 import { CrowdPanel } from "@/components/crowd-panel";
@@ -47,6 +48,11 @@ export default async function MessAdminDashboard() {
         <StatCard title={t("staffCount")} value="12" icon={TrendingUp} accent="secondary" />
         <StatCard title="Open complaints" value="3" icon={UtensilsCrossed} accent="amber" />
         <StatCard title="Avg. daily headcount" value="720" icon={BarChart3} accent="green" />
+      </div>
+
+      <div className="space-y-2" data-testid="admin-add-student">
+        <AddStudentForm messes={messes.filter((m) => m.status === "confirmed").map((m) => ({ id: m.id, name: m.name }))} fixedMess={profile.assigned_mess_id ?? undefined} />
+        <Link href="/dashboard/admin/students" className="inline-block text-sm font-medium text-brand underline" data-testid="students-link">Students of this mess: search and remove</Link>
       </div>
 
       <CrowdPanel ownMessId={profile.assigned_mess_id} />

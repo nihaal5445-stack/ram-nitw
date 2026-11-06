@@ -1199,5 +1199,32 @@
       "time": "Time",
       "tickets": "Tickets used"
     }
+  },
+  "Students": {
+    "title": "Students",
+    "adminLead": "Students of {mess}. Add a student with their email, name and roll number, or remove one from the mess.",
+    "wardenLead": "All students. Add a student to any mess, or move one between messes.",
+    "addTitle": "Add student",
+    "email": "Email",
+    "name": "Name",
+    "roll": "Roll number",
+    "mess": "Mess",
+    "add": "Add student",
+    "addHelp": "The student signs in with the 6-digit code sent to their email. Someone who already has an account and no mess is simply assigned to this mess.",
+    "addedNew": "Student added. They can now sign in with their email code.",
+    "addedExisting": "The existing student account was assigned to the mess.",
+    "listTitle": "Students in the list ({n})",
+    "search": "Search by name, email or roll number",
+    "none": "No students found.",
+    "remove": "Remove from mess",
+    "confirmRemove": "Yes, remove",
+    "cancel": "Cancel",
+    "removed": "Removed from the mess. The account is kept.",
+    "moved": "Moved.",
+    "moveTo": "Move {name} to",
+    "noMess": "No mess",
+    "cardTitle": "Students",
+    "cardDesc": "Add a student to the mess or remove one",
+    "cardWarden": "Add students, move them between messes"
   }
 }

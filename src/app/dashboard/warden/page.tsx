@@ -53,6 +53,11 @@ export default async function WardenDashboard() {
         </span>
       </Link>
 
+      <Link href="/dashboard/warden/students" className="flex items-center gap-4 rounded-lg border border-border bg-card p-5 transition-colors hover:bg-muted/50" data-testid="warden-students-link">
+        <span className="flex size-12 items-center justify-center rounded-xl bg-secondary text-secondary-foreground"><Users className="size-6" aria-hidden /></span>
+        <span><span className="block font-semibold">Students</span><span className="block text-sm text-muted-foreground">Add students to any mess, move them between messes</span></span>
+      </Link>
+
       <SwitchToggle on={switchOn} demo={demo} issued={issued} redeemed={redeemed} />
 
       <CrowdPanel />
