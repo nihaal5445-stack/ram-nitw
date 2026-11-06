@@ -850,5 +850,36 @@
       "postBtn": "Post",
       "sent": "Reply sent."
     }
+  },
+  "Feedback": {
+    "title": "Meal feedback",
+    "subtitle": "About 40 minutes after you are admitted, we ask how the meal was. It helps the mess improve.",
+    "bell": "Feedback requests: {n}",
+    "banner": "How was your {meal}? It takes 20 seconds.",
+    "rateNow": "Rate now",
+    "howWas": "How was your {meal} at {mess}?",
+    "stars": "Star rating",
+    "starN": "{n} stars",
+    "review": "Your review (optional)",
+    "improve": "How can we make it better? (optional)",
+    "submit": "Send feedback",
+    "skip": "Skip",
+    "pickStars": "Please choose a star rating.",
+    "failed": "Could not send. Please try again.",
+    "notSkippable": "Skipping is switched off in your settings.",
+    "thanks": "Thank you! Your feedback was sent.",
+    "snoozed": "We will remind you once more in 30 minutes.",
+    "skipped": "Skipped.",
+    "none": "No feedback requests right now.",
+    "settings": "Feedback settings",
+    "prefSkippable": "Allow me to skip",
+    "prefSkippableDesc": "Turn off if you want to always be asked until you answer.",
+    "prefRemind": "Remind me once",
+    "prefRemindDesc": "If you skip, ask again once after 30 minutes.",
+    "demoTool": "Demo tool",
+    "demoToolDesc": "Pretends 40 minutes have passed since your latest accepted scan (needs a scan in the last 24 hours).",
+    "simulate": "Simulate 40 min passed",
+    "simulated": "Done: your latest meal is now due for feedback.",
+    "simulateNone": "No accepted scan found in the last 24 hours. Scan the student QR at the counter first."
   }
 }

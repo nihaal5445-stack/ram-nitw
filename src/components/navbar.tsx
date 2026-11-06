@@ -8,6 +8,7 @@ import { LocaleToggle } from "@/components/locale-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import type { Role } from "@/config/auth";
+import { FeedbackBell } from "@/components/feedback/feedback-bell";
 
 interface NavbarProps {
   userName: string;
@@ -51,6 +52,7 @@ export function Navbar({ userName, role }: NavbarProps) {
             <span className="text-sm text-muted-foreground hidden md:block truncate max-w-[180px]">
               {userName}
             </span>
+            {role === "student" && <FeedbackBell />}
             <LocaleToggle />
             <ThemeToggle />
             <Button
