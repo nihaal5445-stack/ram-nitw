@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { ComplaintsView, type MyComplaint } from "@/components/complaints/complaints-view";
 import { messes } from "@/config/messes";
@@ -12,7 +13,7 @@ export default async function ComplaintsPage() {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "parent") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "parent") return <WrongRole role={profile.role} expected="parent" />;
 
   const supabase = await createClient();
   let defaultMess = profile.assigned_mess_id as string | null;

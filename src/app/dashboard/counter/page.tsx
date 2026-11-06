@@ -2,9 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { CheckCircle, Clock, Keyboard, RefreshCw, ScanLine } from "lucide-react";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
 import { CrowdPanel } from "@/components/crowd-panel";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +18,7 @@ export default async function CounterDashboard() {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "counter_staff") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "counter_staff") return <WrongRole role={profile.role} expected="counter_staff" />;
 
   const t = await getTranslations("CounterStaff");
   const tDash = await getTranslations("Dashboard");

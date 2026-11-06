@@ -2,8 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
 import { AlertOctagon, AlertTriangle, CheckCircle2 } from "lucide-react";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ export default async function FraudPage({ searchParams }: { searchParams: Promis
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "warden") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "warden") return <WrongRole role={profile.role} expected="warden" />;
 
   const t = await getTranslations("Warden.fraud");
   const locale = await getLocale();

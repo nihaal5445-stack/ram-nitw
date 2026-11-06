@@ -1024,5 +1024,11 @@
     "inboxLink": "Messages inbox",
     "rate": "Too many messages. Wait a bit.",
     "failed": "Could not send."
+  },
+  "WrongRole": {
+    "title": "You're signed in as {role}.",
+    "body": "This page is for a {expected} account. Sign out to use a different account, or go back to your own dashboard.",
+    "signOut": "Sign out",
+    "mine": "Go to my dashboard"
   }
 }

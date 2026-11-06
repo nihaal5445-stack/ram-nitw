@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { AddonShop } from "@/components/addons/addon-shop";
 
@@ -10,7 +11,7 @@ export default async function StudentAddonsPage({ searchParams }: { searchParams
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "student") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "student") return <WrongRole role={profile.role} expected="student" />;
 
   const supabase = await createClient();
   const [{ data: addons }, { data: purchases }] = await Promise.all([

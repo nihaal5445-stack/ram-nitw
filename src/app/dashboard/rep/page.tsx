@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { CrowdPanel } from "@/components/crowd-panel";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
@@ -14,7 +15,7 @@ export default async function MessRepDashboard() {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "mess_rep") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "mess_rep") return <WrongRole role={profile.role} expected="mess_rep" />;
 
   const t = await getTranslations("MessRep");
   const tDash = await getTranslations("Dashboard");

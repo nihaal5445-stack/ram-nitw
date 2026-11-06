@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { AdminConsole, type ConsoleIssue } from "@/components/complaints/admin-console";
 import { messes } from "@/config/messes";
@@ -13,7 +14,7 @@ export default async function AdminComplaintsPage() {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "mess_admin") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "mess_admin") return <WrongRole role={profile.role} expected="mess_admin" />;
 
   const { data } = await (await createClient()).rpc("admin_complaints");
   const rows = (data ?? []) as AdminComplaint[];

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { ScannerApp } from "@/components/access/scanner-app";
 import { messes } from "@/config/messes";
@@ -9,7 +10,7 @@ export default async function ScanPage({ searchParams }: { searchParams: Promise
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "counter_staff" && profile.role !== "mess_admin") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "counter_staff" && profile.role !== "mess_admin") return <WrongRole role={profile.role} expected="counter_staff" />;
 
   const t = await getTranslations("Access.scanner");
   const sp = await searchParams;

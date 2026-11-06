@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { FeeCharts } from "@/components/fees/fee-charts";
 
@@ -8,7 +9,7 @@ export default async function StudentFeesPage() {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "student") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "student") return <WrongRole role={profile.role} expected="student" />;
   const t = await getTranslations("Fees");
   return (
     <div className="space-y-6">

@@ -1,8 +1,9 @@
 import { redirect } from "next/navigation";
-import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { CrowdPanel } from "@/components/crowd-panel";
 import { StudentMenu } from "@/components/likes/student-menu";
 import { SwitchMess } from "@/components/switch/switch-mess";
+import { WrongRole } from "@/components/wrong-role";
 import { ProfileError } from "@/components/profile-error";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
@@ -17,7 +18,7 @@ export default async function StudentDashboard() {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
-  if (profile.role !== "student") redirect(roleDashboard[profile.role]);
+  if (profile.role !== "student") return <WrongRole role={profile.role} expected="student" />;
 
   const t = await getTranslations("Student");
   const tDash = await getTranslations("Dashboard");

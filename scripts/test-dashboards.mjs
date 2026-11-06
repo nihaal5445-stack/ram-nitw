@@ -56,10 +56,18 @@ check("'show resolved' reveals the resolved flag with its note", await visible(w
 // ── access control ──
 const c = await as("counter@nitw.ac.in");
 await c.goto(`${BASE}/dashboard/warden/fraud`, { waitUntil: "networkidle" });
-check("counter staff cannot open the fraud page (redirected to their dashboard)", c.url().includes("/dashboard/counter"), c.url());
+check("counter staff cannot open the fraud page: told who they are signed in as (no silent redirect)", await visible(c.getByTestId("wrong-role")) && /signed in as Counter/i.test(await c.getByTestId("wrong-role").innerText()), c.url());
 const s = await as("student@student.nitw.ac.in", { width: 390, height: 844 }, "dark");
 await s.goto(`${BASE}/dashboard/warden/fraud`, { waitUntil: "networkidle" });
-check("student cannot open the fraud page", s.url().includes("/dashboard/student"), s.url());
+check("student cannot open the fraud page (shows the wrong-role notice with Sign out)", await visible(s.getByTestId("wrong-role")) && await visible(s.getByRole("button", { name: "Sign out" }).last()), s.url());
+// same browser session switched to admin: the student complaint form is NOT silently replaced by an admin page
+const a = await as("admin@nitw.ac.in");
+await a.goto(`${BASE}/dashboard/student/complaints`, { waitUntil: "networkidle" });
+check("admin opening the student complaint form sees the wrong-role notice, URL unchanged", await visible(a.getByTestId("wrong-role")) && a.url().includes("/dashboard/student/complaints"), a.url());
+const sd = await as("student@student.nitw.ac.in");
+await sd.goto(`${BASE}/dashboard/student`, { waitUntil: "networkidle" });
+const hrefs = await sd.locator("a[href^='/dashboard']").evaluateAll((els) => els.map((e) => e.getAttribute("href")));
+check("student dashboard: complaint link goes to the student form and no link points to an admin/warden/counter route", hrefs.includes("/dashboard/student/complaints") && hrefs.every((h) => !/\/dashboard\/(admin|warden|counter|rep|parent)/.test(h)), JSON.stringify(hrefs));
 const noFlagsForStudent = await (await browser.newContext()).request.get(`${BASE}/dashboard/warden/fraud`, { maxRedirects: 0 });
 check("anonymous request is redirected to login", [301, 302, 303, 307, 308].includes(noFlagsForStudent.status()), noFlagsForStudent.status());
 
