@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
 import { CrowdPanel } from "@/components/crowd-panel";
+import { StudentMenu } from "@/components/likes/student-menu";
 import { SwitchMess } from "@/components/switch/switch-mess";
 import { ProfileError } from "@/components/profile-error";
 import { getLocale, getTranslations } from "next-intl/server";
@@ -87,6 +88,8 @@ export default async function StudentDashboard() {
       <CrowdPanel ownMessId={profile.assigned_mess_id} />
 
       {profile.assigned_mess_id && <SwitchMess ownMess={profile.assigned_mess_id} allowed={switchAllowed} activePass={activePass} />}
+
+      {profile.assigned_mess_id && <StudentMenu messId={profile.assigned_mess_id} vegOnly={profile.assigned_mess_id === "ifc-a"} />}
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

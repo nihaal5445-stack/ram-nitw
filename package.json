@@ -19,6 +19,7 @@
     "test:feedback": "node scripts/test-feedback.mjs",
     "test:demo-mode": "node scripts/test-demo-mode.mjs",
     "test:switch": "node scripts/test-switch.mjs",
+    "test:likes": "node scripts/test-likes.mjs",
     "test:dashboards": "node scripts/test-dashboards.mjs",
     "test:login-code": "node scripts/test-login-code.mjs",
     "demo:prep": "node scripts/demo-prep.mjs",

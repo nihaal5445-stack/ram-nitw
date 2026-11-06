@@ -11,6 +11,7 @@ import Link from "next/link";
 import { AlertOctagon } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
+import { TopLiked } from "@/components/likes/top-liked";
 import { CrowdPanel } from "@/components/crowd-panel";
 import { SwitchToggle } from "@/components/switch/switch-toggle";
 import { getDemoMode } from "@/lib/demo-mode";
@@ -53,6 +54,8 @@ export default async function WardenDashboard() {
       <SwitchToggle on={switchOn} demo={demo} issued={issued} redeemed={redeemed} />
 
       <CrowdPanel />
+
+      <TopLiked showMess />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard

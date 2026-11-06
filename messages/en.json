@@ -959,5 +959,16 @@
       "demoOn": "On (demo mode)",
       "passes": "Passes today: {issued} issued, {redeemed} redeemed"
     }
+  },
+  "Likes": {
+    "title": "Like today's {meal}",
+    "wholeMeal": "Whole meal",
+    "likeMeal": "Like the whole meal",
+    "likeDish": "Like {dish}",
+    "note": "One like per dish per day. Counts are shared with the mess admin.",
+    "publicNote": "Students can like dishes after signing in.",
+    "topTitle": "Most-liked dishes (last 7 days)",
+    "topNone": "No likes yet.",
+    "likes": "{n} likes"
   }
 }

@@ -6,6 +6,8 @@ import { baseMenu } from "@/config/demo-data";
 import { slotState } from "@/lib/meal-time";
 import { useNow } from "./use-now";
 import { CrowdNow } from "./crowd-meter";
+import { LikeHeart } from "@/components/likes/heart";
+import { likeKey, useLikes } from "@/components/likes/use-likes";
 
 /** Time-aware parts of a mess: today's menu for the current/next slot and a crowd meter. */
 export function MessLive({ messId, name, vegOnly }: { messId: string; name: string; vegOnly: boolean }) {
@@ -13,6 +15,8 @@ export function MessLive({ messId, name, vegOnly }: { messId: string; name: stri
   const tm = useTranslations("Public.meals");
   const td = useTranslations("Public.dishes");
   const now = useNow();
+  const { counts } = useLikes(messId);
+  const tl = useTranslations("Likes");
   const st = now ? slotState(now) : null;
   const dishes = st ? baseMenu[st.slot.id].filter((d) => !vegOnly || d.veg) : [];
 
@@ -26,8 +30,8 @@ export function MessLive({ messId, name, vegOnly }: { messId: string; name: stri
         <ul className="mt-2 min-h-[8.5rem] divide-y divide-border border-y border-border text-sm">
           {dishes.map((d) => (
             <li key={d.key} className="flex items-center justify-between py-2">
-              {td(d.key)}
-              {d.veg && <Leaf className="size-3.5 text-success" strokeWidth={1.75} aria-label={t("veg")} />}
+              <span className="flex items-center gap-2">{td(d.key)}{d.veg && <Leaf className="size-3.5 text-success" strokeWidth={1.75} aria-label={t("veg")} />}</span>
+              {st && <LikeHeart count={counts[likeKey(st.slot.id, d.key)] ?? 0} liked={false} label={tl("likes", { n: counts[likeKey(st.slot.id, d.key)] ?? 0 })} />}
             </li>
           ))}
         </ul>
