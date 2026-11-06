@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { evaluateManual, evaluateQr, makeContext, MANUAL_REASONS, type Bundle, type Outcome, type ScanContext } from "@/lib/access/scanner-core";
 import { ledgerKey } from "@/lib/access/slots";
+import { evaluateAddonTicket } from "@/lib/access/addon-ticket";
 import {
   checkPin, getScannerInfo, ledgerGet, ledgerManual, ledgerPrune, ledgerPut, outboxCount, outboxPut, saveBundle,
   setScannerInfo, syncOutbox, unlockBundle, wipeBundle, hasBundle, type OutboxItem, type SyncReportRow,
@@ -25,6 +26,14 @@ const SYNC_MS = 30_000;
 const REPORTABLE = new Set(["stale", "future", "bad_signature", "unknown_device", "revoked_device", "duplicate"]);
 
 const uuid = () => crypto.randomUUID();
+/** Adds the server's add-on public key to a fresh bundle; keeps the previous one when offline. */
+async function withAddonKey(b: Bundle, previous: string | null | undefined): Promise<Bundle> {
+  try {
+    const r = await fetch("/api/addons/key", { cache: "no-store" });
+    if (r.ok) return { ...b, addon_key: ((await r.json()) as { public_key: string }).public_key };
+  } catch { /* offline */ }
+  return previous ? { ...b, addon_key: previous } : b;
+}
 const hhmm = (ms: number) => new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata", hour12: false }).format(ms);
 
 export function ScannerApp({ messName, debug }: { messName: string; debug: boolean }) {
@@ -138,7 +147,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
       let res = await supabase.rpc("issue_scanner_bundle", { p_scanner_id: info!.scannerId });
       if (res.error?.message.includes("not authorized")) { await register(); res = await supabase.rpc("issue_scanner_bundle", { p_scanner_id: info!.scannerId }); }
       if (res.error) throw new Error(res.error.message);
-      const b = res.data as Bundle;
+      const b = await withAddonKey(res.data as Bundle, null);
       await setScannerInfo({ scannerId: b.scanner_id, label: info!.label, messId: b.mess_id });
       await saveBundle(pin, b);
       scannerIdRef.current = b.scanner_id; pinRef.current = pin;
@@ -184,6 +193,20 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
     lastText.current = { text, at: Date.now() };
     touch();
     const now = nowMs();
+    if (text.startsWith("ramA.")) {
+      const ao = await evaluateAddonTicket(text, ctx.bundle.addon_key, ctx.bundle.mess_id, ctx.bundle.slots, now, async (id) => !!(await ledgerGet(`addon|${id}`)));
+      if (ao.ok) {
+        const p = ao.payload;
+        await ledgerPut({ key: `addon|${p.i}`, studentId: "addon", slot: p.s, date: p.d, scannedAt: now, method: "qr", scanId: p.i });
+        await outboxPut({ id: uuid(), method: "addon", token: text, scanned_at: new Date(now).toISOString(), local: "admitted", studentName: p.u });
+        show({ tone: "ok", title: t("result.addonOk", { item: p.n }), detail: `${p.u} · ${tm(p.s as "lunch")}` });
+      } else {
+        show({ tone: ao.reason === "addon_wrong_slot" ? "warn" : "bad", title: t(`result.${ao.reason}`), detail: ao.payload ? `${ao.payload.n} · ${ao.payload.u}` : undefined });
+      }
+      await refreshPending();
+      if (navigator.onLine) runSync();
+      return;
+    }
     const out = await evaluateQr(text, ctx, now);
     const base = { method: "qr" as const, token: text, scanned_at: new Date(now).toISOString(), studentName: out.ok || out.student ? (out.ok ? out.student.name : out.student?.name) : null };
     if (out.ok) {
@@ -196,7 +219,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
     show(describe(out));
     await refreshPending();
     if (navigator.onLine) runSync();
-  }, [describe, refreshPending, runSync, show]);
+  }, [describe, refreshPending, runSync, show, t, tm]);
 
   // ── camera ──
   const handleRef = useRef(handleText);
@@ -237,7 +260,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
       if (!navigator.onLine || !pinRef.current) return;
       const { data, error: e } = await createClient().rpc("issue_scanner_bundle", { p_scanner_id: scannerIdRef.current });
       if (e || !data) return;
-      const b = data as Bundle;
+      const b = await withAddonKey(data as Bundle, ctxRef.current?.bundle.addon_key);
       await saveBundle(pinRef.current, b);
       ctxRef.current = makeContext(b, ledgerGet, ledgerManual);
       setBundle(b);

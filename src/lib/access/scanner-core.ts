@@ -8,6 +8,8 @@ export interface BundleStudent { student_id: string; name: string | null; roll: 
 export interface Bundle {
   scanner_id: string; mess_id: string; issued_at: string; expires_at: string; server_time: string;
   students: BundleStudent[]; revoked_keys: string[]; slots: SlotWindow[];
+  /** server public key for add-on tickets (added client-side from /api/addons/key) */
+  addon_key?: string;
 }
 export interface LedgerEntry { key: string; studentId: string; slot: string; date: string; scannedAt: number; method: "qr" | "manual"; scanId: string }
 

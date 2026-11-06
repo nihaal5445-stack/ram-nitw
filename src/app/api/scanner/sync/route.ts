@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { createAdminClient } from "@/utils/supabase/admin";
 import { hexToBytes, prepareScans, type IncomingScan } from "@/lib/access/verify-scans";
 import { parseToken } from "@/lib/access/token";
+import { parseAddonTicket } from "@/lib/access/addon-ticket";
 
 export const runtime = "nodejs";
 const MAX_SCANS = 500;
@@ -32,13 +33,26 @@ export async function POST(request: Request) {
 
   let body: { scannerId?: string; scans?: IncomingScan[] };
   try { body = await request.json(); } catch { return NextResponse.json({ error: "bad_json" }, { status: 400 }); }
-  const { scannerId, scans } = body;
+  const { scannerId } = body;
+  let scans = body.scans as IncomingScan[];
   if (!scannerId || !UUID.test(scannerId) || !Array.isArray(scans) || scans.length > MAX_SCANS) {
     return NextResponse.json({ error: "bad_request" }, { status: 400 });
   }
-  if (scans.some((s) => !s || !UUID.test(String(s.id)) || (s.method !== "qr" && s.method !== "manual") || Number.isNaN(Date.parse(s.scanned_at)))) {
+  if (scans.some((s) => !s || !UUID.test(String(s.id)) || (s.method !== "qr" && s.method !== "manual" && (s.method as string) !== "addon") || Number.isNaN(Date.parse(s.scanned_at)))) {
     return NextResponse.json({ error: "bad_scan" }, { status: 400 });
   }
+
+  // Add-on tickets: the purchase id inside the (offline-verified) ticket is looked up and redeemed once, by the service role.
+  const addonScans = scans.filter((s) => (s.method as string) === "addon");
+  const addonResults: { id: string; status: string; reason?: string }[] = [];
+  for (const a of addonScans) {
+    const t = a.token ? parseAddonTicket(a.token) : null;
+    if (!t || !UUID.test(t.payload.i)) { addonResults.push({ id: a.id, status: "rejected", reason: "addon_malformed" }); continue; }
+    const { data, error } = await admin.rpc("redeem_addon", { p_staff_id: userId, p_scanner_id: scannerId, p_purchase_id: t.payload.i, p_scanned_at: a.scanned_at });
+    if (error) return NextResponse.json({ error: error.message }, { status: error.message.includes("not authorized") ? 403 : 500 });
+    addonResults.push({ id: a.id, ...(data as { status: string; reason?: string }) });
+  }
+  scans = scans.filter((s) => (s.method as string) !== "addon");
 
   const keys = [...new Set(scans.filter((s) => s.method === "qr" && s.token).map((s) => parseToken(s.token!)?.deviceKey).filter(Boolean) as string[])];
   const publicKeys = new Map<string, Uint8Array>();
@@ -53,5 +67,5 @@ export async function POST(request: Request) {
     const status = error.message.includes("not authorized") ? 403 : 500;
     return NextResponse.json({ error: error.message }, { status });
   }
-  return NextResponse.json({ results: data });
+  return NextResponse.json({ results: [...(data ?? []), ...addonResults] });
 }

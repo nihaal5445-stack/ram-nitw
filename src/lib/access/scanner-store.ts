@@ -8,7 +8,7 @@ const LEDGER_KEEP_MS = 8 * 86_400_000;
 
 export interface OutboxItem {
   id: string;
-  method: "qr" | "manual";
+  method: "qr" | "manual" | "addon";
   scanned_at: string;
   token?: string;
   roll_number?: string;

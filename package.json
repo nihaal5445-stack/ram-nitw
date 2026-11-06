@@ -14,13 +14,14 @@
     "test:access": "node scripts/test-access-flow.mjs",
     "test:student-token": "node scripts/test-student-token.mjs",
     "test:scanner": "node scripts/test-scanner-flow.mjs",
+    "test:addons": "node scripts/test-addons.mjs",
     "test:dashboards": "node scripts/test-dashboards.mjs",
     "test:login-code": "node scripts/test-login-code.mjs",
     "demo:crowd": "node scripts/demo-crowd.mjs",
     "demo:lock-seed": "node scripts/demo-lock-seed.mjs",
     "build:demo": "NEXT_PUBLIC_SUPABASE_PROXY=1 next build",
     "start:demo": "NEXT_PUBLIC_SUPABASE_PROXY=1 next start -p 3100",
-    "test:all": "npm run test:unit && npm run test:db && npm run test:signup && npm run test:login-code && npm run test:student-token && npm run test:access && npm run test:dashboards && npm run test:scanner"
+    "test:all": "npm run test:unit && npm run test:db && npm run test:signup && npm run test:login-code && npm run test:student-token && npm run test:access && npm run test:addons && npm run test:dashboards && npm run test:scanner"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",

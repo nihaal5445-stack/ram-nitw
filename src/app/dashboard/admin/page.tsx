@@ -6,6 +6,7 @@ import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, TrendingUp, UtensilsCrossed, BarChart3 } from "lucide-react";
+import Link from "next/link";
 import { messes } from "@/config/messes";
 import { CrowdPanel } from "@/components/crowd-panel";
 
@@ -50,6 +51,9 @@ export default async function MessAdminDashboard() {
             <Button disabled className="bg-primary text-primary-foreground w-full">
               Manage Menu (Phase 3)
             </Button>
+            <Link href="/dashboard/admin/addons" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10">
+              Add-ons: stock and prices
+            </Link>
           </CardContent>
         </Card>
 

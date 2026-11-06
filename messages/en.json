@@ -81,7 +81,9 @@
     "showQrDesc": "Open your rotating QR code for the counter",
     "noHistory": "No meals recorded yet. They appear here after you are scanned at a counter.",
     "manualTag": "Manual entry",
-    "servedTag": "Served"
+    "servedTag": "Served",
+    "addonsLink": "Buy an add-on",
+    "addonsDesc": "Pay (test mode) and get a one-meal ticket QR"
   },
   "Parent": {
     "title": "Child's Mess Account",
@@ -705,7 +707,14 @@
         "unknown_roll": "Roll number not found for this mess",
         "manual_reason_required": "Choose a reason (add a note for Other)",
         "manual_rate_limit_staff": "Too many manual entries this hour",
-        "manual_rate_limit_student": "This student has used the manual limit this week"
+        "manual_rate_limit_student": "This student has used the manual limit this week",
+        "addonOk": "Add-on OK: {item}",
+        "addon_malformed": "Not a valid add-on ticket",
+        "addon_no_key": "Add-on key missing: go online once and refresh the shift",
+        "addon_bad_signature": "Forged or damaged add-on ticket",
+        "addon_wrong_mess": "Ticket is for another mess",
+        "addon_wrong_slot": "Ticket is for another meal slot or day",
+        "addon_used": "Add-on already used"
       }
     }
   },
@@ -727,5 +736,52 @@
     "green": "Quiet",
     "amber": "Busy",
     "red": "Very busy"
+  },
+  "Addons": {
+    "title": "Add-ons",
+    "subtitle": "Extra items for the current meal. Pay, then show the ticket QR at the counter.",
+    "available": "Available add-ons",
+    "none": "No add-ons are on sale in your mess right now.",
+    "noMess": "You are not assigned to a mess yet.",
+    "left": "{n} left",
+    "soldOut": "Sold out",
+    "pay": "Pay {price}",
+    "close": "Close",
+    "ticketFor": "Ticket: {name}",
+    "ticketQr": "Add-on ticket QR",
+    "ticketHelp": "Valid for this meal slot only, one use. Works offline.",
+    "testBanner": "Test payment: no real money is charged",
+    "testPayment": "Test payment",
+    "item": "Item",
+    "amount": "Amount",
+    "method": "Method",
+    "mockCard": "Test card •••• 4242",
+    "testNote": "This is a demo payment screen. A real gateway (Razorpay) is not connected.",
+    "cancel": "Cancel",
+    "processing": "Processing…",
+    "history": "Transaction history",
+    "noHistory": "No add-on purchases yet.",
+    "showQr": "Show QR",
+    "testTag": "test payment",
+    "status": {
+      "paid": "Ready to use",
+      "redeemed": "Used"
+    },
+    "admin": {
+      "title": "Add-ons",
+      "lead": "Items students can buy on top of the meal. Stock updates live as students pay and as the counter scans.",
+      "name": "Item name",
+      "price": "Price (Rs)",
+      "stock": "Stock",
+      "add": "Add item",
+      "save": "Save",
+      "active": "On sale",
+      "left": "Left",
+      "sold": "Sold",
+      "served": "Served at counter",
+      "none": "No add-ons yet.",
+      "saved": "Saved",
+      "pureVeg": "IFC-A is pure vegetarian: non-veg items are refused."
+    }
   }
 }
