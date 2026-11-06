@@ -409,6 +409,23 @@
         "label": "Average student rating (out of 5)"
       },
       "note": "Only the mess count comes from configuration. Every other figure is a placeholder until live attendance and feedback data are connected."
+    },
+    "progress": {
+      "eyebrow": "Daily progress",
+      "title": "What got better lately",
+      "lead": "A public log of improvements, newest first. This board shows progress only; it is not a place for complaints.",
+      "demo": "Demo data",
+      "allMesses": "All confirmed messes",
+      "done": "Done",
+      "inProgress": "In progress",
+      "items": {
+        "p1": "Water coolers were cleaned and serviced.",
+        "p2": "A second serving counter was added at lunch to shorten the wait.",
+        "p3": "The menu board now lists dishes in English and Telugu.",
+        "p4": "Dinner timing was reviewed with hostel representatives.",
+        "p5": "Meal timings and today's menus were published on this website.",
+        "p6": "Counting meals served in each slot, so kitchens can plan quantities."
+      }
     }
   }
 }

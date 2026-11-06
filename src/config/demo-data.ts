@@ -55,3 +55,14 @@ export const stats = [
   { id: "tokens", value: 18500, decimals: 0, demo: true },
   { id: "rating", value: 4.1, decimals: 1, demo: true },
 ] as const;
+
+export interface ProgressEntry { id: string; date: string; messId: string | "all"; status: "done" | "inProgress" }
+/** Improvements only, never complaints. Text under Public.progress.items.<id>. DEMO DATA, TODO: verify. */
+export const progress: ProgressEntry[] = [
+  { id: "p1", date: "2026-11-05", messId: "krishna", status: "done" },
+  { id: "p2", date: "2026-11-04", messId: "ifc-a", status: "done" },
+  { id: "p3", date: "2026-11-03", messId: "ifc-b", status: "done" },
+  { id: "p4", date: "2026-11-02", messId: "priyadarshini", status: "done" },
+  { id: "p5", date: "2026-11-01", messId: "all", status: "done" },
+  { id: "p6", date: "2026-10-30", messId: "all", status: "inProgress" },
+];
