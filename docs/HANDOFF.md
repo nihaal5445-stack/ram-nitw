@@ -181,13 +181,56 @@ For the complete technical specification, architectural blueprint, and future ph
 
 ---
 
-## 7. Phase 2 progress (public website)
+## 7. Phase 2: public website (COMPLETE)
 
-Plan: `/Users/nihal/.claude/plans/mutable-watching-wren.md` (12 sections in order, then /login restyle). One commit per section.
+Plan file: `/Users/nihal/.claude/plans/mutable-watching-wren.md`. One commit per section. Components in `src/components/site/`, page composed in `src/app/(public)/page.tsx`, layout (header/footer) in `src/app/(public)/layout.tsx`. All strings under `Public.*` (and `Login.*`) in `messages/{en,te,hi}.json`.
 
-- [x] Setup: CLAUDE.md, deps (leaflet, motion, playwright), `messes.ts` corrected (4 confirmed + Mess 5-7 TODO + Mess 8-9 under construction TODO; status `confirmed|unconfirmed|under_construction`), tokens in globals.css (`--surface`, `--brand`, `--gold`, `--navy-deep`), `lang` follows locale, `(public)` route group, `/` and `/credits` made public in `src/proxy.ts`.
-- [x] 1. Utility bar + sticky mega-menu + mobile drawer (`src/components/site/`, nav data in `src/config/site.ts`, strings in `messages/*.json` under `Public.*`).
-- [x] 2. Hero + Today's Menu card + Crowd pill. Images in `public/images` (Unsplash), all registered in `src/config/images.ts`; `/credits` page. Photographer names are TODO: verify. `src/config/demo-data.ts` (slots, base menu), `src/lib/meal-time.ts` (IST slot logic, reused by section 8). Fixed circular `--font-heading` token so Playfair now renders (`font-display` / `font-heading`).
-- [ ] 3-12, then login restyle.
+- [x] **Setup:** CLAUDE.md; deps leaflet, @types/leaflet, motion (now unused), playwright; `src/config/messes.ts` corrected (4 confirmed: IFC-A, IFC-B, Krishna, Priyadarshini; Mess 5-7 "(TODO)" unconfirmed; Mess 8-9 "under construction (TODO)"; status `confirmed|unconfirmed|under_construction`); tokens in globals.css (`--surface`, `--brand`, `--gold`, `--gold-on-dark`, `--navy-deep`); `lang` follows locale; `/`, `/credits`, `/robots.txt` public in `src/proxy.ts`. Fixed a circular `--font-heading` token so Playfair renders.
+- [x] **1. Header:** utility bar + sticky mega-menu (7 groups, hover/click/keyboard, Escape returns focus) + mobile drawer (base-ui Dialog). Nav data in `src/config/site.ts`.
+- [x] **2. Hero:** full-bleed photo, Today's Menu card, Crowd pill (IST, time-aware). Images in `public/images`, all registered in `src/config/images.ts`; `/credits` page. Demo data in `src/config/demo-data.ts`; slot logic in `src/lib/meal-time.ts`.
+- [x] **3. Audience rows** (`audience-tiles.tsx`) link to `/login?role=students|parents|staff`.
+- [x] **4. Welcome card** (`welcome-card.tsx`, `warden-portrait.tsx`): fictional "Dr. Raghavendra Iyer", abstract SVG portrait, labelled placeholder.
+- [x] **5. Initiatives** (`initiatives.tsx`): 2 large image-overlay + 3 image-top cards; copy has no invented figures.
+- [x] **6. Campus map** (`mess-map-section.tsx` + `campus-map.tsx`): plain Leaflet, `ssr:false`, mounted only near the viewport (`LazyMap`), pins coloured and shaped by status, card click flies to pin (verified), pin click scrolls to `#mess-<id>` and flashes `.mess-highlight` (verified). Dark mode inverts OSM tiles via CSS.
+- [x] **7. Mess sections** (`mess-sections.tsx` server + `mess-live.tsx` client): 4 confirmed messes with photo, menu style, eligibility, timings, today's menu (pure-veg filtered), crowd meter, rating, add-ons, latest update; Mess 5-9 as plain TODO rows. Per-mess demo values in `messDemo`.
+- [x] **8. Meal timings** (`meal-timings.tsx`): timeline with live Now serving / Next up / Finished; verified with a faked clock.
+- [x] **9. Stat counters** (`stat-counters.tsx`): IntersectionObserver count-up, final value by default (SSR / no-JS / reduced motion). Only the mess count is real; others labelled demo.
+- [x] **10. Daily progress board** (`progress-board.tsx`): improvements only, demo entries.
+- [x] **11. Calendar** (`calendar-section.tsx`): server-rendered month grid (`<table>`) + upcoming list; special = solid, closure = dashed.
+- [x] **12. Footer** (`site-footer.tsx`, `id="footer"`).
+- [x] **Login restyle** (`src/app/login/page.tsx`): split layout, ARIA tablist (Students / Parents / Mess Staff & Administration), preselected from `?role=`, arrow-key navigation, same `signInWithOtp` email flow (see section 8 for sign-up rules).
+- [x] **Housekeeping:** merged `upgrade/next-16.4.5` (Next 16.4.5 security patch); worktree and branch removed; lint clean.
 
-Tooling: `BASE=http://localhost:3100 node scripts/shoot.mjs <name> [path] [selector]` writes `screenshots/` (git-ignored) at 1440/390, light/dark. Dev server was NOT running on :3000 in this session; screenshots used `npm run build && npx next start -p 3100`. The first `npm run build` after a change may print a Next security notice and fail; rerun it. Next 16.4.0 has a published advisory; upgrade is the user's call.
+### Final checks (all pass)
+`npx tsc --noEmit`, `npm run lint`, `NODE_ENV=production npm run build`.
+
+**Lighthouse (mobile, production build `next start`, run twice, same result):** Performance **91**, Accessibility **100**, Best practices **100**, SEO **100**. FCP 0.9 s, LCP 3.5 s (simulated slow 4G; observed about 0.1 s), TBT 10-20 ms, CLS 0.01-0.03.
+
+What took performance from 85 to 91: the Supabase client is imported lazily inside the theme/language toggle handlers (it was in the public bundle, about 118 KB gzipped); the Leaflet map and OSM tiles mount only when the map nears the viewport; the hero image uses `loading="eager" fetchPriority="high"` (`priority` is deprecated in Next 16); added `public/manifest.json` (was a 404 console error) and `src/app/robots.ts`; map pin hit areas enlarged to 36 px and unconfirmed placeholder pins spread apart (tap-target audit). Further options: pass only the needed i18n namespaces to `NextIntlClientProvider`; remove the unused `motion` dependency.
+
+### Needs human review (all placeholders until confirmed)
+1. **Telugu and Hindi translations** (all `Public.*` and `Login.*` strings, dish names, "time remaining" phrasing, fictional-name transliterations) were written by the AI agent; need a native-speaker review.
+2. **Demo stats** (`stats` in `src/config/demo-data.ts`: 6,200 meals/day, 18,500 paper tokens/month, 4.1 rating) and per-mess ratings, crowd bias, add-ons.
+3. **Progress board entries** (`progress`) and per-mess "latest update" texts: invented, labelled demo.
+4. **Calendar events and dates** (`calendarEvents`; 8 Nov 2026 festival lunch assumes Diwali). Verify all four.
+5. **Photos:** generic Unsplash food/interior photos, none show real NITW messes; photographer credits are TODO on `/credits`, and the Unsplash page URLs in `src/config/images.ts` are unverified. Replace with real campus photography.
+6. **Chief Warden:** name "Dr. Raghavendra Iyer", the message text and the abstract SVG portrait are fictional placeholders.
+7. **Mess data** in `src/config/messes.ts`: all coordinates (map pins are NOT real locations), capacities, eligibility, menu styles; Mess 5-9 names unconfirmed.
+8. **Meal timings** (`mealSlots` in demo-data.ts) and the base menu.
+9. **Contact details:** helpline, phone, email are "to be announced"; footer address is the institute name only.
+10. Sign-up rules: resolved, see section 8.
+
+Tooling: `BASE=http://localhost:3100 node scripts/shoot.mjs <name> [path] [selector]` writes `screenshots/` (git-ignored) at 1440/390, light/dark (set `FULL=1` for full page; it scrolls first so lazy images load). The dev server was NOT running on :3000 during Phase 2; screenshots and Lighthouse used `NODE_ENV=production npm run build && npx next start -p 3100`.
+
+---
+
+## 8. Sign-up rules (added after Phase 2)
+
+- **Students** may self-register, but only with `@student.nitw.ac.in` (login Students tab: `shouldCreateUser: true`).
+- **Parents and Staff tabs** use `shouldCreateUser: false`: only existing accounts can sign in. GoTrue answers an unknown email with `otp_disabled` (422) and the UI shows "Ask your student / the warden's office to add you".
+- **Enforced in the DB** (`supabase/migrations/20261106000000_restrict_signups.sql`): `handle_new_user()` rejects any new auth user whose email is not `@student.nitw.ac.in` unless the email is on the **allow-list** `public.provisioned_accounts` (role, mess, linked student). The row is consumed on use. Only wardens can read/write the table (RLS; `provisioned_by` must equal the caller), or code with the service role / direct SQL (seed).
+- **Why an allow-list and not an auth-metadata flag:** GoTrue's admin `createUser` INSERTs the row first and writes `app_metadata` afterwards, so an INSERT trigger can never see it, and `user_metadata` is attacker-controlled. (A first attempt used a flag and failed against real GoTrue even though direct-SQL tests passed.)
+- **Warden path:** `src/app/actions/provision-user.ts` (server action, checks caller is warden) -> `src/lib/provision-user.ts` (inserts the allow-list row with the warden's own session, then `admin.auth.admin.createUser`). Needs `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (server only; `.env*` is git-ignored, so `.env.example` is local only: add the key name there by hand). No UI yet: that is the Phase 7 user-management screen. Parent -> student linking is `linked_student_id` in the allow-list row.
+- **Seed:** `supabase/seed.sql` allow-lists the four non-student seed emails before inserting them. `npm run db:reset` re-verified from scratch; `node scripts/verify-seed-users.mjs` passes.
+- **Tests:** `npm run test:db` runs every `supabase/tests/*.sql` via `docker exec` (new `signup_rules_test.sql`: 16 cases incl. lookalike domains, forged metadata, no-email, single-use, RLS on the allow-list). `npm run test:signup` runs 13 end-to-end cases through GoTrue (needs Supabase running). Both pass.
+- **Known trade-off:** the "not registered" message reveals whether a parent/staff email has an account (email enumeration). Accepted for a clear instruction; GoTrue's own `otp_disabled` already exposes it. Auth rate limits in `supabase/config.toml` apply.
