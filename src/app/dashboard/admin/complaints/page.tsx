@@ -19,8 +19,8 @@ export default async function AdminComplaintsPage() {
   const rows = (data ?? []) as AdminComplaint[];
   const nameOf = (id: string) => messes.find((m) => m.id === id)?.name ?? id;
 
-  const open = await polishWithAi(groupComplaints(rows.filter((r) => r.status === "open"), nameOf), nameOf);
-  const answered = rows.filter((r) => r.status !== "open");
+  const open = await polishWithAi(groupComplaints(rows.filter((r) => r.status === "open" || r.status === "in_progress"), nameOf), nameOf);
+  const answered = rows.filter((r) => r.status === "resolved" || r.status === "cannot_resolve");
 
   const toConsole = (g: (typeof open)[number]): ConsoleIssue => ({
     key: g.key, title: `${g.topicLabel} · ${nameOf(g.messId)} · ${g.slot} · ${g.date}`, summary: g.summary, source: g.source,

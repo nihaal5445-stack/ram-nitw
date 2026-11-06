@@ -826,12 +826,14 @@
     "status": {
       "open": "Open",
       "resolved": "Resolved",
-      "cannot_resolve": "Cannot be resolved"
+      "cannot_resolve": "Cannot be resolved",
+      "in_progress": "In progress"
     },
     "event": {
       "filed": "Complaint filed",
       "resolved": "Resolved",
-      "cannot_resolve": "Cannot be resolved"
+      "cannot_resolve": "Cannot be resolved",
+      "in_progress": "Being worked on"
     },
     "admin": {
       "title": "Complaints console",
@@ -856,7 +858,22 @@
       "postText": "Public text (no names, no complaint details)",
       "posted": "On the public board",
       "postBtn": "Post",
-      "sent": "Reply sent."
+      "sent": "Reply sent.",
+      "noteLabel": "Why it can or cannot be fixed (note for the students)",
+      "notePlaceholder": "e.g. The holding oven was faulty; it was repaired today and we now check temperatures every 30 minutes.",
+      "outcome": "Outcome",
+      "outcomeResolved": "Resolved",
+      "outcomeInProgress": "In progress",
+      "outcomeCannot": "Cannot be resolved",
+      "draft": "Write a reply for each student",
+      "drafting": "Writing…",
+      "previewTitle": "Preview: edit any reply, then send",
+      "sendAll": "Send all {n} replies",
+      "sentAll": "All replies sent.",
+      "draftSourceAi": "Written by AI from your note and each student's own complaint",
+      "draftSourceTemplate": "Written from a template (no AI key): edit freely",
+      "noteRequired": "Write a note of at least 10 characters first. If it cannot be resolved, the note is the reason shared with the students.",
+      "sendFailed": "Some replies could not be sent."
     }
   },
   "Feedback": {
@@ -987,5 +1004,25 @@
       "default": "The assistant is not available right now.",
       "rate": "Too many questions. Wait a minute."
     }
+  },
+  "Messages": {
+    "contact": "Contact admin",
+    "title": "Message the mess admin",
+    "lead": "Your message goes to the admin of your mess. Replies appear here.",
+    "empty": "No messages yet. Say hello.",
+    "placeholder": "Type your message",
+    "send": "Send",
+    "close": "Close",
+    "you": "You",
+    "admin": "Admin",
+    "unread": "{n} new",
+    "inboxTitle": "Messages from students",
+    "inboxLead": "Direct messages from students of your mess.",
+    "noThreads": "No messages yet.",
+    "pick": "Pick a conversation.",
+    "reply": "Reply",
+    "inboxLink": "Messages inbox",
+    "rate": "Too many messages. Wait a bit.",
+    "failed": "Could not send."
   }
 }

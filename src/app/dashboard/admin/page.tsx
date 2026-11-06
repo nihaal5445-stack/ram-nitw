@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, TrendingUp, UtensilsCrossed, BarChart3 } from "lucide-react";
 import Link from "next/link";
+import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
 import { AssistantPanel } from "@/components/assistant/assistant-panel";
 import { TopLiked } from "@/components/likes/top-liked";
@@ -21,6 +22,8 @@ export default async function MessAdminDashboard() {
   const t = await getTranslations("MessAdmin");
   const tDash = await getTranslations("Dashboard");
 
+  const inbox = ((await (await createClient()).rpc("admin_inbox")).data ?? []) as { unread: number }[];
+  const unreadMsgs = inbox.reduce((a, r) => a + r.unread, 0);
   const assignedMess = messes.find((m) => m.id === profile?.assigned_mess_id);
 
   return (
@@ -59,6 +62,9 @@ export default async function MessAdminDashboard() {
             </Button>
             <Link href="/dashboard/admin/addons" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10">
               Add-ons: stock and prices
+            </Link>
+            <Link href="/dashboard/admin/messages" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10" data-testid="inbox-link">
+              Messages inbox{unreadMsgs > 0 ? ` (${unreadMsgs} new)` : ""}
             </Link>
             <Link href="/dashboard/admin/complaints" className="block rounded-md border border-primary/40 bg-primary/5 p-3 text-center text-sm font-semibold hover:bg-primary/10">
               Complaints console

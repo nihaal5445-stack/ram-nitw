@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { getCurrentProfile } from "@/utils/supabase/get-current-profile";
 import { Navbar } from "@/components/navbar";
 import { ProfileError } from "@/components/profile-error";
+import { ContactAdmin } from "@/components/messages/contact-admin";
 import { DemoBadge } from "@/components/demo-badge";
 import { FeedbackBanner } from "@/components/feedback/feedback-bell";
 
@@ -30,6 +31,7 @@ export default async function DashboardLayout({
         badge={<DemoBadge />}
       />
       {profile.role === "student" && <FeedbackBanner />}
+      {profile.role === "student" && <ContactAdmin />}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {children}
       </main>

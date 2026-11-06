@@ -7,7 +7,7 @@ import { Sparkles, Timer, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { postProgress, respondComplaint } from "@/app/actions/complaints";
+import { draftReplies, postProgress, respondComplaint, type Outcome } from "@/app/actions/complaints";
 import { cn } from "@/lib/utils";
 
 export interface ConsoleIssue {
@@ -42,11 +42,10 @@ function Sla({ due, closes }: { due: string | null; closes?: boolean }) {
   );
 }
 
-function ComplaintRow({ c }: { c: ConsoleIssue["complaints"][number] }) {
+function ComplaintRow({ c, reply, setReply }: { c: ConsoleIssue["complaints"][number]; reply: string; setReply: (v: string) => void }) {
   const t = useTranslations("Complaints.admin");
   const router = useRouter();
   const [pending, start] = useTransition();
-  const [reply, setReply] = useState(c.draft);
   const [declining, setDeclining] = useState(false);
   const [reason, setReason] = useState("");
   const [err, setErr] = useState<string | null>(null);
@@ -111,6 +110,71 @@ function AnsweredItem({ a }: { a: AnsweredRow }) {
   );
 }
 
+function IssueCard({ g }: { g: ConsoleIssue }) {
+  const t = useTranslations("Complaints.admin");
+  const router = useRouter();
+  const [pending, start] = useTransition();
+  const [replies, setReplies] = useState<Record<string, string>>(() => Object.fromEntries(g.complaints.map((c) => [c.id, c.draft])));
+  const [note, setNote] = useState("");
+  const [outcome, setOutcome] = useState<Outcome>("resolved");
+  const [drafted, setDrafted] = useState<"ai" | "template" | null>(null);
+  const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+
+  const draft = () => {
+    setMsg(null);
+    if (note.trim().length < 10) { setMsg({ ok: false, text: t("noteRequired") }); return; }
+    start(async () => {
+      const r = await draftReplies({ ids: g.complaints.map((c) => c.id), note, outcome });
+      if (!r.ok) { setMsg({ ok: false, text: t("noteRequired") }); return; }
+      setReplies((prev) => ({ ...prev, ...r.replies })); setDrafted(r.source);
+    });
+  };
+  const sendAll = () => start(async () => {
+    setMsg(null);
+    let failed = 0;
+    for (const c of g.complaints) {
+      const r = await respondComplaint({ id: c.id, outcome, reply: replies[c.id], reason: outcome === "cannot_resolve" ? note : undefined });
+      if (!r.ok) failed++;
+    }
+    setMsg(failed ? { ok: false, text: t("sendFailed") } : { ok: true, text: t("sentAll") });
+    router.refresh();
+  });
+
+  return (
+    <article className="space-y-3 rounded-lg border-2 border-border bg-card p-4" data-testid="issue">
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <h3 className="font-semibold">{g.title}</h3>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-0.5 text-xs font-semibold text-primary-foreground"><Users className="size-3.5" aria-hidden />{t("reports", { n: g.complaints.length })}</span>
+      </div>
+      <p className="flex items-start gap-2 text-sm"><Sparkles className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden /><span>{g.summary} <em className="text-xs text-muted-foreground">({t(g.source === "ai" ? "source_ai" : "source_rules")})</em></span></p>
+
+      <div className="space-y-3 rounded-md border border-dashed border-border p-3" data-testid="explain-box">
+        <Label htmlFor={`note-${g.key}`}>{t("noteLabel")}</Label>
+        <textarea id={`note-${g.key}`} rows={2} value={note} onChange={(e) => setNote(e.target.value)} placeholder={t("notePlaceholder")} className="w-full rounded-md border border-input bg-background p-2 text-sm" data-testid="issue-note" />
+        <fieldset className="flex flex-wrap gap-4 text-sm">
+          <legend className="sr-only">{t("outcome")}</legend>
+          {(["resolved", "in_progress", "cannot_resolve"] as Outcome[]).map((o) => (
+            <label key={o} className="flex items-center gap-1.5"><input type="radio" name={`o-${g.key}`} checked={outcome === o} onChange={() => setOutcome(o)} data-testid={`outcome-${o}`} />{t(o === "resolved" ? "outcomeResolved" : o === "in_progress" ? "outcomeInProgress" : "outcomeCannot")}</label>
+          ))}
+        </fieldset>
+        <div className="flex flex-wrap items-center gap-2">
+          <Button size="sm" onClick={draft} disabled={pending} data-testid="draft-replies">{pending ? t("drafting") : t("draft")}</Button>
+          {drafted && <span className="text-xs text-muted-foreground">{t(drafted === "ai" ? "draftSourceAi" : "draftSourceTemplate")}</span>}
+        </div>
+        {drafted && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium">{t("previewTitle")}</p>
+            <Button size="sm" onClick={sendAll} disabled={pending} data-testid="send-all">{t("sendAll", { n: g.complaints.length })}</Button>
+          </div>
+        )}
+        {msg && <p role={msg.ok ? "status" : "alert"} className={msg.ok ? "text-sm text-success" : "text-sm text-destructive"}>{msg.text}</p>}
+      </div>
+
+      <ul className="space-y-3">{g.complaints.map((c) => <ComplaintRow key={c.id} c={c} reply={replies[c.id]} setReply={(v) => setReplies((p) => ({ ...p, [c.id]: v }))} />)}</ul>
+    </article>
+  );
+}
+
 export function AdminConsole({ issues, answered }: { issues: ConsoleIssue[]; answered: AnsweredRow[] }) {
   const t = useTranslations("Complaints.admin");
   return (
@@ -122,16 +186,7 @@ export function AdminConsole({ issues, answered }: { issues: ConsoleIssue[]; ans
       <section aria-labelledby="open-issues" className="space-y-4">
         <h2 id="open-issues" className="text-lg font-semibold">{t("openIssues")}</h2>
         {issues.length === 0 && <p className="text-muted-foreground">{t("noOpen")}</p>}
-        {issues.map((g) => (
-          <article key={g.key} className="space-y-3 rounded-lg border-2 border-border bg-card p-4" data-testid="issue">
-            <div className="flex flex-wrap items-start justify-between gap-2">
-              <h3 className="font-semibold">{g.title}</h3>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-0.5 text-xs font-semibold text-primary-foreground"><Users className="size-3.5" aria-hidden />{t("reports", { n: g.complaints.length })}</span>
-            </div>
-            <p className="flex items-start gap-2 text-sm"><Sparkles className="mt-0.5 size-4 shrink-0 text-gold" aria-hidden /><span>{g.summary} <em className="text-xs text-muted-foreground">({t(g.source === "ai" ? "source_ai" : "source_rules")})</em></span></p>
-            <ul className="space-y-3">{g.complaints.map((c) => <ComplaintRow key={c.id} c={c} />)}</ul>
-          </article>
-        ))}
+        {issues.map((g) => <IssueCard key={g.key} g={g} />)}
       </section>
       {answered.length > 0 && (
         <section aria-labelledby="answered" className="space-y-3">

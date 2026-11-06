@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 
 export interface MyComplaint {
   id: string; mess: string; category: string; date: string; slot: string; body: string; anonymous: boolean;
-  status: "open" | "resolved" | "cannot_resolve"; reply: string | null; cannotReason: string | null;
+  status: "open" | "in_progress" | "resolved" | "cannot_resolve"; reply: string | null; cannotReason: string | null;
   events: { kind: string; at: string; note: string | null }[];
 }
 const SLOTS = ["breakfast", "lunch", "snacks", "dinner"] as const;
@@ -77,7 +77,7 @@ export function ComplaintsView({ messes, defaultMess, dates, complaints }: {
               <li key={c.id} className="rounded-lg border border-border bg-card p-4" data-testid="my-complaint">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-medium">{t(`cat.${c.category}`)} · {nameOf(c.mess)} · {tm(c.slot as "lunch")} · {c.date}</p>
-                  <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", c.status === "resolved" ? "bg-success/15 text-success" : c.status === "cannot_resolve" ? "bg-destructive/15 text-destructive" : "bg-warning/25")}>
+                  <span className={cn("rounded-full px-2.5 py-0.5 text-xs font-medium", c.status === "resolved" ? "bg-success/15 text-success" : c.status === "cannot_resolve" ? "bg-destructive/15 text-destructive" : c.status === "in_progress" ? "bg-secondary/20" : "bg-warning/25")}>
                     {t(`status.${c.status}`)}
                   </span>
                 </div>
@@ -86,13 +86,13 @@ export function ComplaintsView({ messes, defaultMess, dates, complaints }: {
                   {c.events.filter((e) => e.kind !== "posted" && e.kind !== "replied").map((e) => (
                     <li key={e.kind + e.at} className="relative">
                       <span className="absolute -left-[1.35rem] top-0.5 bg-card">
-                        {e.kind === "resolved" ? <CheckCircle2 className="size-4 text-success" aria-hidden /> : e.kind === "cannot_resolve" ? <XCircle className="size-4 text-destructive" aria-hidden /> : <CheckCircle2 className="size-4 text-primary" aria-hidden />}
+                        {e.kind === "in_progress" ? <Circle className="size-4 text-secondary" aria-hidden /> : e.kind === "resolved" ? <CheckCircle2 className="size-4 text-success" aria-hidden /> : e.kind === "cannot_resolve" ? <XCircle className="size-4 text-destructive" aria-hidden /> : <CheckCircle2 className="size-4 text-primary" aria-hidden />}
                       </span>
                       <span className="font-medium">{t(`event.${e.kind}`)}</span> <span className="text-muted-foreground">· {fmt(e.at)}</span>
                       {e.kind === "cannot_resolve" && c.cannotReason && <p className="text-muted-foreground">{t("reason")}: {c.cannotReason}</p>}
                     </li>
                   ))}
-                  {c.status === "open" && (
+                  {(c.status === "open" || c.status === "in_progress") && (
                     <li className="relative text-muted-foreground"><span className="absolute -left-[1.35rem] top-0.5 bg-card"><Circle className="size-4" aria-hidden /></span>{t("awaiting")}</li>
                   )}
                 </ol>

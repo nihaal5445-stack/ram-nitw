@@ -30,17 +30,17 @@ export async function buildSummary(db: SupabaseClient, nowMs: number): Promise<S
     const t = Date.parse(r.created_at);
     const k = `${r.mess_id}|${topicOf(r).label}`; // topic label only: the free text never leaves this function
     const e = topics.get(k) ?? { mess: nameOf(r.mess_id), topic: topicOf(r).label, total: 0, open: 0, last7: 0 };
-    e.total++; if (r.status === "open") e.open++; if (t >= d7) e.last7++;
+    e.total++; if (r.status === "open" || r.status === "in_progress") e.open++; if (t >= d7) e.last7++;
     topics.set(k, e);
     if (t >= d7) last7++; else if (t >= d14) prev7++;
     if (t >= d7) perDay.set(dayKey(t), (perDay.get(dayKey(t)) ?? 0) + 1);
-    if (r.status === "open" && r.sla_due && Date.parse(r.sla_due) < nowMs) overdue++;
+    if ((r.status === "open" || r.status === "in_progress") && r.sla_due && Date.parse(r.sla_due) < nowMs) overdue++;
   }
   const scope = [...new Set(rows.map((r) => nameOf(r.mess_id)))];
   return {
     scope, today: dayKey(nowMs),
     complaints: {
-      total: rows.length, open: rows.filter((r) => r.status === "open").length, overdueSla: overdue, last7, prev7,
+      total: rows.length, open: rows.filter((r) => r.status === "open" || r.status === "in_progress").length, overdueSla: overdue, last7, prev7,
       byDay: [...perDay.entries()].sort().map(([date, n]) => ({ date, n })),
       topics: [...topics.values()].sort((a, b) => b.open - a.open || b.total - a.total).slice(0, 12),
     },

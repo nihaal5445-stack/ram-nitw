@@ -4,7 +4,7 @@ export type Category = (typeof CATEGORIES)[number];
 
 export interface AdminComplaint {
   id: string; mess_id: string; category: Category; meal_date: string; slot: string; body: string; anonymous: boolean; filer_name: string | null;
-  status: "open" | "resolved" | "cannot_resolve"; reply: string | null; cannot_reason: string | null; responded_at: string | null; posted_at: string | null;
+  status: "open" | "in_progress" | "resolved" | "cannot_resolve"; reply: string | null; cannot_reason: string | null; responded_at: string | null; posted_at: string | null;
   created_at: string; sla_due: string | null;
 }
 
