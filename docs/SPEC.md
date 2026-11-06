@@ -1,7 +1,7 @@
 # RAM: Random Access Meals — Product Specification
 
 **Version:** 1.0 (2026-10-09)  
-**Status:** Phase 1 in progress  
+**Status:** Phases 1-2 complete; Phase 3 in progress  
 **Owner:** NITW Administration
 
 ---
@@ -118,15 +118,29 @@ All coordinates are marked `// TODO: verify`.
 | # | Phase | Key Deliverables |
 |---|---|---|
 | 1 | Foundation | Auth, roles, DB schema, RLS, per-role dashboards, i18n, theming |
-| 2 | Meal Token System | QR token generation, token issuance flow, counter scan UI |
-| 3 | Menu & Attendance | Weekly menu CRUD, meal slot management, attendance tracking |
-| 4 | Balances & Billing | Student wallet, deduction per meal, parent top-up flow |
-| 5 | Complaints & Notices | Complaint submission (mess_rep), resolution tracking, notice board |
-| 6 | Reports & Analytics | Per-mess headcount charts, warden oversight dashboard |
-| 7 | Offline / PWA | Service worker, offline token queue, sync on reconnect |
-| 8 | Native App (Capacitor) | iOS + Android packaging, push notifications, NFC scan |
+| 2 | Public Website | Public site at `/` (SPEC section 6), campus map, role-split sign-in |
+| 3 | Access + Scanner | Signed rotating QR on the student phone, offline counter scanner, sync, fraud flags (8.1) |
+| 4 | Menu & Attendance | Weekly menu CRUD, meal slot management, attendance tracking; mess config moves to DB |
+| 5 | Balances & Billing | Student wallet, deduction per meal, parent top-up flow |
+| 6 | Complaints & Notices | Complaint submission (mess_rep), resolution tracking, notice board |
+| 7 | Reports & Analytics | Per-mess headcount charts, warden oversight dashboard, user-management UI |
+| 8 | Offline / PWA / Native | Service worker, offline queue, Capacitor iOS + Android, push, NFC |
 
----
+### 8.1 Access + Scanner (Phase 3)
+
+**Goal:** replace paper tokens. A student's phone shows a QR that rotates every 30 s; a counter device verifies it **offline**, admits the student once per meal slot, and syncs later, flagging fraud.
+
+**Scheme: signed QR (decision recorded 2026-11-06).** Each student device holds a non-extractable ECDSA P-256 private key (WebCrypto, IndexedDB). The server stores only the **public** key. Counter devices cache public keys, never secrets, so a stolen or dishonest counter device cannot forge a QR. (Shared-secret TOTP was rejected for exactly that reason.)
+
+- **Payload:** `ram1.<device_key>.<step>.<signature>`: `device_key` = 8-byte random handle (base64url), `step` = floor(unix seconds / 30), `signature` = ECDSA-SHA256 over `ram1|<device_key>|<step>` (64 bytes, base64url). About 112 characters, no personal data inside.
+- **Window:** a scanner accepts `step` within +/-1 of its own clock. For in-sync clocks a captured code works at most 60 s after it first appears.
+- **Enrolment:** `enroll_device(label, public_key)`; student role, sign-in within 10 minutes, max 3 per day, one active device per student (a new one revokes the old).
+- **Scanner bundle:** `issue_scanner_bundle(scanner_id)` for counter staff / mess admin of that mess: students with that `assigned_mess_id` (name, roll, device_key, public key), revoked keys, slot windows, `expires_at` (12 h). Encrypted at rest on the scanner under a staff shift PIN; refuses to verify after expiry.
+- **Local rules:** one admission per student per IST date and slot (local ledger); unknown `device_key` = "not registered for this mess" (also the wrong-mess case); outside slot windows = reject.
+- **Sync:** outbox with client UUIDs (idempotent). The server re-verifies every signature (Next.js route, Node crypto, because Postgres cannot verify ECDSA) then records through a service-role-only SQL function. Unique `(student_id, meal_date, slot)` among accepted rows; earliest `scanned_at` wins; later ones are `duplicate` and create a `fraud_flags` row.
+- **Manual fallback:** roll number + required reason + PIN re-entry; 10/hour per staff and 3/student/week; logged, shown as "manual", counted as a fraud signal.
+- **Required fraud tests:** a code older than 60 s is rejected; a second scan in the same slot is rejected; a scan at the wrong mess is rejected; an offline scan syncs successfully.
+- **Known limits:** offline duplicates across two scanners are detected, not prevented; revocation reaches an offline scanner only at its next sync or bundle expiry; relay of a live QR works for up to 60 s; browsers have no hardware keystore (Capacitor in Phase 8).
 
 ## 9. Design Tokens
 

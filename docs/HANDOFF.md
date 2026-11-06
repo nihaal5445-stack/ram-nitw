@@ -34,8 +34,8 @@ For the complete technical specification, architectural blueprint, and future ph
   - Interactive Leaflet campus map showing all 9 mess locations (4 operational, 3 placeholder operational, 2 under construction)
   - Click-to-scroll navigation between map markers and mess detail cards (timings, menus, eligibility)
   - Real-time operational status badges
-- [ ] **Phase 3: Meal Token System (SPEC Section 8.1)**
-  - Device-bound TOTP generation offline on student phone (no server issuance table)
+- [ ] **Phase 3: Access + Scanner (SPEC Section 8.1; IN PROGRESS, see section 9)**
+  - Signed rotating QR (ECDSA P-256, non-extractable device key; scanners hold public keys only). Replaced the earlier shared-secret TOTP idea.
   - Offline counter scanner with cached secret keys and local one-entry-per-slot verification
   - Cross-platform camera scanner via `@zxing/browser` or `qr-scanner` (iOS Safari & Android compatible)
   - Reconnection sync queue
@@ -234,3 +234,13 @@ Tooling: `BASE=http://localhost:3100 node scripts/shoot.mjs <name> [path] [selec
 - **Seed:** `supabase/seed.sql` allow-lists the four non-student seed emails before inserting them. `npm run db:reset` re-verified from scratch; `node scripts/verify-seed-users.mjs` passes.
 - **Tests:** `npm run test:db` runs every `supabase/tests/*.sql` via `docker exec` (new `signup_rules_test.sql`: 16 cases incl. lookalike domains, forged metadata, no-email, single-use, RLS on the allow-list). `npm run test:signup` runs 13 end-to-end cases through GoTrue (needs Supabase running). Both pass.
 - **Known trade-off:** the "not registered" message reveals whether a parent/staff email has an account (email enumeration). Accepted for a clear instruction; GoTrue's own `otp_disabled` already exposes it. Auth rate limits in `supabase/config.toml` apply.
+
+---
+
+## 9. Phase 3 progress (Access + Scanner)
+
+Plan: `/Users/nihal/.claude/plans/mutable-watching-wren.md`; spec: `docs/SPEC.md` 8.1. Decisions (2026-11-06, user): **signed QR** instead of shared-secret TOTP; install `qr-scanner`, `qrcode-generator`, `cloudflared` (for the demo tunnel only).
+
+Deviation from the plan, forced by the signed-QR choice: Postgres cannot verify ECDSA, so scan sync goes through a Next.js route (`/api/scanner/sync`, Node crypto verifies signatures against stored public keys) which calls a **service-role-only** SQL function. The Vault/pgcrypto secret encryption in the plan is no longer needed (public keys are not secret).
+
+- [x] M0: SPEC 8.1 written and phase table fixed; deps installed; browser spike passed in Chromium and WebKit (non-extractable ECDSA key survives IndexedDB, 64-byte signature, 112-char payload = 45x45 QR decoded by qr-scanner). **Not yet tried on a real iPhone/Android.**
