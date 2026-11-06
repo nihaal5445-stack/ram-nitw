@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { CrowdPanel } from "@/components/crowd-panel";
+import { SwitchMess } from "@/components/switch/switch-mess";
 import { ProfileError } from "@/components/profile-error";
 import { getLocale, getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
@@ -25,6 +27,9 @@ export default async function StudentDashboard() {
 
   // Real meal data (RLS limits these rows to this student).
   const supabase = await createClient();
+  const switchAllowed = (await supabase.rpc("mess_switch_allowed")).data === true;
+  const { data: passRow } = await supabase.from("mess_switch_passes").select("id, to_mess, slot").eq("status", "issued").order("created_at", { ascending: false }).limit(1).maybeSingle();
+  const activePass = passRow ? { id: passRow.id, toMess: passRow.to_mess, slot: passRow.slot } : null;
   const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
   const monthStart = `${today.slice(0, 7)}-01`;
   const [{ data: recent }, { data: todayRows }, { count: monthCount }] = await Promise.all([
@@ -78,6 +83,10 @@ export default async function StudentDashboard() {
           <span className="block text-sm text-muted-foreground">{t("feesDesc")}</span>
         </span>
       </Link>
+
+      <CrowdPanel ownMessId={profile.assigned_mess_id} />
+
+      {profile.assigned_mess_id && <SwitchMess ownMess={profile.assigned_mess_id} allowed={switchAllowed} activePass={activePass} />}
 
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

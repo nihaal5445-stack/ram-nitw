@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
+import { CrowdPanel } from "@/components/crowd-panel";
 import { ProfileError } from "@/components/profile-error";
 import { getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
@@ -30,6 +31,8 @@ export default async function MessRepDashboard() {
           {t("title")} · {assignedMess?.name ?? "—"}
         </p>
       </div>
+
+      <CrowdPanel ownMessId={profile.assigned_mess_id} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title={t("openComplaints")} value="3" icon={AlertCircle} accent="primary" />

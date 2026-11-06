@@ -722,7 +722,9 @@
         "addon_bad_signature": "Forged or damaged add-on ticket",
         "addon_wrong_mess": "Ticket is for another mess",
         "addon_wrong_slot": "Ticket is for another meal slot or day",
-        "addon_used": "Add-on already used"
+        "addon_used": "Add-on already used",
+        "passOk": "Meal pass OK: {name}",
+        "passFrom": "Visiting from {mess}"
       }
     }
   },
@@ -927,5 +929,35 @@
   "Demo": {
     "badge": "Demo mode",
     "hint": "Demo mode: the current time counts as an open meal slot for every mess."
+  },
+  "Switch": {
+    "title": "Eat here this meal",
+    "lead": "If your mess is crowded, you can eat at a quieter one with a single-meal pass. The counter there scans it once.",
+    "off": "Mess switching is switched off by the warden right now.",
+    "yourMess": "Your mess",
+    "crowd": "{pct}% full",
+    "eat": "Eat here this meal",
+    "needLess": "Only messes less crowded than yours are offered.",
+    "none": "No quieter mess is available right now.",
+    "passTitle": "Meal pass for {mess}",
+    "passHelp": "Show this at {mess}. Valid for this meal only, one use.",
+    "active": "Your pass",
+    "errors": {
+      "already_issued": "You already have a pass for this meal.",
+      "already_ate": "You were already admitted to this meal.",
+      "not_less_crowded": "That mess is not less crowded than yours any more.",
+      "not_eligible": "This mess is not open to you.",
+      "no_open_slot": "No meal is being served there right now.",
+      "switching_off": "Mess switching is switched off.",
+      "default": "Could not issue the pass."
+    },
+    "warden": {
+      "title": "Allow students to eat at another mess",
+      "desc": "When on, students at a crowded mess can get a single-meal pass for a quieter one. Always on in demo mode.",
+      "on": "On",
+      "off": "Off",
+      "demoOn": "On (demo mode)",
+      "passes": "Passes today: {issued} issued, {redeemed} redeemed"
+    }
   }
 }

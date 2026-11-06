@@ -199,7 +199,7 @@ export function ScannerApp({ messName, debug }: { messName: string; debug: boole
         const p = ao.payload;
         await ledgerPut({ key: `addon|${p.i}`, studentId: "addon", slot: p.s, date: p.d, scannedAt: now, method: "qr", scanId: p.i });
         await outboxPut({ id: uuid(), method: "addon", token: text, scanned_at: new Date(now).toISOString(), local: "admitted", studentName: p.u });
-        show({ tone: "ok", title: t("result.addonOk", { item: p.n }), detail: `${p.u} · ${tm(p.s as "lunch")}` });
+        show({ tone: "ok", title: p.k === "pass" ? t("result.passOk", { name: p.u }) : t("result.addonOk", { item: p.n }), detail: p.k === "pass" ? t("result.passFrom", { mess: p.n }) + ` · ${tm(p.s as "lunch")}` : `${p.u} · ${tm(p.s as "lunch")}` });
       } else {
         show({ tone: ao.reason === "addon_wrong_slot" ? "warn" : "bad", title: t(`result.${ao.reason}`), detail: ao.payload ? `${ao.payload.n} · ${ao.payload.u}` : undefined });
       }

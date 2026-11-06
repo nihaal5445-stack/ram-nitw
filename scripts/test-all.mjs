@@ -4,7 +4,7 @@ import { spawnSync } from "node:child_process";
 import { demoModeFromEnv, setDemoMode } from "./lib/demo-mode.mjs";
 
 // dashboards needs the fraud flags that the access suite creates, so it runs right after it
-const suites = ["test:unit", "test:db", "test:signup", "test:login-code", "test:student-token", "test:access", "test:dashboards", "test:addons", "test:demo-mode", "test:complaints", "test:feedback", "test:scanner"];
+const suites = ["test:unit", "test:db", "test:signup", "test:login-code", "test:student-token", "test:access", "test:dashboards", "test:addons", "test:demo-mode", "test:switch", "test:complaints", "test:feedback", "test:scanner"];
 const results = [];
 await setDemoMode(false);
 try {

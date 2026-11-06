@@ -48,7 +48,8 @@ export async function POST(request: Request) {
   for (const a of addonScans) {
     const t = a.token ? parseAddonTicket(a.token) : null;
     if (!t || !UUID.test(t.payload.i)) { addonResults.push({ id: a.id, status: "rejected", reason: "addon_malformed" }); continue; }
-    const { data, error } = await admin.rpc("redeem_addon", { p_staff_id: userId, p_scanner_id: scannerId, p_purchase_id: t.payload.i, p_scanned_at: a.scanned_at });
+    const isPass = t.payload.k === "pass";
+    const { data, error } = await admin.rpc(isPass ? "redeem_switch_pass" : "redeem_addon", { p_staff_id: userId, p_scanner_id: scannerId, [isPass ? "p_pass_id" : "p_purchase_id"]: t.payload.i, p_scanned_at: a.scanned_at });
     if (error) return NextResponse.json({ error: error.message }, { status: error.message.includes("not authorized") ? 403 : 500 });
     addonResults.push({ id: a.id, ...(data as { status: string; reason?: string }) });
   }

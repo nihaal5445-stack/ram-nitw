@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
+import { CrowdPanel } from "@/components/crowd-panel";
 import { ProfileError } from "@/components/profile-error";
 import { getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
@@ -39,6 +40,8 @@ export default async function ParentDashboard() {
         </h1>
         <p className="text-muted-foreground mt-1">{t("title")}</p>
       </div>
+
+      <CrowdPanel ownMessId={studentProfile?.assigned_mess_id} />
 
       {/* Linked student info */}
       {studentProfile ? (

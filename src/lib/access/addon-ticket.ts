@@ -6,7 +6,7 @@ import { slotAt, type SlotWindow } from "./slots.ts";
  * scanners hold only the server's public key, so they verify offline and cannot forge tickets.
  * Valid for one mess, one date and one slot; redeemed once (local ledger offline, DB at sync).
  */
-export interface AddonPayload { i: string; m: string; d: string; s: string; n: string; u: string } // purchase id, mess, date, slot, item name, student name
+export interface AddonPayload { i: string; m: string; d: string; s: string; n: string; u: string; k?: "pass" } // k = "pass": a single-meal mess-switch pass (n = the home mess) // purchase id, mess, date, slot, item name, student name
 export const ADDON_PREFIX = "ramA";
 const ECDSA = { name: "ECDSA", hash: "SHA-256" } as const;
 const enc = new TextEncoder();
@@ -17,6 +17,7 @@ export function parseAddonTicket(text: string): { payload: AddonPayload; body: s
   try {
     const p = JSON.parse(new TextDecoder().decode(fromB64u(m[1]))) as AddonPayload;
     if (![p.i, p.m, p.d, p.s, p.n, p.u].every((v) => typeof v === "string")) return null;
+    if (p.k !== undefined && p.k !== "pass") return null;
     return { payload: p, body: m[1], sig: fromB64u(m[2]) };
   } catch { return null; }
 }

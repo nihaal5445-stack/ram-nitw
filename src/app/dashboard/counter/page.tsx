@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { CheckCircle, Clock, Keyboard, RefreshCw, ScanLine } from "lucide-react";
 import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
 import { createClient } from "@/utils/supabase/server";
+import { CrowdPanel } from "@/components/crowd-panel";
 import { ProfileError } from "@/components/profile-error";
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,6 +46,8 @@ export default async function CounterDashboard() {
         <h1 className="text-3xl font-heading font-bold text-primary">{tDash("welcome", { name: profile.full_name ?? "Counter Staff" })}</h1>
         <p className="text-muted-foreground mt-1">{t("title")} · {assignedMess?.name ?? "—"}</p>
       </div>
+
+      <CrowdPanel ownMessId={profile.assigned_mess_id} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard title={t("currentSlot")} value={current ? tm(current.slot as "lunch") : t("noMealNow")} icon={Clock} accent="secondary" />

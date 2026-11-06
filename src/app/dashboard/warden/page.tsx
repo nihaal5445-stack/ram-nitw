@@ -12,6 +12,8 @@ import { AlertOctagon } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
 import { CrowdPanel } from "@/components/crowd-panel";
+import { SwitchToggle } from "@/components/switch/switch-toggle";
+import { getDemoMode } from "@/lib/demo-mode";
 
 export default async function WardenDashboard() {
   const { user, profile, error } = await getCurrentProfile();
@@ -23,6 +25,11 @@ export default async function WardenDashboard() {
   const tDash = await getTranslations("Dashboard");
 
   const { count: openFlags } = await (await createClient()).from("fraud_flags").select("id", { count: "exact", head: true }).is("resolved_at", null);
+  const sb = await createClient();
+  const switchOn = (await sb.rpc("mess_switch_allowed")).data === true;
+  const demo = await getDemoMode();
+  const { data: passRows } = await sb.from("mess_switch_passes").select("status");
+  const issued = passRows?.length ?? 0, redeemed = (passRows ?? []).filter((p) => p.status === "redeemed").length;
   const operationalMesses = messes.filter((m) => m.status === "confirmed");
   const underConstructionMesses = messes.filter((m) => m.status === "under_construction");
 
@@ -42,6 +49,8 @@ export default async function WardenDashboard() {
           <span className="block text-sm text-muted-foreground">{t("fraud.cardDesc")}</span>
         </span>
       </Link>
+
+      <SwitchToggle on={switchOn} demo={demo} issued={issued} redeemed={redeemed} />
 
       <CrowdPanel />
 
