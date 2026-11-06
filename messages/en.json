@@ -445,6 +445,30 @@
         "c3": "Hostel day dinner with an extended menu.",
         "c4": "Semester break: closing dates to be announced."
       }
+    },
+    "footer": {
+      "blurb": "RAM, Random Access Meals, is the digital mess platform for NIT Warangal: paper-free tokens, public menus and open progress reporting.",
+      "explore": "Explore",
+      "access": "Sign in",
+      "contact": "Contact",
+      "links": {
+        "messes": "Messes",
+        "map": "Campus map",
+        "timings": "Meal timings",
+        "progress": "Daily progress",
+        "calendar": "Calendar",
+        "students": "Students",
+        "parents": "Parents",
+        "staff": "Mess staff and administration",
+        "credits": "Photo credits"
+      },
+      "address": "National Institute of Technology Warangal, Telangana, India",
+      "phone": "Phone: to be announced",
+      "email": "Email: to be announced",
+      "institute": "NIT Warangal website",
+      "opensNew": "(opens in a new tab)",
+      "copyright": "© {year} RAM, NIT Warangal. Prototype.",
+      "demoNote": "Content marked \"demo data\" is placeholder until verified."
     }
   }
 }

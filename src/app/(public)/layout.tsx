@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { UtilityBar } from "@/components/site/utility-bar";
 import { SiteHeader } from "@/components/site/site-header";
+import { SiteFooter } from "@/components/site/site-footer";
 
 export default async function PublicLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("Public.nav");
@@ -15,6 +16,7 @@ export default async function PublicLayout({ children }: { children: React.React
       <UtilityBar />
       <SiteHeader />
       <main id="main" className="flex-1 bg-background">{children}</main>
+      <SiteFooter />
     </>
   );
 }
