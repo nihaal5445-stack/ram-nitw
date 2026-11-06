@@ -68,7 +68,15 @@
     "balance": "Current Balance",
     "mess": "Assigned Mess",
     "todayMeals": "Today's Meals",
-    "recentHistory": "Recent Meal History"
+    "recentHistory": "Recent Meal History",
+    "balancePlaceholder": "Placeholder until billing is built",
+    "monthMeals": "Meals this month",
+    "monthMealsDesc": "Counted at the counter",
+    "showQr": "Show my meal QR",
+    "showQrDesc": "Open your rotating QR code for the counter",
+    "noHistory": "No meals recorded yet. They appear here after you are scanned at a counter.",
+    "manualTag": "Manual entry",
+    "servedTag": "Served"
   },
   "Parent": {
     "title": "Child's Mess Account",
@@ -504,6 +512,37 @@
       "opensNew": "(opens in a new tab)",
       "copyright": "© {year} RAM, NIT Warangal. Prototype.",
       "demoNote": "Content marked \"demo data\" is placeholder until verified."
+    }
+  },
+  "Access": {
+    "token": {
+      "title": "My meal QR",
+      "subtitle": "Show this code at the counter. It changes every 30 seconds and works without internet.",
+      "enrollTitle": "Set up this phone",
+      "enrollBody": "Your phone creates a private key that never leaves it. Only the matching public key is sent to RAM. You can have one active phone at a time.",
+      "enrollButton": "Enroll this phone",
+      "enrollReplace": "Use this phone instead",
+      "enrolling": "Setting up…",
+      "otherDevice": "Another phone ({label}) is your active device. Enrolling here will replace it.",
+      "enrollAgain": "Set this phone up again",
+      "replacedTitle": "This phone is no longer active",
+      "replacedBody": "Another phone was enrolled, or this one was revoked. Set this phone up again to use it.",
+      "offlineOk": "You are offline. The QR still works.",
+      "clockOff": "Your phone's clock is {seconds} s off. RAM is correcting for it while you are online, but please turn on automatic date and time.",
+      "qrLabel": "Rotating meal QR code",
+      "refreshesIn": "until a new code",
+      "tipBrightness": "Raise your screen brightness so the counter can scan it.",
+      "tipScreenshot": "Screenshots stop working within a minute, so don't share this code.",
+      "deviceActive": "Active phone: {label}",
+      "revoke": "Revoke",
+      "signFailed": "Could not create the code. Set this phone up again.",
+      "errors": {
+        "reauth_required": "For safety, sign in again first, then come back and set up this phone.",
+        "rate_limited": "You have set up phones too many times today. Try again tomorrow or ask the warden's office.",
+        "not_student": "Only students can set up a meal QR.",
+        "invalid_key": "This browser could not create a valid key. Try another browser.",
+        "unknown": "Something went wrong. Please try again."
+      }
     }
   }
 }

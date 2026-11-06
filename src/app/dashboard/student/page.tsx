@@ -1,11 +1,13 @@
 import { redirect } from "next/navigation";
 import { getCurrentProfile, roleDashboard } from "@/utils/supabase/get-current-profile";
 import { ProfileError } from "@/components/profile-error";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { StatCard } from "@/components/stat-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Utensils, Wallet, CalendarDays, History } from "lucide-react";
+import Link from "next/link";
+import { Utensils, Wallet, CalendarDays, History, QrCode } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
 
 export default async function StudentDashboard() {
@@ -18,6 +20,21 @@ export default async function StudentDashboard() {
   const tDash = await getTranslations("Dashboard");
 
   const assignedMess = messes.find((m) => m.id === profile?.assigned_mess_id);
+  const tm = await getTranslations("Public.meals");
+  const locale = await getLocale();
+
+  // Real meal data (RLS limits these rows to this student).
+  const supabase = await createClient();
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+  const monthStart = `${today.slice(0, 7)}-01`;
+  const [{ data: recent }, { data: todayRows }, { count: monthCount }] = await Promise.all([
+    supabase.from("meal_redemptions").select("id, slot, meal_date, scanned_at, method").eq("status", "accepted").order("scanned_at", { ascending: false }).limit(8),
+    supabase.from("meal_redemptions").select("slot").eq("status", "accepted").eq("meal_date", today),
+    supabase.from("meal_redemptions").select("id", { count: "exact", head: true }).eq("status", "accepted").gte("meal_date", monthStart),
+  ]);
+  const slots = ["breakfast", "lunch", "snacks", "dinner"] as const;
+  const servedToday = new Set((todayRows ?? []).map((r) => r.slot));
+  const fmt = new Intl.DateTimeFormat(locale, { weekday: "short", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Asia/Kolkata" });
 
   return (
     <div className="space-y-8">
@@ -29,13 +46,22 @@ export default async function StudentDashboard() {
         <p className="text-muted-foreground mt-1">{t("title")}</p>
       </div>
 
+      {/* Meal QR entry point */}
+      <Link href="/dashboard/student/token" className="flex items-center gap-4 rounded-lg border-2 border-primary/40 bg-primary/5 p-5 transition-colors hover:bg-primary/10">
+        <span className="flex size-12 items-center justify-center rounded-xl bg-primary text-primary-foreground"><QrCode className="size-6" aria-hidden /></span>
+        <span>
+          <span className="block font-semibold">{t("showQr")}</span>
+          <span className="block text-sm text-muted-foreground">{t("showQrDesc")}</span>
+        </span>
+      </Link>
+
       {/* Stats row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title={t("balance")}
           value="₹ 2,450"
           icon={Wallet}
-          description="As of today"
+          description={t("balancePlaceholder")}
           accent="primary"
         />
         <StatCard
@@ -47,16 +73,16 @@ export default async function StudentDashboard() {
         />
         <StatCard
           title={t("todayMeals")}
-          value="2 / 3"
+          value={`${servedToday.size} / ${slots.length}`}
           icon={CalendarDays}
-          description="Breakfast ✓  Lunch ✓  Dinner —"
+          description={slots.map((k) => `${tm(k)} ${servedToday.has(k) ? "✓" : "–"}`).join("  ")}
           accent="green"
         />
         <StatCard
-          title="Meals this month"
-          value="48"
+          title={t("monthMeals")}
+          value={String(monthCount ?? 0)}
           icon={History}
-          description="Out of 90 possible"
+          description={t("monthMealsDesc")}
           accent="amber"
         />
       </div>
@@ -69,40 +95,21 @@ export default async function StudentDashboard() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {[
-              { date: "Today", meal: "Lunch", status: "served" },
-              { date: "Today", meal: "Breakfast", status: "served" },
-              { date: "Yesterday", meal: "Dinner", status: "served" },
-              { date: "Yesterday", meal: "Lunch", status: "absent" },
-              { date: "Yesterday", meal: "Breakfast", status: "served" },
-            ].map((entry, i) => (
-              <div
-                key={i}
-                className="flex items-center justify-between py-2 border-b border-border last:border-0"
-              >
-                <div>
-                  <span className="text-sm font-medium">{entry.meal}</span>
-                  <span className="text-xs text-muted-foreground ml-2">
-                    {entry.date}
+          {(recent ?? []).length === 0 ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">{t("noHistory")}</p>
+          ) : (
+            <ul className="space-y-1">
+              {recent!.map((r) => (
+                <li key={r.id} className="flex items-center justify-between border-b border-border py-2 last:border-0">
+                  <span>
+                    <span className="text-sm font-medium">{tm(r.slot as (typeof slots)[number])}</span>
+                    <span className="ml-2 text-xs text-muted-foreground">{fmt.format(new Date(r.scanned_at))}</span>
                   </span>
-                </div>
-                <Badge
-                  variant={entry.status === "served" ? "default" : "secondary"}
-                  className={
-                    entry.status === "served"
-                      ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
-                      : ""
-                  }
-                >
-                  {entry.status === "served" ? "Served" : "Absent"}
-                </Badge>
-              </div>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground mt-4 text-center">
-            Live meal history available in Phase 3
-          </p>
+                  <Badge variant="secondary">{r.method === "manual" ? t("manualTag") : t("servedTag")}</Badge>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
     </div>
