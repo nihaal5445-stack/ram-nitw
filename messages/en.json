@@ -50,7 +50,12 @@
     "notRegistered": {
       "parents": "This email is not registered. Ask your student or the warden's office to add you.",
       "staff": "This email is not registered. Ask the warden's office to add you."
-    }
+    },
+    "codeLabel": "Or enter the 6-digit code from the email",
+    "codeHelp": "Handy if you opened the email on another device. The code works once and expires.",
+    "verifyCode": "Sign in with code",
+    "verifying": "Checking…",
+    "codeError": "That code did not work. Check it, or request a new link."
   },
   "Dashboard": {
     "welcome": "Welcome, {name}",
@@ -597,7 +602,9 @@
         "not_student": "Only students can set up a meal QR.",
         "invalid_key": "This browser could not create a valid key. Try another browser.",
         "unknown": "Something went wrong. Please try again."
-      }
+      },
+      "debugTitle": "Test view: the code as text",
+      "debugCopy": "Copy code"
     },
     "scanner": {
       "title": "Counter scanner",

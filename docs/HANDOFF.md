@@ -34,7 +34,7 @@ For the complete technical specification, architectural blueprint, and future ph
   - Interactive Leaflet campus map showing all 9 mess locations (4 operational, 3 placeholder operational, 2 under construction)
   - Click-to-scroll navigation between map markers and mess detail cards (timings, menus, eligibility)
   - Real-time operational status badges
-- [ ] **Phase 3: Access + Scanner (SPEC Section 8.1; IN PROGRESS, see section 9)**
+- [x] **Phase 3: Access + Scanner (SPEC Section 8.1; COMPLETE in code and automated tests, see section 9; NOT yet tried on a physical phone)**
   - Signed rotating QR (ECDSA P-256, non-extractable device key; scanners hold public keys only). Replaced the earlier shared-secret TOTP idea.
   - Offline counter scanner with cached secret keys and local one-entry-per-slot verification
   - Cross-platform camera scanner via `@zxing/browser` or `qr-scanner` (iOS Safari & Android compatible)
@@ -176,7 +176,7 @@ For the complete technical specification, architectural blueprint, and future ph
    - Do not re-run `create-next-app` or `supabase init`. Work with the existing codebase and build additively.
 4. **Follow SPEC Phase Order**:
    - Phase 2 is the **Public Website** (full SPEC Section 6 plan: hero section, interactive Leaflet campus map, 9 messes with operational status badges, click-to-scroll navigation, and menu previews), NOT meal tokens.
-   - Phase 3 is the **Meal Token System** (device-bound offline TOTP + cross-platform scanner library like `@zxing/browser` or `qr-scanner`, not BarcodeDetector).
+   - Phase 3 is **Access + Scanner** (signed rotating QR + offline counter scanner with `qr-scanner`, not BarcodeDetector; see SPEC 8.1). It is done; the next phase is **Phase 4: Menu & Attendance**.
 5. **Update `docs/HANDOFF.md` at the end of every work session**.
 
 ---
@@ -256,3 +256,29 @@ Deviation from the plan, forced by the signed-QR choice: Postgres cannot verify 
   - Tests: `npm run test:scanner` (needs `next start -p 3100`; ~90 s because it waits out the 60 s screenshot window): 33 browser checks across a phone context and two laptop contexts: offline admit, duplicate, tamper, other-mess, manual entry, lock/unlock, screenshot > 60 s, roster is ciphertext at rest, sync drain, cross-scanner flag. It temporarily widens ifc-a's lunch window to the whole day and restores it in `finally`. `test:db` clears Phase 3 tables at its start (inside its rolled-back transaction) so it does not depend on earlier e2e data.
 - [x] M5: real dashboards. Counter dashboard (`/dashboard/counter`) now shows current slot (from `mess_slots`), meals served today, manual entries today, last sync, an enabled "Open scanner" link and recent scans, all RLS-scoped; the fake "342 / 1.2s / 21BCS001" content is gone (counter staff cannot read student names by design, so recent scans show slot/time/status only). Warden fraud page `/dashboard/warden/fraud` (+ link card with the open count on the warden dashboard): flags with severity, plain-language explanation, student, mess, evidence, required note to resolve (`resolve_fraud_flag` RPC via a server action), `?all=1` shows resolved. `currentSlot()` in `src/lib/access/slots.ts` keeps `Date.now()` out of server components (react-hooks/purity).
   - Test: `npm run test:dashboards` (needs `next start -p 3100`; run `npm run test:access` first so there are genuine flags): 18 checks incl. role access (counter/student redirected, anonymous to login), resolve flow, real numbers on counter and student dashboards.
+- [x] M6: demo support and wrap-up. Login accepts the **6-digit email code** as well as the link (`verifyOtp`, works when the email is read on another device; tested via GoTrue `generateLink` because the email template only changes after a Supabase restart). Explicit auth cookie name `sb-ram-auth-token` (`src/utils/supabase/config.ts`, used by browser, server and proxy clients; existing dev sessions were signed out once). Opt-in two-device demo plumbing: `NEXT_PUBLIC_SUPABASE_PROXY=1` makes the browser use `<origin>/sb`, which `next.config.ts` rewrites to local Supabase (`npm run build:demo` / `start:demo`; verified in a browser: zero direct calls to :54321, all suites pass through it). `supabase/config.toml` now allows `https://*.trycloudflare.com/auth/callback` and has email templates carrying the code (`supabase/templates/`); **a Supabase restart is needed for those two config changes** (not done: told not to). `cloudflared` is installed (brew) but **no tunnel was opened** (it would expose the local app and Supabase API; `npm run demo:lock-seed` randomises the public seed passwords first). `?debug=1` on the token page shows the code as text. Guide: `docs/DEMO-PHASE3.md`. `npm run test:all` runs every suite in the required order (~2 min).
+
+### Phase 3 final state
+- Checks: `npx tsc --noEmit`, `npm run lint`, `NODE_ENV=production npm run build` pass; `npm run test:all` passes: 26 unit, SQL suites (60 Phase 3 + 16 sign-up + older), 13 sign-up e2e, login code, student token page, 25 access flow, 18 dashboards, 33 scanner flow.
+- Lighthouse mobile re-run after the auth changes: `/` performance 92, accessibility 100, best practices 100, SEO 100; `/login` 100 / 100 / 100 / 100.
+- Design deviation from the original plan: signed QR (user decision) instead of shared-secret TOTP; signature verification happens in `POST /api/scanner/sync` (Postgres cannot verify ECDSA) and `record_scans` is service-role only.
+
+### Phase 3: honest limits
+1. **Not tested on a real iPhone or Android phone.** The camera loop was only started against Chromium's fake camera; decoding was verified on a rendered QR in Chromium and WebKit, not through a live camera. iOS Safari quirks (camera permission, standalone PWA mode, storage eviction after about 7 idle days) are unverified.
+2. **Offline duplicates across two scanners are detected, not prevented** (the meal is already eaten when sync flags it).
+3. **Revocation lag:** an offline scanner honours a replaced/revoked phone until its roster refreshes (every 10 min while online) or the 12 h bundle expires.
+4. **Relay/buddy use:** a live QR sent to a friend works for up to 60 s; the first scan wins. Names are shown to counter staff, but there are no student photos.
+5. **Clock dependence:** phones and scanners correct by `/api/time` while online; fully offline clock drift still shifts the 60 s window.
+6. **Scanner PIN at rest** (PBKDF2 over a 6-12 digit PIN) stops casual access, not a determined offline brute force of a copied IndexedDB. A dishonest counter staffer sees names and rolls of their mess for up to 12 h but, thanks to signed QR, cannot forge a QR.
+7. **Manual fallback is the soft spot:** reason + PIN + local and server rate limits and flags, but social engineering remains.
+8. **Not fully zero-internet:** enrolling, starting a shift and the first sync need connectivity.
+9. **Seed data:** only one student (`DEMO0001`) is in IFC-A; demos of manual entry need care (see the demo guide).
+10. `.env.example` is git-ignored here; the `SUPABASE_SERVICE_ROLE_KEY` entry is local only (set it in `.env.local`; needed by `/api/scanner/sync`, the warden provisioning action and the test scripts).
+
+### Phase 3: needs human review / decisions
+- Real **meal windows** (`mess_slots` seeded from placeholder `mealSlots`), the 15 min grace, the 12 h roster expiry, 10-min idle lock, manual limits (10/h per staff, 3/student/week), and the 30 s step.
+- Real **roll-number format** (placeholder `DEMO0001`) and how rolls get into `profiles.roll_number` for real students.
+- Telugu/Hindi strings for `Access.*`, `Warden.fraud.*`, `CounterStaff.*`, `Login` code step (AI-written).
+- **Data protection:** scanners cache student names and roll numbers for up to 12 h; retention and consent need a policy (Indian DPDP Act review).
+- Whether the "not registered" login message (email enumeration) and the 6-digit code option are acceptable.
+- A backup/restore story for device public keys is not needed (public keys only), but a procedure for lost phones (warden revoke + re-enrol) should be documented for students.

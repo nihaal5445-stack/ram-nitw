@@ -9,6 +9,7 @@ RAM replaces paper-based mess tokens and manual registers with an offline-capabl
 ## Documentation
 
 - **[Product Specification (docs/SPEC.md)](./docs/SPEC.md)**: Master architecture, role requirements, database models, and 8-phase implementation roadmap.
+- **[Phase 3 demo (docs/DEMO-PHASE3.md)](./docs/DEMO-PHASE3.md)**: two-device demo script (laptop scanner + phone student), what is and is not verified, and the full test list.
 - **[Developer Handoff Guide (docs/HANDOFF.md)](./docs/HANDOFF.md)**: Current phase status, codebase folder guide, local setup instructions, database RLS summary, key technical decisions, and rules for contributors.
 
 ---

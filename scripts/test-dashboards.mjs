@@ -9,7 +9,6 @@ const BASE = process.env.BASE ?? "http://localhost:3100";
 const env = supabaseEnv();
 const admin = createClient(env.API_URL, env.SERVICE_ROLE_KEY, { auth: { persistSession: false } });
 const S1 = "11111111-1111-1111-1111-111111111111";
-const NIL = "00000000-0000-0000-0000-000000000000";
 let failed = 0;
 const check = (name, ok, detail = "") => { console.log(`${ok ? "PASS" : "FAIL"}  ${name}${ok ? "" : "  -> " + String(detail).slice(0, 200)}`); if (!ok) failed++; };
 mkdirSync("screenshots", { recursive: true });

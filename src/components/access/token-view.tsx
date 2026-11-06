@@ -23,7 +23,7 @@ function guessLabel() {
   return "Browser";
 }
 
-export function TokenView({ serverDevice }: { serverDevice: ServerDevice | null }) {
+export function TokenView({ serverDevice, debug = false }: { serverDevice: ServerDevice | null; debug?: boolean }) {
   const t = useTranslations("Access.token");
   const router = useRouter();
   const [local, setLocal] = useState<StoredDevice | null | undefined>(undefined); // undefined = still loading
@@ -191,6 +191,13 @@ export function TokenView({ serverDevice }: { serverDevice: ServerDevice | null 
           </p>
         </div>
       </section>
+      {debug && token && (
+        <div className="rounded-md border border-dashed border-border p-3" data-testid="debug-token">
+          <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">{t("debugTitle")}</p>
+          <code className="mt-1 block break-all text-xs">{token}</code>
+          <Button type="button" variant="outline" size="sm" className="mt-2" onClick={() => navigator.clipboard?.writeText(token)}>{t("debugCopy")}</Button>
+        </div>
+      )}
       <ul className="space-y-1.5 text-sm text-muted-foreground">
         <li>{t("tipBrightness")}</li>
         <li>{t("tipScreenshot")}</li>

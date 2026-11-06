@@ -12,7 +12,7 @@ export async function sessionCookies(email, password = "password123", domain = "
   const c = createClient(env.API_URL, env.ANON_KEY, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data, error } = await c.auth.signInWithPassword({ email, password });
   if (error) throw new Error(error.message);
-  const name = `sb-${new URL(env.API_URL).hostname.split(".")[0]}-auth-token`;
+  const name = "sb-ram-auth-token"; // = AUTH_COOKIE_NAME in src/utils/supabase/config.ts
   const value = "base64-" + Buffer.from(JSON.stringify(data.session)).toString("base64url");
   const CHUNK = 3180; // @supabase/ssr splits long values into name.0, name.1, ...
   const parts = value.length <= CHUNK ? [[name, value]] : Array.from({ length: Math.ceil(value.length / CHUNK) }, (_, i) => [`${name}.${i}`, value.slice(i * CHUNK, (i + 1) * CHUNK)]);

@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { AUTH_COOKIE_NAME } from "@/utils/supabase/config";
 
 export async function proxy(request: NextRequest) {
   let supabaseResponse = NextResponse.next({ request });
@@ -8,6 +9,7 @@ export async function proxy(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
+      cookieOptions: { name: AUTH_COOKIE_NAME },
       cookies: {
         getAll() {
           return request.cookies.getAll();
@@ -33,7 +35,7 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Public routes that don't need a session. /api/scanner/sync authenticates itself (cookie or Bearer) and returns 401/403.
-  const publicRoutes = ["/login", "/auth/callback", "/credits", "/robots.txt", "/api/scanner/sync", "/api/time"];
+  const publicRoutes = ["/login", "/auth/callback", "/credits", "/robots.txt", "/api/scanner/sync", "/api/time", "/sb"];
   if (pathname === "/" || publicRoutes.some((r) => pathname.startsWith(r))) {
     return supabaseResponse;
   }

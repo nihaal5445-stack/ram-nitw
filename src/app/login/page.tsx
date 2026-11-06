@@ -3,7 +3,7 @@
 import { Suspense, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { ArrowLeft, ChefHat, GraduationCap, MailCheck, UsersRound, UtensilsCrossed, type LucideIcon } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
@@ -28,12 +28,16 @@ const isAudience = (v: string | null): v is Audience => v === "students" || v ==
 function LoginInner() {
   const t = useTranslations("Login");
   const params = useSearchParams();
+  const router = useRouter();
   const initial = params.get("role");
   const [audience, setAudience] = useState<Audience>(isAudience(initial) ? initial : "students");
   const [email, setEmail] = useState("");
   const [step, setStep] = useState<Step>(params.get("error") ? "error" : "form");
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState(params.get("error") ? t("error") : "");
+  const [code, setCode] = useState("");
+  const [codeError, setCodeError] = useState<string | null>(null);
+  const [verifying, setVerifying] = useState(false);
   const tabRefs = useRef<Record<Audience, HTMLButtonElement | null>>({ students: null, parents: null, staff: null });
   const supabase = createClient();
 
@@ -44,6 +48,17 @@ function LoginInner() {
     const next = audiences[(i + dir + audiences.length) % audiences.length].key;
     setAudience(next);
     tabRefs.current[next]?.focus();
+  }
+
+  /** Sign in with the 6-digit code from the email: works when the email is read on a different device. */
+  async function handleVerify(e: React.FormEvent) {
+    e.preventDefault();
+    setVerifying(true); setCodeError(null);
+    const { error } = await supabase.auth.verifyOtp({ email, token: code.trim(), type: "email" });
+    setVerifying(false);
+    if (error) { setCodeError(t("codeError")); return; }
+    router.push("/dashboard"); // the dashboard redirects each role to its own page
+    router.refresh();
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -140,7 +155,18 @@ function LoginInner() {
                   <MailCheck className="mx-auto size-10 text-brand" strokeWidth={1.5} aria-hidden />
                   <h2 className="font-display text-xl font-semibold">{t("checkEmail")}</h2>
                   <p className="text-sm text-muted-foreground" role="status">{t("checkEmailDesc", { email })}</p>
-                  <Button variant="outline" className="w-full" onClick={() => { setStep("form"); setEmail(""); }}>
+                  <form onSubmit={handleVerify} className="space-y-3 border-t border-border pt-4 text-left">
+                    <Label htmlFor="otp-code">{t("codeLabel")}</Label>
+                    <Input id="otp-code" inputMode="numeric" autoComplete="one-time-code" maxLength={8} value={code}
+                      onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} className="h-11 text-center font-mono text-lg tracking-[0.4em]"
+                      aria-describedby="otp-help" aria-invalid={!!codeError} />
+                    <p id="otp-help" className="text-xs text-muted-foreground">{t("codeHelp")}</p>
+                    {codeError && <p role="alert" className="text-sm text-destructive">{codeError}</p>}
+                    <Button type="submit" disabled={verifying || code.length < 6} className="h-11 w-full bg-primary font-semibold text-primary-foreground hover:bg-primary/90">
+                      {verifying ? t("verifying") : t("verifyCode")}
+                    </Button>
+                  </form>
+                  <Button variant="outline" className="w-full" onClick={() => { setStep("form"); setEmail(""); setCode(""); setCodeError(null); }}>
                     {t("differentEmail")}
                   </Button>
                 </div>

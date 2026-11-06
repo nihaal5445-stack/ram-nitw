@@ -51,6 +51,10 @@ check("device is stored non-extractable in IndexedDB", await A.page.evaluate(() 
 check("countdown is shown", /\d+ s/.test(await A.page.getByRole("timer").innerText()));
 await A.page.screenshot({ path: "screenshots/token-qr-390-light.png" });
 
+await A.page.goto(`${BASE}/dashboard/student/token?debug=1`, { waitUntil: "networkidle" });
+await A.page.waitForFunction(() => document.querySelector("[data-testid=debug-token] code")?.textContent?.startsWith("ram1."), null, { timeout: 15000 });
+check("?debug=1 shows the same code as text for copy/paste testing", parseToken(await A.page.locator("[data-testid=debug-token] code").innerText())?.deviceKey === deviceKey);
+
 // 2. rotation + offline
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 await A.ctx.setOffline(true);

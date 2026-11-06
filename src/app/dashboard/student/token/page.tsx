@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { ProfileError } from "@/components/profile-error";
 import { TokenView } from "@/components/access/token-view";
 
-export default async function StudentTokenPage() {
+export default async function StudentTokenPage({ searchParams }: { searchParams: Promise<{ debug?: string }> }) {
   const { user, profile, error } = await getCurrentProfile();
   if (!user) redirect("/login");
   if (!profile) return <ProfileError error={error} />;
@@ -22,7 +22,7 @@ export default async function StudentTokenPage() {
         <h1 className="font-display text-3xl font-semibold text-brand">{t("title")}</h1>
         <p className="mt-1 text-muted-foreground">{t("subtitle")}</p>
       </div>
-      <TokenView serverDevice={device} />
+      <TokenView serverDevice={device} debug={(await searchParams).debug === "1"} />
     </div>
   );
 }
