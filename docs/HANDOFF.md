@@ -182,7 +182,7 @@ Plan: `/Users/nihal/.claude/plans/mutable-watching-wren.md` (12 sections in orde
 
 - [x] Setup: CLAUDE.md, deps (leaflet, motion, playwright), `messes.ts` corrected (4 confirmed + Mess 5-7 TODO + Mess 8-9 under construction TODO; status `confirmed|unconfirmed|under_construction`), tokens in globals.css (`--surface`, `--brand`, `--gold`, `--navy-deep`), `lang` follows locale, `(public)` route group, `/` and `/credits` made public in `src/proxy.ts`.
 - [x] 1. Utility bar + sticky mega-menu + mobile drawer (`src/components/site/`, nav data in `src/config/site.ts`, strings in `messages/*.json` under `Public.*`).
-- [ ] 2. Hero + Today's Menu + Crowd pill (+ `src/config/images.ts`, `/credits`)
+- [x] 2. Hero + Today's Menu card + Crowd pill. Images in `public/images` (Unsplash), all registered in `src/config/images.ts`; `/credits` page. Photographer names are TODO: verify. `src/config/demo-data.ts` (slots, base menu), `src/lib/meal-time.ts` (IST slot logic, reused by section 8). Fixed circular `--font-heading` token so Playfair now renders (`font-display` / `font-heading`).
 - [ ] 3-12, then login restyle.
 
 Tooling: `BASE=http://localhost:3100 node scripts/shoot.mjs <name> [path] [selector]` writes `screenshots/` (git-ignored) at 1440/390, light/dark. Dev server was NOT running on :3000 in this session; screenshots used `npm run build && npx next start -p 3100`. The first `npm run build` after a change may print a Next security notice and fail; rerun it. Next 16.4.0 has a published advisory; upgrade is the user's call.

@@ -200,6 +200,59 @@
           }
         }
       }
+    },
+    "hero": {
+      "eyebrow": "Chief Warden's Office · NIT Warangal",
+      "title": "Good food, without the queue.",
+      "lead": "RAM is the digital mess platform for NIT Warangal: paper-free tokens, clear menus and honest, open reporting on how our messes run.",
+      "ctaMesses": "Explore the messes",
+      "ctaMap": "Find on the map"
+    },
+    "menuCard": {
+      "title": "Today's Menu",
+      "serving": "Now serving",
+      "next": "Next up",
+      "tomorrow": "Tomorrow morning",
+      "veg": "Vegetarian",
+      "note": "Demo data. Menus differ by mess; pure-veg messes serve only vegetarian items."
+    },
+    "crowd": {
+      "label": "Crowd now",
+      "low": "Light",
+      "moderate": "Moderate",
+      "busy": "Busy",
+      "closed": "Not serving",
+      "demo": "demo data"
+    },
+    "meals": {
+      "breakfast": "Breakfast",
+      "lunch": "Lunch",
+      "snacks": "Snacks",
+      "dinner": "Dinner"
+    },
+    "dishes": {
+      "idli": "Idli",
+      "sambar": "Sambar",
+      "vada": "Medu vada",
+      "chutney": "Coconut chutney",
+      "boiledEgg": "Boiled egg",
+      "rice": "Steamed rice",
+      "dal": "Dal",
+      "paneerCurry": "Paneer curry",
+      "chickenCurry": "Chicken curry",
+      "curd": "Curd",
+      "samosa": "Samosa",
+      "tea": "Tea",
+      "chapati": "Chapati",
+      "mixedVeg": "Mixed vegetable curry",
+      "eggCurry": "Egg curry",
+      "fruit": "Seasonal fruit"
+    },
+    "credits": {
+      "title": "Photo credits",
+      "intro": "Photographs on this site are free-licence images from Unsplash. Photographer names are still being confirmed and are marked as such.",
+      "photographer": "Photographer",
+      "source": "Source"
     }
   }
 }
