@@ -309,6 +309,26 @@
         "title": "Wellness",
         "desc": "Balanced plates, fresh vegetables and lighter options on every menu."
       }
+    },
+    "map": {
+      "eyebrow": "Find your mess",
+      "title": "Messes on campus",
+      "lead": "Select a pin to jump to that mess's details, or select a mess in the list to find it on the map.",
+      "count": "4 confirmed messes",
+      "listLabel": "Messes",
+      "details": "Jump to details",
+      "legend": "Map legend",
+      "todo": "Pin positions are placeholders until the Chief Warden's office confirms exact locations."
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "unconfirmed": "Not yet confirmed",
+      "under_construction": "Under construction"
+    },
+    "messType": {
+      "veg": "Pure vegetarian",
+      "mixed": "Mixed menu",
+      "north_indian": "North Indian"
     }
   }
 }
