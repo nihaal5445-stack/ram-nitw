@@ -1,7 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 import { Clock, Leaf } from "lucide-react";
-import { baseMenu } from "@/config/demo-data";
+import { istWeekday, menuFor } from "@/config/weekly-menu";
 import { slotState } from "@/lib/meal-time";
 import { useNow } from "./use-now";
 import { cn } from "@/lib/utils";
@@ -32,7 +32,7 @@ export function TodaysMenuCard({ className }: { className?: string }) {
       </div>
       {/* Fixed min height so the card never shifts when the time-based content mounts */}
       <ul className="mt-5 min-h-[10.5rem] divide-y divide-border border-y border-border">
-        {(slot ? baseMenu[slot.id] : []).map((d) => (
+        {(slot && now ? menuFor(slot.id, istWeekday(now, st?.tomorrow ? 1 : 0)) : []).map((d) => (
           <li key={d.key} className="flex items-center justify-between py-2.5 text-[15px]">
             <span>{td(d.key)}</span>
             {d.veg && <Leaf className="size-4 text-success" strokeWidth={1.75} aria-label={t("veg")} />}

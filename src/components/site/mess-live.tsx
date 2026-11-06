@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Clock, Leaf } from "lucide-react";
-import { baseMenu } from "@/config/demo-data";
+import { istWeekday, menuFor } from "@/config/weekly-menu";
 import { slotState } from "@/lib/meal-time";
 import { useNow } from "./use-now";
 import { CrowdNow } from "./crowd-meter";
@@ -18,7 +18,7 @@ export function MessLive({ messId, name, vegOnly }: { messId: string; name: stri
   const { counts } = useLikes(messId);
   const tl = useTranslations("Likes");
   const st = now ? slotState(now) : null;
-  const dishes = st ? baseMenu[st.slot.id].filter((d) => !vegOnly || d.veg) : [];
+  const dishes = st && now ? menuFor(st.slot.id, istWeekday(now, st.tomorrow ? 1 : 0)).filter((d) => !vegOnly || d.veg) : [];
 
   return (
     <div className="grid gap-6 sm:grid-cols-2">
