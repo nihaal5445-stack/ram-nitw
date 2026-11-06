@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { ArrowDown } from "lucide-react";
@@ -29,6 +29,20 @@ export function highlightAndScroll(id: string) {
   window.setTimeout(() => target.classList.remove("mess-highlight"), 1800);
 }
 
+/** Mounts the (heavy) map only once its container is near the viewport. */
+function LazyMap(props: React.ComponentProps<typeof CampusMap>) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setShow(true); io.disconnect(); } }, { rootMargin: "400px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return <div ref={ref} className="h-full w-full">{show ? <CampusMap {...props} /> : <div className="h-full w-full bg-surface-2" aria-hidden />}</div>;
+}
+
 export function MessMapSection() {
   const t = useTranslations("Public.map");
   const ts = useTranslations("Public.status");
@@ -55,7 +69,7 @@ export function MessMapSection() {
 
         <div className="mt-10 grid gap-6 lg:grid-cols-12">
           <div className="h-[22rem] overflow-hidden rounded-lg border border-border lg:col-span-8 lg:h-[34rem]">
-            <CampusMap messes={messes} selectedId={selected} labels={labels} onPinClick={onPinClick} />
+            <LazyMap messes={messes} selectedId={selected} labels={labels} onPinClick={onPinClick} />
           </div>
           <ul className="max-h-[34rem] space-y-2 overflow-y-auto lg:col-span-4" aria-label={t("listLabel")}>
             {messes.map((m) => (

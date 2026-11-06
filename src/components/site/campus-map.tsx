@@ -41,8 +41,8 @@ export default function CampusMap({ messes, selectedId, labels, onPinClick }: Pr
       const icon = L.divIcon({
         className: "",
         html: `<span class="mess-pin mess-pin--${mess.status}"></span>`,
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
+        iconSize: [36, 36],
+        iconAnchor: [18, 18],
       });
       const marker = L.marker([mess.location.lat, mess.location.lng], {
         icon,

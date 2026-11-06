@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Globe } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/utils/supabase/client";
 
 export function LocaleToggle() {
   const router = useRouter();
@@ -20,6 +19,7 @@ export function LocaleToggle() {
     
     // Save to user profile in Supabase if logged in
     try {
+      const { createClient } = await import("@/utils/supabase/client"); // lazy: keeps Supabase out of the public page bundle
       const supabase = createClient();
       const {
         data: { user },

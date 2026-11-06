@@ -15,7 +15,8 @@ export async function Hero() {
         width={images.hero.width}
         height={images.hero.height}
         alt={images.hero.alt}
-        priority
+        loading="eager"
+        fetchPriority="high"
         sizes="100vw"
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       />

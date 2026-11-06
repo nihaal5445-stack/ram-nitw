@@ -4,7 +4,6 @@ import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
-import { createClient } from "@/utils/supabase/client";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
@@ -15,6 +14,7 @@ export function ThemeToggle() {
 
     // Save to user profile in Supabase if logged in
     try {
+      const { createClient } = await import("@/utils/supabase/client"); // lazy: keeps Supabase out of the public page bundle
       const supabase = createClient();
       const {
         data: { user },

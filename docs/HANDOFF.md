@@ -29,7 +29,7 @@ For the complete technical specification, architectural blueprint, and future ph
   - Server-side role verification and redirection on every `/dashboard/<role>` page
   - Mess configuration (`messes.ts`) with confirmed and placeholder messes
   - Seed database setup with permanent `auth.identities` and non-null token defaults via `npm run db:reset`
-- [ ] **Phase 2: Public Website (IN PROGRESS, see 'Phase 2 progress' below)**
+- [x] **Phase 2: Public Website (COMPLETE, see 'Phase 2 progress' below)**
   - Public landing page with NITW branding and features
   - Interactive Leaflet campus map showing all 9 mess locations (4 operational, 3 placeholder operational, 2 under construction)
   - Click-to-scroll navigation between map markers and mess detail cards (timings, menus, eligibility)

@@ -79,8 +79,8 @@ export const messes: MessConfig[] = [
       capacity: 500, // TODO: verify
       status: "unconfirmed",
       location: {
-        lat: 17.9842 + i * 0.0013, // TODO: verify
-        lng: 79.5330 + i * 0.0011, // TODO: verify
+        lat: 17.9846 + i * 0.0020, // TODO: verify
+        lng: 79.5336 + i * 0.0016, // TODO: verify
       },
     }),
   ),

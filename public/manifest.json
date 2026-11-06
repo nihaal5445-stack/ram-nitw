@@ -1,0 +1,9 @@
+{
+  "name": "RAM, Random Access Meals",
+  "short_name": "RAM",
+  "description": "NIT Warangal's digital mess management platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#7B1E1E"
+}
