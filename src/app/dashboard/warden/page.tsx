@@ -11,6 +11,7 @@ import Link from "next/link";
 import { AlertOctagon } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
 import { messes } from "@/config/messes";
+import { CrowdPanel } from "@/components/crowd-panel";
 
 export default async function WardenDashboard() {
   const { user, profile, error } = await getCurrentProfile();
@@ -41,6 +42,8 @@ export default async function WardenDashboard() {
           <span className="block text-sm text-muted-foreground">{t("fraud.cardDesc")}</span>
         </span>
       </Link>
+
+      <CrowdPanel />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard

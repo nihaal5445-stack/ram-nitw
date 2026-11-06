@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { ArrowDown } from "lucide-react";
 import { messes, type MessStatus } from "@/config/messes";
 import { cn } from "@/lib/utils";
+import { useCrowd } from "./use-crowd";
 
 const CampusMap = dynamic(() => import("./campus-map"), {
   ssr: false,
@@ -47,6 +48,8 @@ export function MessMapSection() {
   const t = useTranslations("Public.map");
   const ts = useTranslations("Public.status");
   const tt = useTranslations("Public.messType");
+  const tc = useTranslations("Crowd");
+  const crowd = useCrowd();
   const [selected, setSelected] = useState<string | null>(null);
 
   const labels = Object.fromEntries(messes.map((m) => [m.id, `${m.name}, ${ts(m.status)}`]));
@@ -69,7 +72,7 @@ export function MessMapSection() {
 
         <div className="mt-10 grid gap-6 lg:grid-cols-12">
           <div className="h-[22rem] overflow-hidden rounded-lg border border-border lg:col-span-8 lg:h-[34rem]">
-            <LazyMap messes={messes} selectedId={selected} labels={labels} onPinClick={onPinClick} />
+            <LazyMap messes={messes} selectedId={selected} labels={labels} onPinClick={onPinClick} crowd={crowd} />
           </div>
           <ul className="max-h-[34rem] space-y-2 overflow-y-auto lg:col-span-4" aria-label={t("listLabel")}>
             {messes.map((m) => (
@@ -91,6 +94,7 @@ export function MessMapSection() {
                       <span className="block font-medium">{m.name}</span>
                       <span className="block text-sm text-muted-foreground">
                         {tt(m.type)} · {ts(m.status)}
+                        {crowd?.[m.id] && crowd[m.id].level !== "closed" ? ` · ${crowd[m.id].pct}%` : ""}
                       </span>
                     </span>
                   </button>
@@ -113,6 +117,12 @@ export function MessMapSection() {
               <span className={cn("size-2.5 rounded-full", statusDot[s])} aria-hidden />
               {ts(s)}
             </li>
+          ))}
+        </ul>
+        <ul className="mt-2 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground" aria-label={tc("legend")}>
+          <li className="font-medium text-foreground">{tc("legend")}:</li>
+          {([["bg-success", "green"], ["bg-warning", "amber"], ["bg-destructive", "red"]] as const).map(([c, k]) => (
+            <li key={k} className="inline-flex items-center gap-2"><span className={cn("size-2.5 rounded-full", c)} aria-hidden />{tc(k)}</li>
           ))}
         </ul>
         <p className="mt-3 text-xs text-muted-foreground">{t("todo")}</p>

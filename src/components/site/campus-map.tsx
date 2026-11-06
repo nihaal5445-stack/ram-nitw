@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import type { MessConfig } from "@/config/messes";
+import type { CrowdRow } from "@/lib/crowd";
 import { CAMPUS_CENTER } from "@/config/messes";
 
 interface Props {
@@ -12,11 +13,13 @@ interface Props {
   /** accessible label per mess id, e.g. "IFC-A, confirmed" */
   labels: Record<string, string>;
   onPinClick: (id: string) => void;
+  /** live crowd per mess id; colours the pin green / amber / red */
+  crowd?: Record<string, CrowdRow> | null;
 }
 
 const reduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export default function CampusMap({ messes, selectedId, labels, onPinClick }: Props) {
+export default function CampusMap({ messes, selectedId, labels, onPinClick, crowd }: Props) {
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const markers = useRef<Map<string, L.Marker>>(new Map());
@@ -64,6 +67,18 @@ export default function CampusMap({ messes, selectedId, labels, onPinClick }: Pr
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Colour pins by live crowd.
+  useEffect(() => {
+    markers.current.forEach((marker, id) => {
+      const pin = marker.getElement()?.querySelector(".mess-pin");
+      if (!pin) return;
+      pin.classList.remove("mess-pin--crowd-low", "mess-pin--crowd-moderate", "mess-pin--crowd-busy");
+      const r = crowd?.[id];
+      if (r && r.level !== "closed") pin.classList.add(`mess-pin--crowd-${r.level}`);
+      if (r) marker.getElement()?.setAttribute("title", `${labels[id]}, ${r.level === "closed" ? "closed" : r.pct + "% full"}`);
+    });
+  }, [crowd, labels]);
 
   // Reflect selection: highlight pin and pan to it.
   useEffect(() => {

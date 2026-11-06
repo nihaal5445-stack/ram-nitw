@@ -708,5 +708,24 @@
         "manual_rate_limit_student": "This student has used the manual limit this week"
       }
     }
+  },
+  "Crowd": {
+    "now": "Crowd now",
+    "demo": "demo data",
+    "scans": "{n} students admitted in the last 10 min",
+    "level": {
+      "low": "Plenty of room",
+      "moderate": "Getting busy",
+      "busy": "Very busy",
+      "closed": "Not serving right now"
+    },
+    "hintAfter": "{name} is at {pct}%. Try after {time}.",
+    "hintBusy": "{name} is at {pct}%. It should ease soon.",
+    "adminTitle": "Live crowd, all messes",
+    "adminLead": "Accepted scans in the last 10 minutes against seat capacity. Updates every 15 s.",
+    "legend": "Pin colour = crowd now",
+    "green": "Quiet",
+    "amber": "Busy",
+    "red": "Very busy"
   }
 }

@@ -84,7 +84,7 @@ export async function MessSections() {
                     </dl>
 
                     <div className="mt-6">
-                      <MessLive messId={m.id} vegOnly={m.type === "veg"} />
+                      <MessLive messId={m.id} name={m.name} vegOnly={m.type === "veg"} />
                     </div>
 
                     <div className="mt-6">

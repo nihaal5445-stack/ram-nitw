@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, TrendingUp, UtensilsCrossed, BarChart3 } from "lucide-react";
 import { messes } from "@/config/messes";
+import { CrowdPanel } from "@/components/crowd-panel";
 
 export default async function MessAdminDashboard() {
   const { user, profile, error } = await getCurrentProfile();
@@ -36,6 +37,8 @@ export default async function MessAdminDashboard() {
         <StatCard title="Open complaints" value="3" icon={UtensilsCrossed} accent="amber" />
         <StatCard title="Avg. daily headcount" value="720" icon={BarChart3} accent="green" />
       </div>
+
+      <CrowdPanel ownMessId={profile.assigned_mess_id} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <Card className="border border-border shadow-sm">

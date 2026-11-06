@@ -204,6 +204,9 @@
 .mess-pin--confirmed { background: var(--success); }
 .mess-pin--unconfirmed { background: var(--warning); border-style: dashed; border-color: var(--foreground); }
 .mess-pin--under_construction { background: var(--muted-foreground); border-radius: 6px; }
+.mess-pin--crowd-low { background: var(--success); }
+.mess-pin--crowd-moderate { background: var(--warning); border-style: solid; border-color: var(--background); }
+.mess-pin--crowd-busy { background: var(--destructive); }
 .mess-pin-selected .mess-pin { transform: scale(1.35); outline: 3px solid var(--brand); outline-offset: 2px; }
 .dark .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9); }
 .leaflet-container { font-family: inherit; }
