@@ -253,6 +253,26 @@
       "intro": "Photographs on this site are free-licence images from Unsplash. Photographer names are still being confirmed and are marked as such.",
       "photographer": "Photographer",
       "source": "Source"
+    },
+    "audiences": {
+      "eyebrow": "Who it is for",
+      "title": "One platform, three ways in",
+      "lead": "Whether you eat at a mess, pay for someone who does, or keep one running, RAM puts what you need in one place.",
+      "students": {
+        "title": "Students",
+        "desc": "See today's menu and the crowd before you walk over, and use a digital token instead of a paper slip.",
+        "cta": "Student sign in"
+      },
+      "parents": {
+        "title": "Parents and guardians",
+        "desc": "Follow your ward's meal history and balance, and see how the messes are run.",
+        "cta": "Parent sign in"
+      },
+      "staff": {
+        "title": "Mess staff and administration",
+        "desc": "Counter scanning, menus, headcount and reports for mess teams and wardens.",
+        "cta": "Staff sign in"
+      }
     }
   }
 }
