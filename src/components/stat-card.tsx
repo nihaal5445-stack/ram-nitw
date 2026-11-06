@@ -10,8 +10,8 @@ interface StatCardProps {
 }
 
 const accentClasses = {
-  primary: "text-primary",
-  secondary: "text-secondary",
+  primary: "text-primary dark:text-brand",
+  secondary: "text-secondary dark:text-[#8fb0e8]",
   green: "text-green-600 dark:text-green-400",
   amber: "text-amber-600 dark:text-amber-400",
 };

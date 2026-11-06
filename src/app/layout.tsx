@@ -4,6 +4,7 @@ import "@fontsource-variable/playfair-display";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "@/components/theme-provider";
+import { BackgroundFx } from "@/components/background-fx";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <BackgroundFx />
           <NextIntlClientProvider messages={messages} locale={locale}>
             {children}
           </NextIntlClientProvider>

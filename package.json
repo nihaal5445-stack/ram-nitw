@@ -22,6 +22,7 @@
     "test:likes": "node scripts/test-likes.mjs",
     "test:assistant": "node scripts/test-assistant.mjs",
     "test:replies": "node scripts/test-replies.mjs",
+    "test:backdrop": "node scripts/test-backdrop.mjs",
     "test:dashboards": "node scripts/test-dashboards.mjs",
     "test:login-code": "node scripts/test-login-code.mjs",
     "demo:prep": "node scripts/demo-prep.mjs",

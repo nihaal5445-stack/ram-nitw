@@ -9,7 +9,7 @@ import { TodaysMenuCard } from "./todays-menu-card";
 export async function Hero() {
   const t = await getTranslations("Public.hero");
   return (
-    <section id="hero" className="relative isolate overflow-hidden bg-navy-deep text-navy-deep-foreground">
+    <section id="hero" className="relative isolate z-[2] overflow-hidden bg-navy-deep text-navy-deep-foreground">
       <Image
         src={images.hero.src}
         width={images.hero.width}
@@ -21,6 +21,7 @@ export async function Hero() {
         className="absolute inset-0 -z-10 h-full w-full object-cover"
       />
       <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy-deep/95 via-navy-deep/80 to-navy-deep/65 lg:via-navy-deep/65 lg:to-navy-deep/10" aria-hidden />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(55%_75%_at_12%_15%,rgb(214_179_106/0.26),transparent_65%),radial-gradient(50%_70%_at_90%_95%,rgb(123_30_30/0.50),transparent_70%)]" aria-hidden data-testid="hero-glow" />
       <div className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-12 lg:items-center lg:gap-10 lg:px-8 lg:py-24">
         <div className="lg:col-span-7">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-on-dark">{t("eyebrow")}</p>
